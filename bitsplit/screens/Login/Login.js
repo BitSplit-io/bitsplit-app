@@ -10,6 +10,13 @@ import {
     StatusBar,
     } from 'react-native';
 import { RootNavigator } from '../../config/router';
+import LoginWithUsername from '../../src/api/ApiUtils';
+
+function login(username, password){
+    var test = "test";
+    test = LoginWithUsername(username, password);
+}
+
 
 export default class Login extends React.Component {
 
@@ -17,6 +24,7 @@ export default class Login extends React.Component {
         super();
         this.state = { username: '', password: '' };
     };
+
 
 
     render() {
@@ -55,6 +63,7 @@ export default class Login extends React.Component {
                         style={styles.input}
                         onChangeText={(username) => this.setState({ username })}
                         value={this.state.username}
+
                     />
 
                     <TextInput
@@ -71,12 +80,14 @@ export default class Login extends React.Component {
                         value={this.state.password}
                     />
 
+
+
                     {/* ------ LOGIN BUTTONS -------*/}
                     <TouchableOpacity
 
                         style={styles.buttonContainer}
 
-                        onPress={() => navigate('Home', {})}
+                        onPress={() => login('Magnus', 'Magnus')}
 
                     >
 
