@@ -11,19 +11,17 @@ import {
     } from 'react-native';
 import { RootNavigator } from '../../config/router';
 import LoginWithUsername from '../../src/api/ApiUtils';
-
-function login(username, password){
-    LoginWithUsername(username, password).then(results => {
-        console.log(results)
-        alert(results.message);
-    }).catch((error) => {
-        console.log(error)
-        alert("error when processing login result");
-    });
-}
-
+import MessageBar from '../Notification/MessageBar';
+import MessageBarManager from '../Notification/MessageBarManager';
 
 export default class Login extends React.Component {
+    
+    componentDidMount() {
+        MessageBarManager.registerMessageBar(this.refs.alert);
+      }
+      componentWillUnmount() {
+        MessageBarManager.unregisterMessageBar();
+      }
 
     constructor() {
         super();
@@ -55,7 +53,7 @@ export default class Login extends React.Component {
 
                     {/* ------ LOGIN FORM -------*/}
                     <TextInput
-                        placeholder="Username"
+                        placeholder="Email or username"
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         underlineColorAndroid='rgba(0,0,0,0)'
                         textAlign='center'
@@ -90,8 +88,16 @@ export default class Login extends React.Component {
 
                         style={styles.buttonContainer}
 
-                        onPress={() => login(this.state.username, this.state.password)}
-
+                        onPress={() => LoginWithUsername(this.state.username, this.state.password).then(results => {
+                            //No point showing success message on success
+                            results.status == "error" ? MessageBarManager.showAlert({
+                                message: results.message,
+                                alertType: results.status,
+                            }) : null;
+                        })
+                        .catch((error) =>
+                                alert("error when processing login result")
+                            )}
                     >
 
                         <Text style={styles.buttonText}>LOGIN</Text>
@@ -105,6 +111,18 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
 
                 </View>
+                <MessageBar
+                    ref="alert"
+                    duration={2000}
+                    viewTopOffset={10}
+                    stylesheetSuccess={{
+                    backgroundColor: '#97b7e5',
+                    strokeColor: '#97b7e5',
+                    titleColor: '#ffffff',
+                    messageColor: '#ffffff'
+                    }}
+                />
+
             </View>
             
         )
