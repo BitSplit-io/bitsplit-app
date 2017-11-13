@@ -13,8 +13,13 @@ import { RootNavigator } from '../../config/router';
 import LoginWithUsername from '../../src/api/ApiUtils';
 
 function login(username, password){
-    var test = "test";
-    test = LoginWithUsername(username, password);
+    LoginWithUsername(username, password).then(results => {
+        console.log(results)
+        alert(results.message);
+    }).catch((error) => {
+        console.log(error)
+        alert("error when processing login result");
+    });
 }
 
 
@@ -24,8 +29,6 @@ export default class Login extends React.Component {
         super();
         this.state = { username: '', password: '' };
     };
-
-
 
     render() {
 
@@ -87,7 +90,7 @@ export default class Login extends React.Component {
 
                         style={styles.buttonContainer}
 
-                        onPress={() => login('Magnus', 'Magnus')}
+                        onPress={() => login(this.state.username, this.state.password)}
 
                     >
 
