@@ -47,6 +47,10 @@ export const RootNavigator = StackNavigator({
         screen: HomeTabs,
         navigationOptions: { header: null, },
     },
+    NewUser: {
+        screen: NewUser,
+        navigationOptions: { header: null, },
+    },
     Pool: {
         screen: Pool,
         navigationOptions: {

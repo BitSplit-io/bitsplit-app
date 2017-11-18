@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { 
-    AppRegistry, 
-    StyleSheet, 
-    View, 
-    Text, 
-    Image, 
-    TextInput, 
+import {
+    AppRegistry,
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    TextInput,
     TouchableOpacity,
     StatusBar,
     } from 'react-native';
 import { RootNavigator } from '../../config/router';
-import LoginWithUsername from '../../src/api/ApiUtils';
+import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
 
 export default class Login extends React.Component {
-    
+
     componentDidMount() {
         MessageBarManager.registerMessageBar(this.refs.alert);
       }
@@ -51,8 +51,8 @@ export default class Login extends React.Component {
 
                 <View>
 
-                    {/* ------ LOGIN FORM -------*/}
                     <TextInput
+
                         placeholder="Email or username"
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         underlineColorAndroid='rgba(0,0,0,0)'
@@ -66,8 +66,9 @@ export default class Login extends React.Component {
                         value={this.state.username}
 
                     />
-
+                    
                     <TextInput
+
                         placeholder="Password"
                         secureTextEntry
                         placeholderTextColor="rgba(255,255,255,0.5)"
@@ -83,28 +84,34 @@ export default class Login extends React.Component {
 
 
 
-                    {/* ------ LOGIN BUTTONS -------*/}
+
                     <TouchableOpacity
 
                         style={styles.buttonContainer}
 
                         onPress={() => LoginWithUsername(this.state.username, this.state.password).then(results => {
+                            console.log(results);
                             //No point showing success message on success
-                            results.status == "error" ? MessageBarManager.showAlert({
-                                message: results.message,
-                                alertType: results.status,
-                            }) : null;
-                        })
-                        .catch((error) =>
-                                alert("error when processing login result")
+                            results.status == "error" ? alert(results.message) : navigate('Home', {});
+                            })
+                        .catch((error) =>{
+                            console.log("error when processing login result");
+                            console.log(error);
+                            alert("error when processing login result");   
+                        }
                             )}
+
                     >
 
                         <Text style={styles.buttonText}>LOGIN</Text>
 
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+
+                    onPress={() => navigate('NewUser', {})}
+
+                    >
 
                         <Text style={styles.newUserButton}>Create new user</Text>
 
@@ -124,9 +131,9 @@ export default class Login extends React.Component {
                 />
 
             </View>
-            
+
         )
-        
+
     }
 
 };
@@ -139,7 +146,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#7EC480',
         padding: 20,
     },
-    
+
     input: {
         height: 40,
         backgroundColor: 'rgba(234, 246, 235, 0.1)',

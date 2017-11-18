@@ -1,12 +1,25 @@
-import React, { Component } from 'react';
+var username;
+var userId;
+var userPools = [];
 
-export default class User extends Component {
+import PoolComponent from "../Pool/PoolComponent";
 
-    constructor (userProperties) {
-        this.userID;
-        this.userName;
-        this.userPassword;
-        this.userEmail;
+function setPools(poolData){
+    PoolComponent
+    this.userPools = []
+    poolData.array.forEach(function(pool) {
+        this.userPools.push(new PoolComponent(pool))
+    }, this);
+}
+    
+export default class CurrentUser {
+
+    constructor (username) {
+
+        username = '',
+        userId = '',
+        userPools = '',
+
     }
 
 }

@@ -64,6 +64,7 @@ export default class Home extends Component {
                     <Button
                         onPress={() => ('Refresh')}
                         title='Refresh'
+                        
                     />
 
                     <Text style={styles.title}>Pools</Text>
