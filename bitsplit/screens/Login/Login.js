@@ -13,6 +13,7 @@ import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
+import CurrentUser from '../../src/components/User/UserComponent'
 
 export default class Login extends React.Component {
 
@@ -89,17 +90,18 @@ export default class Login extends React.Component {
 
                         style={styles.buttonContainer}
 
-                        onPress={() => LoginWithUsername(this.state.username, this.state.password).then(results => {
+                        onPress={() => LoginWithUsername('magnus', 'password').then(results => { 
+                            //this.state.username , this.state.password).then(results => {
                             console.log(results);
                             //No point showing success message on success
-                            results.status == "error" ? alert(results.message) : navigate('Home', {});
-                            })
-                        .catch((error) =>{
-                            console.log("error when processing login result");
-                            console.log(error);
-                            alert("error when processing login result");   
-                        }
-                            )}
+                            // results.status == "error" ? alert(results.message) : navigate('Home', {});
+                            if ( results.status == "error" ){
+                                alert(results.message)
+                            }else{
+                                new CurrentUser(results.data.username, results.data.userId);
+                                navigate('Home', {});
+                            }
+                            })}
 
                     >
 

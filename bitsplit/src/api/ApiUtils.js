@@ -1,7 +1,7 @@
 var bitsplitURL = "http://172.20.10.2:8080";
 var Auth_Headers = null;
 
-export function Logout (){
+export function Logout() {
     return fetch(bitsplitURL + "/auth/login", {
         method: 'POST',
         headers: new Headers({
@@ -9,7 +9,7 @@ export function Logout (){
         }),
         body: JSON.stringify({
             "username": username,
-            "password": password, 
+            "password": password,
         } // <-- Post parameters)
         )
     }).then(Auth_Headers = null);
@@ -23,20 +23,21 @@ export function LoginWithUsername(username, password) {
         }),
         body: JSON.stringify({
             "username": username,
-            "password": password, 
+            "password": password,
         } // <-- Post parameters)
         )
     })
         .then(response => {
-            
-console.log("logging in");
+
+            console.log("logging in");
             return response.json();
         }).then(responseJson => {
-            if(responseJson.status == "success"){
+            if (responseJson.status == "success") {
                 Auth_Headers = {
                     "Authorization-Token": responseJson.data.authToken,
-                    "refreshToken": responseJson.data.refreshToken,
-                    "userId": responseJson.data.userId 
+                    "Refresh-Token": responseJson.data.refreshToken,
+                    "User-Id": responseJson.data.userId,
+                    "test": "test"
                 }
                 console.log(Auth_Headers);
             }
@@ -48,7 +49,27 @@ console.log("logging in");
         })
 
 }
-    
+
+
+export function GetUserPools() {
+    return fetch(bitsplitURL + "/users/" + Auth_Headers["User-Id"]  + "/pools", {
+
+        method: 'GET',
+        headers: new Headers(
+            Auth_Headers
+        ),
+    }).then(response => {
+                    return response.json();
+                }).then(responseJson => {
+                    return responseJson;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    alert("THERE WAS A NETWORK ERROR");
+                })
+        
+}
+
 
 export function CreateNewUser(email, username, password) {
 
@@ -65,7 +86,7 @@ export function CreateNewUser(email, username, password) {
         )
     })
         .then(response => {
-                return response.json();
+            return response.json();
         })
         .catch((error) => {
             console.log(error)
@@ -75,7 +96,7 @@ export function CreateNewUser(email, username, password) {
 }
 
 export function CreateNewPool(poolName, poolAdmin, poolPassword, poolMember, poolTransactionFee, poolAutomization) {
-    
+
     return fetch(bitsplitURL + "/pools/create", {
         method: 'POST',
         headers: new Headers({
@@ -93,7 +114,7 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, poolMember, poo
         )
     })
         .then(response => {
-                return response.json();
+            return response.json();
         })
         .catch((error) => {
             console.log(error)
@@ -102,8 +123,8 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, poolMember, poo
 }
 
 export function GetPool(poolId) {
-    
-    return fetch(bitsplitURL + "/pools/"+poolId, {
+
+    return fetch(bitsplitURL + "/pools/" + poolId, {
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json', // <-- Specifying the Content-Type
@@ -111,7 +132,7 @@ export function GetPool(poolId) {
         }),
     })
         .then(response => {
-                return response.json();
+            return response.json();
         })
         .catch((error) => {
             console.log(error)

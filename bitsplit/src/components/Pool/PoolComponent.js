@@ -4,6 +4,7 @@ var poolData = null;
 
 export default class PoolComponent extends Component {
     constructor (data) {
+        super();
         this.poolData = data;
     }
     get poolId(){
