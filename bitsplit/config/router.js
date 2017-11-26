@@ -1,3 +1,5 @@
+var bitsplitURL = "http://172.20.10.2:8080";
+
 import React, { Component } from 'react';
 import { Appregistry, Platform, StatusBar } from "react-native";
 import { TabNavigator, StackNavigator } from 'react-navigation';
@@ -32,7 +34,11 @@ export const HomeTabs = TabNavigator({
         initialRouteName: 'Home',
         tabBarOptions: {
             style: {
-                backgroundColor: '#003300',
+                backgroundColor: '#55ac45',
+            },
+            
+            indicatorStyle: {
+                backgroundColor: '#222222',
             },
         },
     },
@@ -53,9 +59,10 @@ export const RootNavigator = StackNavigator({
     },
     Pool: {
         screen: Pool,
+        path: 'bitsplitURL',
         navigationOptions: {
             headerStyle: {
-                backgroundColor: '#f5fff5',
+                backgroundColor: '#7EC480',
                 elevation: 0,
             }
         }

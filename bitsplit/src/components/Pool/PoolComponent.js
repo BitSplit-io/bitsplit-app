@@ -3,32 +3,32 @@ import React, { Component } from 'react';
 var poolData = null;
 
 export default class PoolComponent extends Component {
-    constructor (data) {
+    constructor(data) {
         super();
         this.poolData = data;
     }
-    get poolId(){
+    get poolId() {
         return this.poolData.poolId;
     }
-    get poolName(){
+    get poolName() {
         return this.poolData.poolName;
     }
-    get poolAdmin(){
+    get poolAdmin() {
         return this.poolData.poolAdmin;
     }
-    get recipients(){
+    get recipients() {
         return this.poolData.recipients;
     }
-    get poolTransactionFee(){
+    get poolTransactionFee() {
         return 1;
     }
-    get poolAutomization(){
+    get poolAutomization() {
         return false;
     }
 }
 
 
-export function renderAsList (_onPress) {
+export function renderPoolList(_onPress) {
     //Onpress navigate('Pool', {})
     return (
         <View style={{ borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', height: 70 }}>
@@ -44,26 +44,16 @@ export function renderAsList (_onPress) {
 }
 
 
-export function renderAsPieChart () {
+export function renderPoolPieChart() {
     const chart_wh = 250
     const series = [300, 10,]
     const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
     return (
-        <View style={styles.container}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={styles.pieContainer}>
-                    <Pie
-                    radius={100}
-                    series={[25, 25, 50,]}
-                    colors={['#999', 'lime', '#55ac45']} />
-                </View>
-                <View style={styles.infoContainer}>
-                    <Text>
-                        Fullt av info
-                    </Text>
-                </View>
-            </ScrollView>
-        </View>
+        <Pie
+            radius={100}
+            series={[100,]}
+            colors={['#55ac45',]}
+        />
     );
 }
 
@@ -71,11 +61,11 @@ export function renderAsPieChart () {
 
 class ManagePool extends PoolComponent {
 
-    set poolName(name){
+    set poolName(name) {
         this.poolName = name;
     }
 
-    set poolMember(newMember){
+    set poolMember(newMember) {
         this.poolMember = newMember;
     }
 }

@@ -26,7 +26,7 @@ export default class Home extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows(
-                [{ poolName: 'jacob', poolID: 'string' }]
+                []
             ),
         }
         //     this.refreshPools()
@@ -68,11 +68,11 @@ export default class Home extends Component {
         // const { navigate } = this.props.navigation;
 
         return (
-            <View style={{ borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', height: 70 }}>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#A0A0A0', alignItems: 'center', justifyContent: 'center', height: 70 }}>
 
                 <TouchableOpacity
 
-                    onPress={() => navigate('Pool', {})}
+                    onPress={() => navigate('Pool', {param: poolData.poolName})}
 
                 >
                     <Text>{poolData.poolName}</Text>
@@ -122,6 +122,7 @@ export default class Home extends Component {
                 <ListView
                     renderRow={this._renderPoolList}
                     dataSource={this.state.dataSource}
+                    enableEmptySections={true}
                 />
 
             </View>

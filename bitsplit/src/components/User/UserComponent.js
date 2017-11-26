@@ -13,9 +13,7 @@ export function setPools(poolData){
 }
 
 export function getPools(){
-    return [{poolName: 'jacob', poolID: 'string'}]
-    
-    //return userPools;
+    return userPools;
 }
     
 export default class CurrentUser {
@@ -29,9 +27,5 @@ export default class CurrentUser {
 }
 
 export function getUser(username){
-
-
-
     return username;
-
 }
