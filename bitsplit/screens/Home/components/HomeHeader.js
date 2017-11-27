@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, } from 'react-native';
-import { RootNavigator } from '../../../config/router';
+import { PoolNavigator } from '../../../config/router';
 
 const styles = StyleSheet.create({
   container: {

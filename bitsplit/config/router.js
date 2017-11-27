@@ -38,7 +38,7 @@ export const HomeTabs = TabNavigator({
             },
             
             indicatorStyle: {
-                backgroundColor: '#222222',
+                backgroundColor: '#f5fff5',
             },
         },
     },
@@ -59,7 +59,6 @@ export const RootNavigator = StackNavigator({
     },
     Pool: {
         screen: Pool,
-        path: 'bitsplitURL',
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
@@ -68,6 +67,40 @@ export const RootNavigator = StackNavigator({
         }
     },
 });
+
+export const PoolNavigator = StackNavigator({
+    Home: {
+        screen: HomeTabs,
+        navigationOptions: { header: null, },
+    },
+    Pool: {
+        screen: Pool,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    },
+    NewPool: {
+        screen: Pool,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    },
+    ManagePool: {
+        screen: Pool,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    }
+})
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0

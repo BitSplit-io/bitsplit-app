@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, View, ScrollView, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
+import { Logout } from '../../src/api/ApiUtils'
+import { RootNavigator } from '../../config/router';
+import { CurrentUser } from '../../src/components/User/UserComponent';
 
 export default class Settings extends Component {
 
     render() {
+        
+        const { navigate } = this.props.navigation;
+
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
@@ -55,12 +61,22 @@ export default class Settings extends Component {
                             About
                     </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonStyle}>
+
+                    <TouchableOpacity
+
+                        style={styles.buttonStyle}
+
+                        onPress={() => Logout(CurrentUser.username(), CurrentUser.userId()).
+                            navigate('Login', {})
+                            }
+                    >
+
                         <Text style={styles.category}>
                             Sign Out
-                    </Text>
+                        </Text>
                     </TouchableOpacity>
-                    
+
+
                 </ScrollView>
             </View>
         )
@@ -71,7 +87,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#7EC480',
-        padding: 20,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     header: {
         flexDirection: 'row',

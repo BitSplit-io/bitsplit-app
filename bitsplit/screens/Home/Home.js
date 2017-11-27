@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ListView, Text, StatusBar, TouchableOpacity, Button, } from 'react-native';
-import { HomeTabs } from '../../config/router';
-import { RootNavigator } from '../../config/router';
+import { HomeTabs, RootNavigator, PoolNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
-import { getPools, setPools, } from '../../src/components/User/UserComponent'
+import { getPools, setPools, } from '../../src/components/User/UserComponent';
 
-import { GetUserPools } from '../../src/api/ApiUtils'
+import { GetUserPools } from '../../src/api/ApiUtils';
+import PoolComponent from '../../src/components/Pool/PoolComponent';
 
 import PoolList from './components/PoolList'
 import SectionHeader from './components/SectionHeader'
-
-import data from '../Test/data'
 
 const ds = new ListView.DataSource({
     rowHasChanged: (r1, r2) => r1 !== r2,
@@ -39,7 +37,7 @@ export default class Home extends Component {
         //     }
         //    })
         //console.log(getPools())
-    }
+    };
 
 
 
@@ -59,24 +57,25 @@ export default class Home extends Component {
         //         setPools(result.data);
         //     }
         //     })
-    }
+    };
 
-
+    poolDetails = (poolData) => {
+        return (this.props.navigation.navigate('Pool', poolData))
+    };
 
     _renderPoolList(poolData) {
 
-        // const { navigate } = this.props.navigation;
-
+        new PoolComponent();
+        
         return (
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#A0A0A0', alignItems: 'center', justifyContent: 'center', height: 70 }}>
+            <View style={styles.poolSegment}>
 
                 <TouchableOpacity
-
-                    onPress={() => navigate('Pool', {param: poolData.poolName})}
-
+                    style={styles.poolButton}
+                    onPress={() => poolDetails(poolData)}
                 >
                     <Text>{poolData.poolName}</Text>
-                    <Text>{poolData.poolID}</Text>
+                    <Text>{poolData.poolId}</Text>
                     {poolData.poolAdmin && <Text>Admin</Text>}
 
                 </TouchableOpacity>
@@ -86,7 +85,8 @@ export default class Home extends Component {
     }
 
     render() {
-        super.render
+
+        super.render;
 
         const { navigate } = this.props.navigation;
 
@@ -113,8 +113,8 @@ export default class Home extends Component {
                     <Text style={styles.title}>Pools</Text>
 
                     <Button
-                        onPress={() => navigate('Pool')}
-                        title='New'
+                        onPress={() => poolDetails('Pool', {})}
+                        title='Pool'
                     />
                 </View>
 
@@ -128,7 +128,7 @@ export default class Home extends Component {
             </View>
 
         );
-    }
+    };
 
 }
 
@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f5fff5'
     },
-
     text: {
         fontSize: 16,
     },
@@ -155,5 +154,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 30,
         fontWeight: 'bold',
+    },
+    poolSegment: {
+        flex: 1,
+        borderBottomWidth: 1, 
+        borderBottomColor: '#A0A0A0', 
+        height: 70,
+    },
+    poolButton: {
+        flex:1,
+        alignItems: 'center', 
+        justifyContent: 'center', 
     },
 });

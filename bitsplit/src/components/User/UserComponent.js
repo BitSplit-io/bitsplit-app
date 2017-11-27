@@ -4,6 +4,23 @@ var userPools = [];
 
 import PoolComponent from "../Pool/PoolComponent";
 
+export default class CurrentUser {
+
+    constructor (username, userId) {
+        username = username;
+        userId = userId;
+        console.log("CREATED USER WITH USERNAME: " + username + " AND USERID: " + userId)        
+    }
+
+    get username() {
+        return this.username
+    }
+
+    get userId() {
+        return this.userId
+    }
+}
+
 export function setPools(poolData){
     PoolComponent
     this.userPools = []
@@ -14,16 +31,6 @@ export function setPools(poolData){
 
 export function getPools(){
     return userPools;
-}
-    
-export default class CurrentUser {
-
-    constructor (username, userId) {
-        username = username;
-        userId = userId;
-        console.log("CREATED USER WITH USERNAME: " + username + " AND USERID: " + userId)        
-    }
-
 }
 
 export function getUser(username){

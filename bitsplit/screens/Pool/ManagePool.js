@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import { AppRegistry, View, Text, StyleSheet, ScrollView, StatusBar, ListView } from 'react-native';
 import Pie from 'react-native-pie';
 // import PoolComponent from '../../src/components/Pool/PoolComponent'
-import { GetPool } from '../../src/api/ApiUtils'
-import PoolComponent from '../../src/components/Pool/PoolComponent';
 
 export default class Pool extends Component {
 
     render() {
-
-        //const { poolName, poolId, poolAdmin, recipients } = this.props.navigation.state.params(poolData);
 
         return (
 
@@ -23,7 +19,7 @@ export default class Pool extends Component {
 
                         <Pie
                             radius={100}
-                            series={[25, 25, 50,]}
+                            series={[0.25, 0.25, 0.5,]}
                             colors={['#55ac45', '#099', '#909']} />
 
                     </View>

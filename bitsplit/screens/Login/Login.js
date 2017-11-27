@@ -90,7 +90,8 @@ export default class Login extends React.Component {
 
                         style={styles.buttonContainer}
 
-                        onPress={() => LoginWithUsername('magnus', 'password').then(results => { 
+                        onPress={() => LoginWithUsername(
+                            'magnus', 'password').then(results => { 
                             //this.state.username , this.state.password).then(results => {
                             console.log(results);
                             //No point showing success message on success
