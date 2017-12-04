@@ -105,12 +105,14 @@ export function GetPool(poolId) {
     return fetch(bitsplitURL + "/pools/" + poolId, {
         method: 'GET',
         headers: new Headers({
-            'Content-Type': 'application/json', // <-- Specifying the Content-Type
             Auth_Headers,
         }),
     })
         .then(response => {
+            console.log('Pool details fetched');
             return response.json();
+        }).then(responseJson => {
+            return responseJson;
         })
         .catch((error) => {
             console.log(error)

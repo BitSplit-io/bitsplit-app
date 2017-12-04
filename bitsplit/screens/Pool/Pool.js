@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, StyleSheet, ScrollView, StatusBar, ListView } from 'react-native';
+import { AppRegistry, View, Text, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { List, ListItem, } from "react-native-elements";
+import { RootNavigator } from '../../config/router';
+import { StackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
-// import PoolComponent from '../../src/components/Pool/PoolComponent'
-import { GetPool } from '../../src/api/ApiUtils'
-import PoolComponent from '../../src/components/Pool/PoolComponent';
+import PoolComponent from '../../src/components/Pool/PoolComponent'
+import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
+import { GetPool } from '../../src/api/ApiUtils';
+
+const activePool = '';
 
 export default class Pool extends Component {
 
+
+    constructor(props) {
+        super(props);
+        this.state = { activePool: this.props.navigation.state.params.item };
+    }
+
     render() {
 
-        //const { poolName, poolId, poolAdmin, recipients } = this.props.navigation.state.params(poolData);
 
         return (
 
@@ -21,10 +31,7 @@ export default class Pool extends Component {
 
                     <View style={styles.pieContainer}>
 
-                        <Pie
-                            radius={100}
-                            series={[25, 25, 50,]}
-                            colors={['#55ac45', '#099', '#909']} />
+                        {this.state.activePool.renderPoolPieChart()}
 
                     </View>
 
@@ -32,10 +39,10 @@ export default class Pool extends Component {
 
                         <View style={styles.titleSegment}>
                             <Text style={styles.title}>
-                                Pool Name
+                                {this.state.activePool ? this.state.activePool.poolDetails.poolName : ''}
                             </Text>
                             <Text style={styles.subtitle}>
-                                #AJDIr32234iasdij3e3
+                                {this.state.activePool ? this.state.activePool.poolDetails.poolId : ''}
                             </Text>
                         </View>
 
@@ -44,12 +51,21 @@ export default class Pool extends Component {
                                 Members
                             </Text>
 
-                            {/* <ListView
-                                    renderRow={this._renderMemberList}
-                                     dataSource={this.state.dataSource}
-                            /> */}
-
+                            <List>
+                                <FlatList
+                                    data={this.state.activePool.poolDetails.recipients}
+                                    renderItem={({ item }) =>
+                                        <ListItem
+                                            title={item ? (item.proportion * 100)+'%' : ''}
+                                            subtitle={item ? item.address : ''}
+                                            hideChevron={true}
+                                        />
+                                    }
+                                    keyExtractor={item => item.address}
+                                />
+                            </List>
                         </View>
+
 
                         <View style={styles.infoSegment}>
                             <Text style={styles.title}>

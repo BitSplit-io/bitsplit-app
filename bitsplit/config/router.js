@@ -1,6 +1,7 @@
 var bitsplitURL = "http://172.20.10.2:8080";
 
-import React, { Component } from 'react';
+import React, { Component, Image, } from 'react';
+import { Icon } from 'react-native-elements';
 import { Appregistry, Platform, StatusBar } from "react-native";
 import { TabNavigator, StackNavigator } from 'react-navigation';
 
@@ -22,12 +23,42 @@ export default class Start extends Component {
 export const HomeTabs = TabNavigator({
     Settings: {
         screen: Settings,
+        navigationOptions: {
+            tabBarIcon: ({ focused }) => (
+                <Icon
+                    name={focused ? 'gear' : 'gear'}
+                    type='evilicon'
+                    size={26}
+                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
+                />
+            )
+        },
     },
     Home: {
         screen: Home,
+        navigationOptions: {
+            tabBarIcon: ({ focused }) => (
+                <Icon
+                    name={focused ? 'home' : 'home'}
+                    type='MaterialcommunityIcons'
+                    size={26}
+                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
+                />
+            )
+        },
     },
     Wallet: {
         screen: Wallet,
+        navigationOptions: {
+            tabBarIcon: ({ focused }) => (
+                <Icon
+                    name={focused ? 'wallet' : 'wallet'}
+                    type='entypo'
+                    size={26}
+                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
+                />
+            )
+        },
     },
 }, {
         tabBarPosition: 'bottom',
@@ -36,7 +67,8 @@ export const HomeTabs = TabNavigator({
             style: {
                 backgroundColor: '#55ac45',
             },
-            
+            showLabel: false,
+            showIcon: true,
             indicatorStyle: {
                 backgroundColor: '#f5fff5',
             },
