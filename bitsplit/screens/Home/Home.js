@@ -44,7 +44,7 @@ export default class Home extends Component {
                 _poolComponents.push(new PoolComponent(results.data[i]));
             }
             
-             this.setState({
+            this.setState({
                 poolComponents: _poolComponents,
             })
             console.log("AT THIS POINT RESULT DATA IS: ")
@@ -87,10 +87,11 @@ export default class Home extends Component {
                     <Text style={styles.title}>Pools</Text>
 
                     <Button
-                        onPress={() => navigate('Pool', {})}
-                        icon={{name: 'plus', type: 'feather', size: '26px'}}
+                        onPress={() => navigate('EditPool', {props: new PoolComponent()})}
+                        icon={{name: 'plus', type: 'feather'}}
                         backgroundColor={'rgba(0,0,0,0)'}                        
                     />
+
                 </View>
 
                 <List>

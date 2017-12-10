@@ -2,25 +2,47 @@ import React, { Component, FlatList, } from 'react';
 import { List, ListItem, } from "react-native-elements";
 import Pie from 'react-native-pie';
 
-var poolData = null;
+
 const colors = [    
                     '#55ac45',
-                    'rgba(255, 153, 255, 0.4)',
-                    'rgba(255, 255, 0, 0.4)',
-                    'rgba(0, 255, 255, 0.4)',
-                    'rgba(255, 0, 255, 0.4)',
-                    'rgba(255, 0, 0, 0.4)',
-                    'rgba(0, 255, 0, 0.4)',
-                    'rgba(0, 0, 255, 0.4)',
+                    'rgba(255, 153, 255, 0.16)',
+                    'rgba(255, 255, 0, 0.16)',
+                    'rgba(0, 255, 255, 0.16)',
+                    'rgba(255, 0, 255, 0.16)',
+                    'rgba(255, 0, 0, 0.16)',
+                    'rgba(0, 255, 0, 0.16)',
+                    'rgba(0, 0, 255, 0.16)',
                 ]
-
+ 
 
 export default class PoolComponent extends Component {
-
-
+    
     constructor(data) {
         super();
+        this.poolDetails = data == undefined ?  {poolAdmin: undefined, poolId: undefined, poolName: undefined, recipients: [], transactionFee: 0.5} :
         this.poolDetails = data;
+    }
+
+    setPoolName(name){
+        this.poolDetails.poolName = name;
+    }
+
+    
+    setPoolAdmin(admin){
+        this.poolDetails.poolAdmin = admin;
+    }
+
+    
+    addPoolRecipient(recipient){
+        this.poolDetails.recipients.push(recipient);
+    }
+
+    setPoolRecipients(recipients){
+        this.poolDetails.recipients = recipients;
+    }
+
+    setTransactionFee(transactionFee) {
+        this.poolDetails.transactionFee= transactionFee;
     }
 
     renderPoolPieChart() {

@@ -7,6 +7,8 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import Home from '../screens/Home/Home';
 import Pool from '../screens/Pool/Pool';
+import EditPool from '../screens/Pool/EditPool';
+import EditPoolMembers from '../screens/Pool/EditPoolMembers';
 import Wallet from '../screens/Wallet/Wallet';
 import Test from '../screens/Test/Test';
 import Login from '../screens/Login/Login';
@@ -89,8 +91,27 @@ export const RootNavigator = StackNavigator({
         screen: NewUser,
         navigationOptions: { header: null, },
     },
+
     Pool: {
         screen: Pool,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    },
+    EditPool: {
+        screen: EditPool,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    },
+    EditPoolMembers: {
+        screen: EditPoolMembers,
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
@@ -99,40 +120,6 @@ export const RootNavigator = StackNavigator({
         }
     },
 });
-
-export const PoolNavigator = StackNavigator({
-    Home: {
-        screen: HomeTabs,
-        navigationOptions: { header: null, },
-    },
-    Pool: {
-        screen: Pool,
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#7EC480',
-                elevation: 0,
-            }
-        }
-    },
-    NewPool: {
-        screen: Pool,
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#7EC480',
-                elevation: 0,
-            }
-        }
-    },
-    ManagePool: {
-        screen: Pool,
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#7EC480',
-                elevation: 0,
-            }
-        }
-    }
-})
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
