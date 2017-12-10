@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
 import { List, ListItem, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import { StackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
 import PoolComponent from '../../src/components/Pool/PoolComponent'
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
-import { GetPool } from '../../src/api/ApiUtils';
+import { GetPool, DoTransaction } from '../../src/api/ApiUtils';
 
 const activePool = '';
 
@@ -34,7 +34,11 @@ export default class Pool extends Component {
                         {this.state.activePool.renderPoolPieChart()}
 
                     </View>
-
+                    <Button
+                    title="Split revenue"
+                    color="#222"
+                    onPress={() => DoTransaction('password', this.state.activePool.poolDetails.poolId)}
+                />
                     <View style={styles.infoContainer}>
 
                         <View style={styles.titleSegment}>
@@ -81,6 +85,7 @@ export default class Pool extends Component {
 
 
                     </View>
+                    
                 </ScrollView>
 
             </View>

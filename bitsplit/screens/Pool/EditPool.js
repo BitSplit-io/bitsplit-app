@@ -3,8 +3,9 @@ import { AppRegistry, View, Text, TextInput, Button, StyleSheet, ScrollView, Sta
 import { List, ListItem, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import Pie from 'react-native-pie';
-import PoolComponent from '../../src/components/Pool/PoolComponent'
-import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
+import PoolComponent from '../../src/components/Pool/PoolComponent';
+import { GetUserId } from '../../src/components/User/CurrentUser';
+import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent';
 import { GetPool, CreateNewPool } from '../../src/api/ApiUtils';
 
 const activePool = '';
@@ -17,26 +18,17 @@ export default class EditPool extends Component {
             activePool: new PoolComponent(),
             recipients: [],
         };
+        this.state.poolAdmin = GetUserId();
+        console.log(this.state.activePool.poolDetails.poolAdmin);
+        console.log('this.state.activePool.poolDetails.poolAdmin');
     }
 
-    static navigationOptions = ({ navigation }) => {
-        const { params = {} } = navigation.state;
-        let headerRight = (
-          <Button
-            title="Submit"
-            color="#222"
-            onPress={CreateNewPool(this.activePool)}
-          />
-        );
-        return { headerRight };
-      };
-    
+
+
 
     render() {
 
         const { navigate } = this.props.navigation;
-        
-        
 
         return (
 
@@ -52,6 +44,17 @@ export default class EditPool extends Component {
 
                     </View>
 
+                    <Button
+                        title="Submit"
+                        color="#222"
+                        onPress={() => CreateNewPool(
+                            this.state.activePool.poolDetails.poolName, 
+                            GetUserId(), 
+                            this.state.activePool.poolDetails.poolPassword, 
+                            this.state.recipients, 
+                            0.5)}
+                    />
+
                     <View style={styles.infoContainer}>
 
                         <View style={styles.titleSegment}>
@@ -61,12 +64,27 @@ export default class EditPool extends Component {
                                 placeholderTextColor="rgba(128,128,128,0.5)"
                                 underlineColorAndroid='rgba(0,0,0,0)'
                                 textAlign='left'
-                                keyboardType="email-address"
                                 autoCapitalize="words"
                                 autoCorrect={false}
+                                onSubmitEditing={() => this.passwordInput.focus()}
                                 onChangeText={(poolName) => this.state.activePool.setPoolName(poolName)}
                             >
                             </TextInput>
+                        </View>
+
+                        <View style={styles.titleSegment}>
+                            <TextInput
+                                style={styles.title}
+                                placeholder="Enter pool password"
+                                secureTextEntry
+                                placeholderTextColor="rgba(128,128,128,0.5)"
+                                underlineColorAndroid='rgba(0,0,0,0)'
+                                textAlign='left'
+                                ref={(input) => this.passwordInput = input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                onChangeText={(poolPassword) => this.state.activePool.setPoolPassword(poolPassword)}
+                            />
                         </View>
 
                         <View style={styles.infoSegment}>
@@ -76,7 +94,6 @@ export default class EditPool extends Component {
 
                             <List>
 
-                                {console.log(this.state.activePool.poolDetails.recipients)}
                                 <FlatList
                                     data={this.state.recipients}
                                     extraData={this.state}
@@ -93,11 +110,11 @@ export default class EditPool extends Component {
                                 />
                             </List>
 
-                            <TouchableOpacity 
-                            style={styles.editMembers}
-                            onPress={() => navigate('EditPoolMembers', { 
-                                    props: this.state.activePool, 
-                                    onGoBack: () => {this.setState({ recipients: this.state.activePool.poolDetails.recipients }); console.log('back') }
+                            <TouchableOpacity
+                                style={styles.editMembers}
+                                onPress={() => navigate('EditPoolMembers', {
+                                    props: this.state.activePool,
+                                    onGoBack: () => { this.setState({ recipients: this.state.activePool.poolDetails.recipients }); console.log('back') }
                                 })}
                                 underlayColor='#55ac45'
                             >
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
     },
-    editMembers:{
+    editMembers: {
         paddingTop: 7,
     }
 })

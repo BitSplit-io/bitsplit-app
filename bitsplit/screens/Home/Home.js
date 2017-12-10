@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity
 import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
-import { getPools, setPools, } from '../../src/components/User/UserComponent';
+import { getPools, setPools, } from '../../src/components/User/CurrentUser';
 
 import { GetUserPools } from '../../src/api/ApiUtils';
 //import { GetPools } from '../../src/components/User/UserComponent';

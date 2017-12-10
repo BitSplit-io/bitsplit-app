@@ -13,7 +13,7 @@ import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
-import CurrentUser from '../../src/components/User/UserComponent'
+import { SetUser } from '../../src/components/User/CurrentUser'
 
 export default class Login extends React.Component {
 
@@ -84,27 +84,23 @@ export default class Login extends React.Component {
                         value={this.state.password}
                     />
 
-
-
-
                     <TouchableOpacity
 
                         style={styles.buttonContainer}
 
                         onPress={() => LoginWithUsername(
                             'magnus', 'password').then(results => { 
-                            //this.state.username , this.state.password).then(results => {
+                            // this.state.username , this.state.password).then(results => {
                             console.log(results);
                             //No point showing success message on success
                             // results.status == "error" ? alert(results.message) : navigate('Home', {});
                             if ( results.status == "error" ){
                                 alert(results.message)
                             }else{
-                                new CurrentUser(results.data.username, results.data.userId);
+                                SetUser(results.data.username, results.data.userId);
                                 navigate('Home', {});
                             }
                             })}
-
                     >
 
                         <Text style={styles.buttonText}>LOGIN</Text>

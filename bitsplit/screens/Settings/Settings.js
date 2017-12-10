@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, View, ScrollView, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
 import { Logout } from '../../src/api/ApiUtils'
 import { RootNavigator } from '../../config/router';
-import { CurrentUser } from '../../src/components/User/UserComponent';
+import { CurrentUser } from '../../src/components/User/CurrentUser';
 
 export default class Settings extends Component {
 

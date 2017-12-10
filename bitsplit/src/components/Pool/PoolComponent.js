@@ -19,14 +19,17 @@ export default class PoolComponent extends Component {
     
     constructor(data) {
         super();
-        this.poolDetails = data == undefined ?  {poolAdmin: undefined, poolId: undefined, poolName: undefined, recipients: [], transactionFee: 0.5} :
+        this.poolDetails = data == undefined ?  { poolName: undefined, poolAdmin: undefined, poolPassword: undefined, poolId: undefined, recipients: [], transactionFee: 0.5} :
         this.poolDetails = data;
     }
 
     setPoolName(name){
         this.poolDetails.poolName = name;
     }
-
+    
+    setPoolPassword(password){
+        this.poolDetails.poolPassword = password;
+    }
     
     setPoolAdmin(admin){
         this.poolDetails.poolAdmin = admin;
