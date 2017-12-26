@@ -10,6 +10,7 @@ import Pool from '../screens/Pool/Pool';
 import EditPool from '../screens/Pool/EditPool';
 import EditPoolMembers from '../screens/Pool/EditPoolMembers';
 import Wallet from '../screens/Wallet/Wallet';
+import Receive from '../screens/Transactions/Receive';
 import Test from '../screens/Test/Test';
 import Login from '../screens/Login/Login';
 import NewUser from '../screens/NewUser/NewUser';
@@ -119,6 +120,16 @@ export const RootNavigator = StackNavigator({
             }
         }
     },
+
+    Receive: {
+        screen: Receive,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    }
 });
 
 const headerStyle = {

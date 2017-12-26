@@ -114,7 +114,9 @@ export default class EditPool extends Component {
                                 style={styles.editMembers}
                                 onPress={() => navigate('EditPoolMembers', {
                                     props: this.state.activePool,
-                                    onGoBack: () => { this.setState({ recipients: this.state.activePool.poolDetails.recipients }); console.log('back') }
+                                    onGoBack: () => { this.setState({ 
+                                        recipients: this.state.activePool.poolDetails.recipients }); 
+                                        console.log('back') }
                                 })}
                                 underlayColor='#55ac45'
                             >

@@ -1,6 +1,11 @@
+import RNFetchBlob from 'react-native-fetch-blob';
+
 var bitsplitURL = "http://172.20.10.2:8080";
 var Auth_Headers = null;
 
+export function GetBitsplitURL() {
+    return bitsplitURL;
+}
 
 // ----------- USER ----------- //
 
@@ -152,9 +157,12 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, recipients, poo
         })
 }
 
+
+/*------------------- Transaction APIs -----------------------*/
+
 export function DoTransaction(poolPassword, poolId) {
-    var headers = Object.assign({}, Auth_Headers)
-    headers["Content-Type"] = "application/json" 
+    var headers = Object.assign({}, Auth_Headers);
+    headers["Content-Type"] = "application/json"; 
     return fetch(bitsplitURL + "/pools/"+ poolId +"/transact", {
         method: 'POST',
         headers: new Headers(
@@ -171,4 +179,45 @@ export function DoTransaction(poolPassword, poolId) {
             console.log(error)
             alert("THERE WAS A NETWORK ERROR");
         })
+}
+
+ export function GetReceiveQR(poolId, BTCamount) {
+
+    var headers = Object.assign({}, Auth_Headers);
+    headers["BTC-Amount"] = BTCamount.toString();
+    return RNFetchBlob.fetch('GET', bitsplitURL + "/pools/"+ poolId +"/receive-request", headers
+        ).then((res) => {
+            var result = [res.respInfo.headers["Receive-Request-URL"], "data:image/jpg;base64,"+res.base64()];
+            return result
+        }).catch(error => {
+            console.log(error);
+            alert("THERE WAS AN ERROR");
+        })
+
+        /*
+    }).then(response => response.blob()).then(myBlob => {
+            console.log("CREATING URL FOR BLOB")
+            return URL.createObjectURL(myBlob);
+        })
+        .catch(error => {
+            console.log(error)
+            alert("THERE WAS A NETWORK ERROR");
+        })
+    
+*/
+}
+
+export function GetExchangeRate(){
+    return fetch(
+        bitsplitURL + "/bitcoin/exchangerate", {
+            method: 'GET',
+        }
+    ).then((result) => {
+        return result;
+    }).then((resultJson) =>{
+        return resultJson.json();
+    }).catch(error => {
+        console.log(error);
+        alert("THERE WAS AN ERROR");
+    })
 }

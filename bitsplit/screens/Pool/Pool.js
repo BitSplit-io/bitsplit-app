@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
-import { List, ListItem, } from "react-native-elements";
+import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import { StackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
@@ -20,6 +20,7 @@ export default class Pool extends Component {
 
     render() {
 
+        const { navigate } = this.props.navigation;
 
         return (
 
@@ -32,6 +33,13 @@ export default class Pool extends Component {
                     <View style={styles.pieContainer}>
 
                         {this.state.activePool.renderPoolPieChart()}
+
+                        <Button 
+                            title="Get Address"
+                            color="#222"
+                            onPress= {() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                        >
+                        </Button>
 
                     </View>
                     <Button
