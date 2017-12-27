@@ -89,8 +89,8 @@ export default class Login extends React.Component {
                         style={styles.buttonContainer}
 
                         onPress={() => LoginWithUsername(
-                            'magnus', 'password').then(results => { 
-                            // this.state.username , this.state.password).then(results => {
+                            // 'magnus', 'password').then(results => { 
+                            this.state.username , this.state.password).then(results => {
                             console.log(results);
                             //No point showing success message on success
                             // results.status == "error" ? alert(results.message) : navigate('Home', {});
@@ -108,9 +108,7 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-
                     onPress={() => navigate('NewUser', {})}
-
                     >
 
                         <Text style={styles.newUserButton}>Create new user</Text>

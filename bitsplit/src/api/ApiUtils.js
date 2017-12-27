@@ -23,7 +23,6 @@ export function LoginWithUsername(username, password) {
         )
     })
         .then(response => {
-
             console.log("logging in");
             return response.json();
         }).then(responseJson => {
@@ -44,17 +43,12 @@ export function LoginWithUsername(username, password) {
 
 }
 
-export function Logout(username, userId) {
+export function Logout() {
     return fetch(bitsplitURL + "/auth/login", {
         method: 'POST',
         headers: new Headers({
             Auth_Headers
-        }),
-        body: JSON.stringify({
-            "username": username,
-            "password": password,
-        } // <-- Post parameters)
-        )
+        })
     }).then(Auth_Headers = null);
 }
 
@@ -78,7 +72,7 @@ export function CreateNewUser(email, username, password) {
         })
         .catch((error) => {
             console.log(error)
-            alert("THERE WAS A NETWORK ERROR");
+            throw new error(error.message ? error.message : "Could not create user");
         })
 
 }
@@ -88,9 +82,9 @@ export function CreateNewUser(email, username, password) {
 
 export function GetUserPools() {
     var headers = Object.assign({}, Auth_Headers)
-    headers["Content-Type"] = "application/json" 
+    headers["Content-Type"] = "application/json"
     return fetch(bitsplitURL + "/users/" + Auth_Headers["User-Id"] + "/pools", {
-   
+
         method: 'GET',
         headers: new Headers(
             headers
@@ -109,7 +103,7 @@ export function GetUserPools() {
 export function GetPool(poolId) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
-    
+
     return fetch(bitsplitURL + "/pools/" + poolId, {
         method: 'GET',
         headers: new Headers(
@@ -157,13 +151,41 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, recipients, poo
         })
 }
 
+export function UpdatePool(poolName, poolAdmin, poolPassword, recipients, poolTransactionFee) {
+
+    var headers = Object.assign({}, Auth_Headers);
+    headers["Content-Type"] = "application/json"
+    return fetch(bitsplitURL + "/pools/" + poolId, {
+        method: 'PUT',
+        headers: new Headers(
+            headers
+        ),
+        body: JSON.stringify({
+            "poolName": poolName,
+            "poolAdmin": poolAdmin,
+            "poolPassword": poolPassword,
+            "recipients": recipients,
+            "poolTransactionFee": poolTransactionFee,
+            // "poolAutomization": poolAutomization,
+        } // <-- Post parameters)
+        )
+    })
+        .then(response => {
+            console.log(response);
+            return response.json();
+        })
+        .catch((error) => {
+            console.log(error)
+            alert("THERE WAS A NETWORK ERROR");
+        })
+}
 
 /*------------------- Transaction APIs -----------------------*/
 
 export function DoTransaction(poolPassword, poolId) {
     var headers = Object.assign({}, Auth_Headers);
-    headers["Content-Type"] = "application/json"; 
-    return fetch(bitsplitURL + "/pools/"+ poolId +"/transact", {
+    headers["Content-Type"] = "application/json";
+    return fetch(bitsplitURL + "/pools/" + poolId + "/transact", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -181,40 +203,40 @@ export function DoTransaction(poolPassword, poolId) {
         })
 }
 
- export function GetReceiveQR(poolId, BTCamount) {
+export function GetReceiveQR(poolId, BTCamount) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["BTC-Amount"] = BTCamount.toString();
-    return RNFetchBlob.fetch('GET', bitsplitURL + "/pools/"+ poolId +"/receive-request", headers
-        ).then((res) => {
-            var result = [res.respInfo.headers["Receive-Request-URL"], "data:image/jpg;base64,"+res.base64()];
-            return result
-        }).catch(error => {
-            console.log(error);
-            alert("THERE WAS AN ERROR");
-        })
+    return RNFetchBlob.fetch('GET', bitsplitURL + "/pools/" + poolId + "/receive-request", headers
+    ).then((res) => {
+        var result = [res.respInfo.headers["Receive-Request-URL"], "data:image/jpg;base64," + res.base64()];
+        return result
+    }).catch(error => {
+        console.log(error);
+        alert("THERE WAS AN ERROR");
+    })
 
-        /*
-    }).then(response => response.blob()).then(myBlob => {
-            console.log("CREATING URL FOR BLOB")
-            return URL.createObjectURL(myBlob);
-        })
-        .catch(error => {
-            console.log(error)
-            alert("THERE WAS A NETWORK ERROR");
-        })
-    
+    /*
+}).then(response => response.blob()).then(myBlob => {
+        console.log("CREATING URL FOR BLOB")
+        return URL.createObjectURL(myBlob);
+    })
+    .catch(error => {
+        console.log(error)
+        alert("THERE WAS A NETWORK ERROR");
+    })
+ 
 */
 }
 
-export function GetExchangeRate(){
+export function GetExchangeRate() {
     return fetch(
         bitsplitURL + "/bitcoin/exchangerate", {
             method: 'GET',
         }
     ).then((result) => {
         return result;
-    }).then((resultJson) =>{
+    }).then((resultJson) => {
         return resultJson.json();
     }).catch(error => {
         console.log(error);

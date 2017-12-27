@@ -17,6 +17,7 @@ export default class EditPool extends Component {
         this.state = {
             activePool: new PoolComponent(),
             recipients: [],
+            transactionFee: 0.5,
         };
         this.state.poolAdmin = GetUserId();
         console.log(this.state.activePool.poolDetails.poolAdmin);
@@ -43,17 +44,6 @@ export default class EditPool extends Component {
                         {this.state.activePool.renderPoolPieChart()}
 
                     </View>
-
-                    <Button
-                        title="Submit"
-                        color="#222"
-                        onPress={() => CreateNewPool(
-                            this.state.activePool.poolDetails.poolName, 
-                            GetUserId(), 
-                            this.state.activePool.poolDetails.poolPassword, 
-                            this.state.recipients, 
-                            0.5)}
-                    />
 
                     <View style={styles.infoContainer}>
 
@@ -128,18 +118,26 @@ export default class EditPool extends Component {
 
                         <View style={styles.infoSegment}>
                             <Text style={styles.title}>
-                                Revenue
-                            </Text>
-                        </View>
-
-                        <View style={styles.infoSegment}>
-                            <Text style={styles.title}>
                                 Transaction settings
                             </Text>
                         </View>
 
+                        <Button
+                        title="Submit"
+                        color="#00BCFF"
+                        onPress={() => CreateNewPool(
+                            this.state.activePool.poolDetails.poolName, 
+                            GetUserId(), 
+                            this.state.activePool.poolDetails.poolPassword, 
+                            this.state.recipients, 
+                            this.state.transactionFee
+                            )}
+                        />
 
                     </View>
+
+                    
+
                 </ScrollView>
 
             </View>

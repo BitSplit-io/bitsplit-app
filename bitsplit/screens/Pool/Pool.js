@@ -12,7 +12,6 @@ const activePool = '';
 
 export default class Pool extends Component {
 
-
     constructor(props) {
         super(props);
         this.state = { activePool: this.props.navigation.state.params.item };
@@ -26,27 +25,34 @@ export default class Pool extends Component {
 
             <View style={styles.container}>
 
-
                 <ScrollView style={{ flex: 1 }}>
-
 
                     <View style={styles.pieContainer}>
 
                         {this.state.activePool.renderPoolPieChart()}
 
-                        <Button 
-                            title="Get Address"
-                            color="#222"
-                            onPress= {() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
-                        >
-                        </Button>
 
                     </View>
+
+                    <View style={styles.qrContainer}>
+                            <Text style={[{textAlignVertical: 'center', fontSize: 16}]}>
+                                Press icon to receive a transaction:
+                            </Text>
+                            <Icon
+                                name='qrcode'
+                                type='font-awesome'
+                                raised={true}
+                                style={styles.receiveButton}
+                                onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                            />
+                        </View>
+
                     <Button
-                    title="Split revenue"
-                    color="#222"
-                    onPress={() => DoTransaction('password', this.state.activePool.poolDetails.poolId)}
-                />
+                        title="Split revenue"
+                        color="#00BCFF"
+                        onPress={() => DoTransaction('password', this.state.activePool.poolDetails.poolId)}
+                    />
+
                     <View style={styles.infoContainer}>
 
                         <View style={styles.titleSegment}>
@@ -68,7 +74,7 @@ export default class Pool extends Component {
                                     data={this.state.activePool.poolDetails.recipients}
                                     renderItem={({ item }) =>
                                         <ListItem
-                                            title={item ? (item.proportion * 100)+'%' : ''}
+                                            title={item ? (item.proportion * 100) + '%' : ''}
                                             subtitle={item ? item.address : ''}
                                             hideChevron={true}
                                         />
@@ -93,7 +99,7 @@ export default class Pool extends Component {
 
 
                     </View>
-                    
+
                 </ScrollView>
 
             </View>
@@ -106,6 +112,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5fff5',
+    },
+    qrContainer: {
+        flex: 1,
+        marginLeft: 30,
+        marginRight: 30,
+        padding: 30,
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+    },
+    receiveButton: {
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
     },
     pieContainer: {
         flex: 1,

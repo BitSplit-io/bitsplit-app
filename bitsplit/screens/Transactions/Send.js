@@ -7,7 +7,7 @@ import PoolComponent from '../../src/components/Pool/PoolComponent';
 import { GetReceiveQR, GetExchangeRate } from '../../src/api/ApiUtils';
 import Notification from 'react-native-in-app-notification';
 
-export default class ReceiveScreen extends Component {
+export default class SendScreen extends Component {
 
     constructor(props) {
         super(props);

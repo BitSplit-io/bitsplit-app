@@ -26,37 +26,55 @@ export default class Settings extends Component {
 
 
                 <ScrollView style={styles.settingsList}>
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('AccountScreen', {})}
+                    >
                         <Text style={styles.category}>
                             Account
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('PreferencesScreen', {})}
+                    >
                         <Text style={styles.category}>
                             Preferences
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('SecurityScreen', {})}
+                    >
                         <Text style={styles.category}>
                             Security
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('UserGuideScreen', {})}
+                    >
                         <Text style={styles.category}>
                             User Guide
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('SupportScreen', {})}
+                    >
                         <Text style={styles.category}>
                             Support
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity 
+                        style={styles.buttonStyle}
+                        onPress={ () => navigate('AboutScreen', {})}
+                    >
                         <Text style={styles.category}>
                             About
                     </Text>
@@ -66,9 +84,7 @@ export default class Settings extends Component {
 
                         style={styles.buttonStyle}
 
-                        onPress={() => Logout(CurrentUser.username(), CurrentUser.userId()).
-                            navigate('Login', {})
-                            }
+                        onPress={() => Logout().then(navigate('Login', {}))}
                     >
 
                         <Text style={styles.category}>

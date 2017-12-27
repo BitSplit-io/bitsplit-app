@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, View, ScrollView, TouchableOpacity, Text, StatusBar } from 'react-native';
+import { RootNavigator } from '../../config/router';
 
 export default class Wallet extends Component {
 
     render() {
+
+        const { navigate } = this.props.navigation;
+
+
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
-                
+
                 <ScrollView style={styles.settingsList}>
                     <TouchableOpacity style={styles.buttonStyle}>
                         <Text style={styles.category}>
@@ -15,15 +20,21 @@ export default class Wallet extends Component {
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={() => navigate('Send', {})}                        
+                    >
                         <Text style={styles.category}>
                             Send
                     </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={() => navigate('Receive', {})}
+                    >
                         <Text style={styles.category}>
-                            Recieve
+                            Receive
                     </Text>
                     </TouchableOpacity>
 
@@ -38,7 +49,7 @@ export default class Wallet extends Component {
                             Manage
                     </Text>
                     </TouchableOpacity>
-                    
+
                 </ScrollView>
 
             </View>

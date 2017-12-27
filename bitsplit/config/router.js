@@ -10,11 +10,18 @@ import Pool from '../screens/Pool/Pool';
 import EditPool from '../screens/Pool/EditPool';
 import EditPoolMembers from '../screens/Pool/EditPoolMembers';
 import Wallet from '../screens/Wallet/Wallet';
+import Send from '../screens/Transactions/Send';
 import Receive from '../screens/Transactions/Receive';
 import Test from '../screens/Test/Test';
 import Login from '../screens/Login/Login';
 import NewUser from '../screens/NewUser/NewUser';
 import Settings from '../screens/Settings/Settings';
+import AccountScreen from '../screens/Settings/AccountScreen';
+import PreferencesScreen from '../screens/Settings/PreferencesScreen';
+import SecurityScreen from '../screens/Settings/SecurityScreen';
+import UserGuideScreen from '../screens/Settings/UserGuideScreen';
+import SupportScreen from '../screens/Settings/SupportScreen';
+import AboutScreen from '../screens/Settings/AboutScreen';
 
 export default class Start extends Component {
     render() {
@@ -129,7 +136,66 @@ export const RootNavigator = StackNavigator({
                 elevation: 0,
             }
         }
-    }
+    },
+    
+    Send: {
+        screen: Send,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 0,
+            }
+        }
+    },
+
+    AccountScreen: {
+        screen: AccountScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
+    PreferencesScreen: {
+        screen: PreferencesScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
+    SecurityScreen: {
+        screen: SecurityScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
+    UserGuideScreen: {
+        screen: UserGuideScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
+    SupportScreen: {
+        screen: SupportScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
+    AboutScreen: {
+        screen: AboutScreen,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: '#7EC480',
+            }
+        }
+    },
 });
 
 const headerStyle = {
