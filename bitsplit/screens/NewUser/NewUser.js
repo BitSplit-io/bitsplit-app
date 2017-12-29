@@ -14,6 +14,7 @@ import { RootNavigator } from '../../config/router';
 import { CreateNewUser, LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
+import { NavigationActions } from 'react-navigation'
 
 export default class NewUser extends React.Component {
 
@@ -135,7 +136,11 @@ export default class NewUser extends React.Component {
                                 this.setState({isLoading: true});
                                 this.CreateandAuth(this.state.email.trim(), this.state.username.trim(), this.state.password)
                                 .then(() => {
-                                    navigate('Home', {})
+                                    this.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 0,
+                                            actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                                          }))
                                 }).catch(error => {
                                     MessageBarManager.showAlert({
                                         message: error.message,

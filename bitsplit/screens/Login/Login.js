@@ -14,6 +14,7 @@ import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
+import { NavigationActions } from 'react-navigation'
 
 export default class Login extends React.Component {
 
@@ -87,12 +88,18 @@ export default class Login extends React.Component {
                     <TouchableOpacity
                         style={styles.buttonContainer}
                         onPress={() => {
+                            
                             !this.state.isLoading && ( 
-                                this.setState({ isLoading: true }) ||
+                                this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
                                 LoginWithUsername(this.state.username, this.state.password)
                                     .then(results => {
                                         //No point showing success message on success
-                                        results.status == "success" ? navigate('Home', {}) :
+                                        results.status == "success" ? 
+                                        this.props.navigation.dispatch(
+                                            NavigationActions.reset({
+                                                index: 0,
+                                                actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                                              })) :
                                             MessageBarManager.showAlert({
                                                 message: results.message,
                                                 alertType: results.status,
@@ -137,8 +144,6 @@ export default class Login extends React.Component {
     }
 
 };
-
-
 
 const styles = StyleSheet.create({
     container: {
