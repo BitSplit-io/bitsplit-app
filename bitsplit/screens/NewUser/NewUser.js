@@ -52,9 +52,7 @@ export default class NewUser extends React.Component {
 
             <View style={styles.container}>
                 <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
-
                 <View>
-
                     {/* ------ NEW USER FORM -------*/}
                     <TextInput
                         placeholder="Email"
@@ -67,9 +65,7 @@ export default class NewUser extends React.Component {
                         autoCorrect={false}
                         style={styles.input}
                         onChangeText={(email) => this.setState({ email })}
-
                     />
-
                     <TextInput
                         placeholder="Username"
                         placeholderTextColor="rgba(255,255,255,0.5)"
@@ -82,9 +78,7 @@ export default class NewUser extends React.Component {
                         autoCorrect={false}
                         style={styles.input}
                         onChangeText={(username) => this.setState({ username })}
-
                     />
-
                     <TextInput
                         placeholder="Password"
                         secureTextEntry
@@ -98,7 +92,6 @@ export default class NewUser extends React.Component {
                         style={styles.input}
                         onChangeText={(password) => this.setState({ password })}
                     />
-
                     <TextInput
                         placeholder="Confirm Password"
                         secureTextEntry
@@ -111,7 +104,6 @@ export default class NewUser extends React.Component {
                         style={styles.input}
                         onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
                     />
- 
                 </View>
 
              {/* ------ LOGIN BUTTONS -------*/}
@@ -138,12 +130,13 @@ export default class NewUser extends React.Component {
                                 if (this.state.password != this.state.confirmPassword) {
                                     throw new Error("Passwords didn't match")
                                 }
+
+
                                 this.setState({isLoading: true});
                                 this.CreateandAuth(this.state.email.trim(), this.state.username.trim(), this.state.password)
                                 .then(() => {
                                     navigate('Home', {})
-                                })
-                                .catch(error => {
+                                }).catch(error => {
                                     MessageBarManager.showAlert({
                                         message: error.message,
                                         alertType: "error",
@@ -152,26 +145,21 @@ export default class NewUser extends React.Component {
                                 this.setState({isLoading: false}
                                 ));                                
                             } catch (error) {
-                                console.log("===THE ERROR WAS CAUGHT===");
                                 MessageBarManager.showAlert({
                                     message: error.message,
                                     alertType: "error",
                                 });
                             }
-
                         }}
                     >
                     <Text style={[styles.buttonText, {paddingLeft: this.state.isLoading ? 45 : 0}]}>SIGN UP</Text>  
                     {this.state.isLoading && <ActivityIndicator style={{paddingLeft: 25}}/>}
                 </TouchableOpacity>      
-
-
+                
                 <TouchableOpacity
                     onPress={() => navigate('Login', {})}
                 >
-
                     <Text style={styles.returnButton}>Return to login</Text>
-
                 </TouchableOpacity>
 
                 <MessageBar
@@ -185,13 +173,9 @@ export default class NewUser extends React.Component {
                     messageColor: '#ffffff'
                     }}
                 />
-
             </View>
-
         )
-
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -236,6 +220,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#55ac45',
         paddingVertical: 15,
     },
+    
     buttonText: {
         textAlign: 'center',
         color: '#f5fff5',

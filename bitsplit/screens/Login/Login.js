@@ -8,7 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
-    } from 'react-native';
+    ActivityIndicator,
+} from 'react-native';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
@@ -18,20 +19,20 @@ export default class Login extends React.Component {
 
     componentDidMount() {
         MessageBarManager.registerMessageBar(this.refs.alert);
-      }
-      componentWillUnmount() {
+    }
+    componentWillUnmount() {
         MessageBarManager.unregisterMessageBar();
-      }
+    }
 
     constructor() {
         super();
-        this.state = { username: '', password: '' };
+        this.state = { username: '', password: '', isLoading: false };
     };
 
     render() {
 
         const { navigate } = this.props.navigation;
-        
+
         return (
 
             <View style={styles.container}>
@@ -67,7 +68,7 @@ export default class Login extends React.Component {
                         value={this.state.username}
 
                     />
-                    
+
                     <TextInput
 
                         placeholder="Password"
@@ -84,43 +85,48 @@ export default class Login extends React.Component {
                     />
 
                     <TouchableOpacity
-
                         style={styles.buttonContainer}
-                        onPress={() => LoginWithUsername(this.state.username, this.state.password).then(results => {
-                            //No point showing success message on success
-                            results.status == "success" ?  navigate('Home', {}) :
-                            MessageBarManager.showAlert({
-                                message: results.message,
-                                alertType: results.status,
-                            });
-                        })
-                        .catch((error) =>
-                                alert("error when processing login result")
-                            )}
+                        onPress={() => {
+                            !this.state.isLoading && ( 
+                                this.setState({ isLoading: true }) ||
+                                LoginWithUsername(this.state.username, this.state.password)
+                                    .then(results => {
+                                        //No point showing success message on success
+                                        results.status == "success" ? navigate('Home', {}) :
+                                            MessageBarManager.showAlert({
+                                                message: results.message,
+                                                alertType: results.status,
+                                            });
+                                    }).catch((error) =>
+                                        alert("error when processing login result"))
+                                    .finally(() => {
+                                        this.setState({ isLoading: false });
+                                    })
+                                )
+                            }
+                        }
                     >
-
-                        <Text style={styles.buttonText}>LOGIN</Text>
+                        <Text style={[styles.buttonText, { paddingLeft: this.state.isLoading ? 45 : 0 }]}>LOG IN</Text>
+                        {this.state.isLoading && <ActivityIndicator style={{ paddingLeft: 25 }} />}
 
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                    onPress={() => navigate('NewUser', {})}
+                        onPress={() => navigate('NewUser', {})}
                     >
-
-                        <Text style={styles.newUserButton}>Create new user</Text>
-
+                        <Text style={styles.newUserButton}>Create account</Text>
                     </TouchableOpacity>
-
                 </View>
+
                 <MessageBar
                     ref="alert"
                     duration={2000}
                     viewTopOffset={10}
                     stylesheetSuccess={{
-                    backgroundColor: '#97b7e5',
-                    strokeColor: '#97b7e5',
-                    titleColor: '#ffffff',
-                    messageColor: '#ffffff'
+                        backgroundColor: '#97b7e5',
+                        strokeColor: '#97b7e5',
+                        titleColor: '#ffffff',
+                        messageColor: '#ffffff'
                     }}
                 />
 
@@ -170,9 +176,12 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         backgroundColor: '#55ac45',
         paddingVertical: 15,
     },
+    
     buttonText: {
         textAlign: 'center',
         color: '#f5fff5',
