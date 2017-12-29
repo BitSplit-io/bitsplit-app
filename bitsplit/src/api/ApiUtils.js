@@ -44,12 +44,12 @@ export function LoginWithUsername(username, password) {
 }
 
 export function Logout() {
-    return fetch(bitsplitURL + "/auth/login", {
+    return fetch(bitsplitURL + "/auth/logout", {
         method: 'POST',
         headers: new Headers({
             Auth_Headers
         })
-    }).then(Auth_Headers = null);
+    }).then(() => Auth_Headers = null);
 }
 
 
