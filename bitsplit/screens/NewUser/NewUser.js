@@ -120,6 +120,15 @@ export default class NewUser extends React.Component {
                                 if (this.state.password != this.state.confirmPassword) {
                                     throw new Error("Passwords didn't match")
                                 }
+                                if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                .test(this.state.email.toLowerCase())) {
+                                    throw new Error("Please enter a valid email");
+                                }
+                                if (/([@,^"()/\\;:])/.test(this.state.username)) { 
+                                    throw new Error("Please use alphanumeric username");
+                                }
+
+                                
                                 CreateNewUser(this.state.email, this.state.username, this.state.password)
                                     .then(results => {
                                         //No point showing success message on success
