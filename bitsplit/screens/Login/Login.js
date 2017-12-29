@@ -13,7 +13,6 @@ import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
-import { SetUser } from '../../src/components/User/CurrentUser'
 
 export default class Login extends React.Component {
 
@@ -87,20 +86,17 @@ export default class Login extends React.Component {
                     <TouchableOpacity
 
                         style={styles.buttonContainer}
-
-                        onPress={() => LoginWithUsername(
-                            // 'magnus', 'password').then(results => { 
-                            this.state.username , this.state.password).then(results => {
-                            console.log(results);
+                        onPress={() => LoginWithUsername(this.state.username, this.state.password).then(results => {
                             //No point showing success message on success
-                            // results.status == "error" ? alert(results.message) : navigate('Home', {});
-                            if ( results.status == "error" ){
-                                alert(results.message)
-                            }else{
-                                SetUser(results.data.username, results.data.userId);
-                                navigate('Home', {});
-                            }
-                            })}
+                            results.status == "success" ?  navigate('Home', {}) :
+                            MessageBarManager.showAlert({
+                                message: results.message,
+                                alertType: results.status,
+                            });
+                        })
+                        .catch((error) =>
+                                alert("error when processing login result")
+                            )}
                     >
 
                         <Text style={styles.buttonText}>LOGIN</Text>

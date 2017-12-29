@@ -8,9 +8,10 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
+    ActivityIndicator,
 } from 'react-native';
 import { RootNavigator } from '../../config/router';
-import { CreateNewUser } from '../../src/api/ApiUtils';
+import { CreateNewUser, LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
 
@@ -18,13 +19,32 @@ export default class NewUser extends React.Component {
 
     constructor() {
         super();
-        this.state = { email: '', username: '', password: '', confirmPassword: '' };
+        this.state = { email: '', username: '', password: '', confirmPassword: '', isLoading: false};
     };
 
-    userFeedback() {
-        if (this.state.password != this.state.confirmPassword) throw new Error("Passwords didn't match");
-    }
+    componentDidMount() {
+        MessageBarManager.registerMessageBar(this.refs.alert);
+      }
+    componentWillUnmount() {
+        MessageBarManager.unregisterMessageBar();
+      }
 
+    CreateandAuth(email, username, password){
+        return CreateNewUser(email, username, password)
+        .then(results => {
+            //No point showing success message on success
+            console.log(results);
+            if (results.status == "error") 
+                throw new Error(results.message);
+        })
+        .then(() => {
+            return LoginWithUsername(username.trim(), password).then(results => {
+                if (results.status == "error")
+                    throw new Error (results.message);
+                return results;
+            })
+        })
+    }
     render() {
 
         const { navigate } = this.props.navigation;
@@ -32,17 +52,6 @@ export default class NewUser extends React.Component {
 
             <View style={styles.container}>
                 <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
-                <MessageBar
-                    ref="alert"
-                    duration={2000}
-                    viewTopOffset={10}
-                    stylesheetSuccess={{
-                        backgroundColor: '#97b7e5',
-                        strokeColor: '#97b7e5',
-                        titleColor: '#ffffff',
-                        messageColor: '#ffffff'
-                    }}
-                />
 
                 <View>
 
@@ -102,15 +111,24 @@ export default class NewUser extends React.Component {
                         style={styles.input}
                         onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
                     />
+ 
+                </View>
 
-
-                    {/* ------ LOGIN BUTTONS -------*/}
-                    <TouchableOpacity
-
+             {/* ------ LOGIN BUTTONS -------*/}
+             <TouchableOpacity
                         style={styles.buttonContainer}
-
                         onPress={() => {
+                            if (!this.state.isLoading)
                             try {
+                                if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                .test(this.state.email.toLowerCase())) {
+                                    throw new Error("Please enter a valid email");
+                                }
+
+                                if (/([@,^"()/\\;:])/.test(this.state.username)) { 
+                                    throw new Error("Please use alphanumeric username");
+                                }
+
                                 if (this.state.password.length < 8 || this.state.password. length > 32 ) {
                                     throw new Error("Passwords needs to be at least 8 characters long, and less than 32 characters.")
                                 }
@@ -120,35 +138,33 @@ export default class NewUser extends React.Component {
                                 if (this.state.password != this.state.confirmPassword) {
                                     throw new Error("Passwords didn't match")
                                 }
-                                if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                                .test(this.state.email.toLowerCase())) {
-                                    throw new Error("Please enter a valid email");
-                                }
-                                if (/([@,^"()/\\;:])/.test(this.state.username)) { 
-                                    throw new Error("Please use alphanumeric username");
-                                }
-
-                                
-                                CreateNewUser(this.state.email, this.state.username, this.state.password)
-                                    .then(results => {
-                                        //No point showing success message on success
-                                        console.log(results);
-                                        results.status == "error" ? alert(results.message) : navigate('Home', {});
-                                    })
+                                this.setState({isLoading: true});
+                                this.CreateandAuth(this.state.email.trim(), this.state.username.trim(), this.state.password)
+                                .then(() => {
+                                    navigate('Home', {})
+                                })
+                                .catch(error => {
+                                    MessageBarManager.showAlert({
+                                        message: error.message,
+                                        alertType: "error",
+                                    });
+                                }).finally(() => 
+                                this.setState({isLoading: false}
+                                ));                                
+                            } catch (error) {
+                                console.log("===THE ERROR WAS CAUGHT===");
+                                MessageBarManager.showAlert({
+                                    message: error.message,
+                                    alertType: "error",
+                                });
                             }
-                            catch (error) {
-                                alert(error.message)
 
-                            }
-                        }
-                        }
+                        }}
                     >
+                    <Text style={[styles.buttonText, {paddingLeft: this.state.isLoading ? 45 : 0}]}>SIGN UP</Text>  
+                    {this.state.isLoading && <ActivityIndicator style={{paddingLeft: 25}}/>}
+                </TouchableOpacity>      
 
-                        <Text style={styles.buttonText}>SIGN UP</Text>
-
-                    </TouchableOpacity>
-
-                </View>
 
                 <TouchableOpacity
                     onPress={() => navigate('Login', {})}
@@ -157,6 +173,18 @@ export default class NewUser extends React.Component {
                     <Text style={styles.returnButton}>Return to login</Text>
 
                 </TouchableOpacity>
+
+                <MessageBar
+                    ref="alert"
+                    duration={4000}
+                    viewTopOffset={10}
+                    stylesheetSuccess={{
+                    backgroundColor: '#97b7e5',
+                    strokeColor: '#97b7e5',
+                    titleColor: '#ffffff',
+                    messageColor: '#ffffff'
+                    }}
+                />
 
             </View>
 
@@ -203,6 +231,8 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         backgroundColor: '#55ac45',
         paddingVertical: 15,
     },
