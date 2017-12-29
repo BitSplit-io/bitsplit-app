@@ -12,7 +12,6 @@ import EditPoolMembers from '../screens/Pool/EditPoolMembers';
 import Wallet from '../screens/Wallet/Wallet';
 import Send from '../screens/Transactions/Send';
 import Receive from '../screens/Transactions/Receive';
-import Test from '../screens/Test/Test';
 import Login from '../screens/Login/Login';
 import NewUser from '../screens/NewUser/NewUser';
 import Settings from '../screens/Settings/Settings';

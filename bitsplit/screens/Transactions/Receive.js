@@ -23,6 +23,7 @@ export default class ReceiveScreen extends Component {
     }
 
     refreshQR(btcAmount) {
+        console.log("REFRESHING QR");
         GetReceiveQR(this.state.poolId, btcAmount?btcAmount:0).then(data => {
             this.setState({ receiveAdress: data[0] });
             this.setState({ qrImage: data[1] });
@@ -56,10 +57,6 @@ export default class ReceiveScreen extends Component {
         this.keyboardHidden();
         this.refreshQR();
         GetExchangeRate().then(BTCrate => this.setState({BTCrate: BTCrate}))
-    }
-
-    componentWillUnmount() {
-        this.refreshQR()
     }
 
     getCurrencyAmount(){

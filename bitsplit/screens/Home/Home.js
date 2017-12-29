@@ -25,13 +25,17 @@ export default class Home extends Component {
             error: null,
             refreshing: false,
         }
-
-        this.refreshPools();
-
     };
+
+    componentWillMount(){
+        this.refreshPools();
+    }
 
     refreshPools() {
         console.log("REFRESHING POOLS")
+        this.setState({
+            poolComponents: []
+        })
         GetUserPools().then(results => {
             var _poolComponents = [];
             console.log("results.data.length: " + results.data.length);
@@ -87,7 +91,7 @@ export default class Home extends Component {
                         <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#55ac45'>
                             <ListItem
                                 roundAvatar
-                                title={item ? item.poolDetails.poolName : ''}
+                                title={item ? item.poolDetails.poolName +" (balance: "+ item.poolDetails.balance + ")": ''}
                                 subtitle={item ? item.poolDetails.intermediateAddress : ''}
                             /* avatar={{ uri: item.picture.thumbnail }} */
                             />
