@@ -1,42 +1,61 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, TextInput, Button, StyleSheet, Animated, ScrollView, StatusBar, FlatList, TouchableOpacity, Image, Clipboard, Keyboard } from 'react-native';
+import { Item, AppRegistry, View, Text, TextInput, Button, StyleSheet, Animated, ScrollView, StatusBar, FlatList, TouchableOpacity, Image, Clipboard, Keyboard, Picker } from 'react-native';
 import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
+
+
 export default class ReceiveScreen extends Component {
 
-    render() {
+    constructor() {
+        super();
+        this.state = {
+            preferredPrefix: 'BTC',
+            preferredCurrency: 'USD',
+            preferredColorScheme: 'green',
+        }
+    }
+
+    settingWithDropdown(list, description, onChanged) {
         return (
-
             <View style={styles.container}>
-
-                <View style={styles.infoSegment}>
-                    <Text>
-                        Select preferred bitcoin prefix: BTC - mBTC - satoshi
+                <View style={{ width: '66%', height: 40 }}>
+                    <Text style={{ fontSize: 17, paddingTop: 14, paddingLeft: 10 }}>
+                        {description}
                     </Text>
                 </View>
-
-                <View style={styles.infoSegment}>
-                    <Text>
-                        Select preferred exchange currency: USD - EUR - GBP
-                    </Text>
+                <View style={{ width: '34%', height: 40 }}>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={this.state.stateVariable}
+                        onValueChange={(value) => this.setState({ stateVariable: value })}>
+                        {Object.keys(list).map((key) => {
+                            return (<Item label={list[key]} value={key} key={key} />)
+                        })}
+                    </Picker>
                 </View>
-
-                <View style={styles.infoSegment}>
-                    <Text>
-                        Select personal color: blue - green - red - black
-                    </Text>
-                </View>
-
             </View>
+        )
+    }
 
+    render() {
+        var currencies = ["USD", "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "DKK", "EUR", "GBP", "HKD", "INR", "ISK", "JPY", "KRW", "NZD", "PLN", "RUB", "SEK", "SGD", "THB", "TWD"],
+            prefixes = ["BTC", "mBTC", "satoshi"],
+            colorSchemes = ['green', 'blue', 'red', 'black'];
+        return (
+            <View>
+                {this.settingWithDropdown(prefixes, 'Preferred prefix:', this.state.preferredPrefix)}
+                {this.settingWithDropdown(currencies, 'Preferred exchange currency:', this.state.preferredCurrency)}
+                {this.settingWithDropdown(colorSchemes, 'Preferred color scheme:', this.state.preferredColorScheme)}
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexDirection: 'row',
         backgroundColor: '#f5fff5',
+        borderBottomWidth: 1,
     },
     inputWrapper: {
         flex: 1,
@@ -90,9 +109,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#A0A0A0',
     },
     infoSegment: {
-        paddingLeft: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        backgroundColor: '#55ac45',
+        paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
     }
