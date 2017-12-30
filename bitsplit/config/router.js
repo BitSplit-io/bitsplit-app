@@ -21,6 +21,8 @@ import SecurityScreen from '../screens/Settings/SecurityScreen';
 import UserGuideScreen from '../screens/Settings/UserGuideScreen';
 import SupportScreen from '../screens/Settings/SupportScreen';
 import AboutScreen from '../screens/Settings/AboutScreen';
+import LoadingScreen from '../screens/App/LoadingScreen';
+import ConfirmPasswordScreen from '../screens/Login/ConfirmPasswordScreen'
 
 export default class Start extends Component {
     render() {
@@ -86,19 +88,26 @@ export const HomeTabs = TabNavigator({
 );
 
 export const RootNavigator = StackNavigator({
+    LoadingScreen: {
+        screen: LoadingScreen,
+        navigationOptions: {header: null, }
+    },
+    ConfirmPasswordScreen: {
+        screen: ConfirmPasswordScreen,
+        navigationOptions: {header: null, }
+    },
     Login: {
         screen: Login,
-        navigationOptions: { header: null, },
+        navigationOptions: { header: null, }
     },
     Home: {
         screen: HomeTabs,
-        navigationOptions: { header: null, },
+        navigationOptions: { header: null, }
     },
     NewUser: {
         screen: NewUser,
-        navigationOptions: { header: null, },
+        navigationOptions: { header: null, }
     },
-
     Pool: {
         screen: Pool,
         navigationOptions: {
@@ -126,7 +135,6 @@ export const RootNavigator = StackNavigator({
             }
         }
     },
-
     Receive: {
         screen: Receive,
         navigationOptions: {
@@ -136,7 +144,6 @@ export const RootNavigator = StackNavigator({
             }
         }
     },
-    
     Send: {
         screen: Send,
         navigationOptions: {
@@ -146,7 +153,6 @@ export const RootNavigator = StackNavigator({
             }
         }
     },
-
     AccountScreen: {
         screen: AccountScreen,
         navigationOptions: {

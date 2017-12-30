@@ -88,7 +88,6 @@ export default class Login extends React.Component {
                     <TouchableOpacity
                         style={styles.buttonContainer}
                         onPress={() => {
-                            
                             !this.state.isLoading && ( 
                                 this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
                                 LoginWithUsername(this.state.username, this.state.password)
@@ -193,6 +192,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20
     },
+
     newUserButton: {
         alignSelf: 'center',
         padding: 3,

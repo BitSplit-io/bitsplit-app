@@ -1,4 +1,5 @@
 import RNFetchBlob from 'react-native-fetch-blob';
+import { AsyncStorage } from 'react-native'
 
 var bitsplitURL = "http://172.20.10.2:8080";
 var Auth_Headers = null;
@@ -34,6 +35,14 @@ export function LoginWithUsername(username, password) {
                 }
                 console.log(Auth_Headers);
             }
+            if(responseJson.status && responseJson.status == "success") {
+                try {
+                    AsyncStorage.setItem('@UserStore:userId', responseJson.data.userId);
+                    AsyncStorage.setItem('@UserStore:username', responseJson.data.username);                    
+                } catch (error) {
+                    alert("DANGER DANGER");
+                  }
+            }
             return responseJson;
         })
         .catch((error) => {
@@ -44,17 +53,20 @@ export function LoginWithUsername(username, password) {
 }
 
 export function Logout() {
+    var headers = Object.assign({}, Auth_Headers)
+    Auth_Headers = null
+    AsyncStorage.removeItem('@UserStore:userId');
+    AsyncStorage.removeItem('@UserStore:username');
     return fetch(bitsplitURL + "/auth/logout", {
         method: 'POST',
-        headers: new Headers({
-            Auth_Headers
-        })
-    }).then(() => Auth_Headers = null);
+        headers: new Headers(
+            headers
+        )
+    });
 }
 
 
 export function CreateNewUser(email, username, password) {
-
     return fetch(bitsplitURL + "/users/create", {
         method: 'POST',
         headers: new Headers({

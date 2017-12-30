@@ -83,8 +83,15 @@ export default class Settings extends Component {
                     <TouchableOpacity
 
                         style={styles.buttonStyle}
-
-                        onPress={() => Logout().then(navigate('Login', {}))}
+                        
+                        onPress={() => {
+                            Logout().then(() =>
+                            this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                    index: 0,
+                                    actions: [NavigationActions.navigate({ routeName: 'Login'})]
+                                  }))
+                            )}}
                     >
 
                         <Text style={styles.category}>
