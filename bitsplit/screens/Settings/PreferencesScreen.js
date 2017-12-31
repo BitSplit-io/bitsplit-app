@@ -28,24 +28,21 @@ export default class ReceiveScreen extends Component {
                         mode="dropdown"
                         selectedValue={stateVariable}
                         onValueChange={(value, index) => onChanged(value)}>
-                        {Object.keys(list).map((key) => {
-                            return (<Item label={list[key]} value={key} key={key} />)
-                        })}
+                        {list.map( (s, i) => { return <Picker.Item key={i} value={s} label={s} />})}
                     </Picker>
                 </View>
             </View>
         )
     }
-
     render() {
-        var currencies = { USD: "USD" , AUD:"AUD", BRL: "BRL", CAD: "CAD", CHF: "CHF", CLP: "CLP", CNY: "CNY", DKK: "DKK", EUR: "EUR", GBP: "GBP", HKD:"HKD",
-         INR: "INR", ISK: "ISK", JPY: "JPY", KRW: "KRW", NZD: "NZD",PLN: "PLN", RUB:  "RUB", SEK: "SEK", SGD: "SGD", THB: "THB", TWD:"TWD" },
-         prefixes = {"BTC" : "BTC", "mBTC": "mBTC", "satoshi": "satoshi"},
-         colorSchemes = { green: 'green', blue: 'blue', red: 'red', black: 'black'};
-        return (
+        var currencies = [ "USD" ,"AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "DKK", "EUR", "GBP", "HKD", "INR", "ISK", "JPY", "KRW", "NZD", "PLN", "RUB", "SEK", "SGD", "THB", "TWD" ],
+         prefixes = [ "BTC",  "mBTC", "satoshi"],
+         colorSchemes = ['green', 'blue', 'red',  'black'];
+        
+         return (
             <View>
                 {this.settingWithDropdown(prefixes, 'Preferred prefix:', (value)  =>  this.setState({preferredPrefix: value}), this.state.preferredPrefix)}
-                {this.settingWithDropdown(currencies, 'Preferred exchange currency:',  (value)  =>  this.setState({preferredCurrency: value}), this.state.preferredCurrency)}
+                {this.settingWithDropdown(currencies, 'Preferred currency:', (value)  =>  this.setState({preferredCurrency: value}), this.state.preferredCurrency)}
                 {this.settingWithDropdown(colorSchemes, 'Preferred color scheme:', (value)  =>  this.setState({preferredColorScheme: value}), this.state.preferredColorScheme)}
                 </View>
         )
