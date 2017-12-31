@@ -15,7 +15,7 @@ export default class ReceiveScreen extends Component {
         }
     }
 
-    settingWithDropdown(list, description, onChanged) {
+    settingWithDropdown(list, description, onChanged, stateVariable) {
         return (
             <View style={styles.container}>
                 <View style={{ width: '66%', height: 40 }}>
@@ -26,8 +26,8 @@ export default class ReceiveScreen extends Component {
                 <View style={{ width: '34%', height: 40 }}>
                     <Picker
                         mode="dropdown"
-                        selectedValue={this.state.stateVariable}
-                        onValueChange={(value) => this.setState({ stateVariable: value })}>
+                        selectedValue={stateVariable}
+                        onValueChange={(value, index) => onChanged(value)}>
                         {Object.keys(list).map((key) => {
                             return (<Item label={list[key]} value={key} key={key} />)
                         })}
@@ -38,15 +38,16 @@ export default class ReceiveScreen extends Component {
     }
 
     render() {
-        var currencies = ["USD", "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "DKK", "EUR", "GBP", "HKD", "INR", "ISK", "JPY", "KRW", "NZD", "PLN", "RUB", "SEK", "SGD", "THB", "TWD"],
-            prefixes = ["BTC", "mBTC", "satoshi"],
-            colorSchemes = ['green', 'blue', 'red', 'black'];
+        var currencies = { USD: "USD" , AUD:"AUD", BRL: "BRL", CAD: "CAD", CHF: "CHF", CLP: "CLP", CNY: "CNY", DKK: "DKK", EUR: "EUR", GBP: "GBP", HKD:"HKD",
+         INR: "INR", ISK: "ISK", JPY: "JPY", KRW: "KRW", NZD: "NZD",PLN: "PLN", RUB:  "RUB", SEK: "SEK", SGD: "SGD", THB: "THB", TWD:"TWD" },
+         prefixes = {"BTC" : "BTC", "mBTC": "mBTC", "satoshi": "satoshi"},
+         colorSchemes = { green: 'green', blue: 'blue', red: 'red', black: 'black'};
         return (
             <View>
-                {this.settingWithDropdown(prefixes, 'Preferred prefix:', this.state.preferredPrefix)}
-                {this.settingWithDropdown(currencies, 'Preferred exchange currency:', this.state.preferredCurrency)}
-                {this.settingWithDropdown(colorSchemes, 'Preferred color scheme:', this.state.preferredColorScheme)}
-            </View>
+                {this.settingWithDropdown(prefixes, 'Preferred prefix:', (value)  =>  this.setState({preferredPrefix: value}), this.state.preferredPrefix)}
+                {this.settingWithDropdown(currencies, 'Preferred exchange currency:',  (value)  =>  this.setState({preferredCurrency: value}), this.state.preferredCurrency)}
+                {this.settingWithDropdown(colorSchemes, 'Preferred color scheme:', (value)  =>  this.setState({preferredColorScheme: value}), this.state.preferredColorScheme)}
+                </View>
         )
     }
 }
