@@ -25,9 +25,7 @@ export default class ReceiveScreen extends Component {
                 </View>
 
                 <Text>
-                    BitSplit started in the year of 20xx.
-                    We will not steal your money. In fact. It's not even money. You fool.
-                    It's just numbers. On a chain. Of blocks. But verified it. So they're yours.
+                    BitSplit started in the year of 2017. We make it easy for you to receive Bitcoins to your team.
                     Keep them safe.
                 </Text>
 
