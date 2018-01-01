@@ -55,9 +55,8 @@ export function LoginWithUsername(username, password) {
 export function Logout() {
     var headers = Object.assign({}, Auth_Headers)
     Auth_Headers = null
-    AsyncStorage.removeItem('@UserStore:userId');
-    AsyncStorage.removeItem('@UserStore:username');
-    return fetch(bitsplitURL + "/auth/logout", {
+    return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => {console.log("error")})
+    fetch(bitsplitURL + "/auth/logout", {
         method: 'POST',
         headers: new Headers(
             headers
