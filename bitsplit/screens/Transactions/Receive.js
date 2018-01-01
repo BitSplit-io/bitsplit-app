@@ -14,11 +14,13 @@ export default class ReceiveScreen extends Component {
         this.state = {
             poolId: this.props.navigation.state.params,
             qrImage: null,
+            qrSize: null,
             receiveAdress: null,
             BTCamount: 0,
             CurrencyAmount: 0,
             animation: new Animated.Value(),
             BTCrate: null,
+            keyboardToggle: false,
         };
     }
 
@@ -32,25 +34,33 @@ export default class ReceiveScreen extends Component {
 
 
     animateSize(initialValue, finalValue) {
-        this.state.animation.setValue(initialValue);
-        Animated.decay(
+        if (this.state.qrSize != initialValue)
+            this.state.animation.setValue(initialValue);
+        
+        Animated.timing(
             this.state.animation,
             {
-                delay: 100,
-                duration: 1000,
+                delay: 10,
+                duration: 500,
                 toValue: finalValue,
             }
         ).start();
+
+        this.setState({qrSize: finalValue});
     }
 
     keyboardShown() {
-        this.animateSize(100, 300);
+        this.animateSize(300, 100);
     }
 
     keyboardHidden() {
-        this.animateSize(300, 100);
-        if(this.state.BTCamount=='')this.setState({BTCamount: 0});
-        if(this.state.CurrencyAmount=='')this.setState({CurrencyAmount: 0});
+        this.animateSize(100, 300);
+        
+        if (this.state.BTCamount == '')
+            this.setState({BTCamount: 0});
+        
+        if (this.state.CurrencyAmount == '')
+            this.setState({CurrencyAmount: 0});
     }
 
     componentWillMount() {
@@ -73,6 +83,10 @@ export default class ReceiveScreen extends Component {
 
     numberify(input){
         input = input.replace(',', '.');
+        if (input.startsWith('0') && input == 0)
+            input = "";
+        if (input.startsWith('0') && input != 0)
+            input = input.slice(1);
         if (input.startsWith('.'))
             input = "0" + input.toString();
         if (input < 0)
@@ -94,8 +108,8 @@ export default class ReceiveScreen extends Component {
 
                 <View style={styles.content}>
                     <Animated.Image
-                        source={{ uri: this.state.qrImage == null ? "../../src/images/Logo.png" : this.state.qrImage }}
                         style={[styles.qrImage, { width: this.state.animation, height: this.state.animation }]}
+                        source={{ uri: this.state.qrImage == null ? "../../src/images/Logo.png" : this.state.qrImage }}
                     />
                 </View>
 
@@ -123,7 +137,7 @@ export default class ReceiveScreen extends Component {
                         }
                         value={(this.state.BTCamount).toString().substr(0,7)}
                         onFocus={() => {
-                            if(this.state.BTCamount == 0) this.resetBTCState();                            
+                            if(this.state.BTCamount == 0) this.resetBTCState();
                             this.keyboardShown();
                         }
                         }
@@ -150,7 +164,7 @@ export default class ReceiveScreen extends Component {
                         }                    
                         }
                         onFocus={() => {
-                            if(this.state.CurrencyAmount == 0) this.resetCurrencyState();
+                            if(this.state.CurrencyAmount == 0) this.resetCurrencyState();              
                             this.keyboardShown();
                         }
                         }

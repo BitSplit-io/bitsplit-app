@@ -30,7 +30,7 @@ export default class NewUser extends React.Component {
         MessageBarManager.unregisterMessageBar();
       }
 
-    CreateandAuth(email, username, password){
+    createAndAuth(email, username, password){
         return CreateNewUser(email, username, password)
         .then(results => {
             //No point showing success message on success
@@ -46,6 +46,54 @@ export default class NewUser extends React.Component {
             })
         })
     }
+
+    _submit(){
+        if (!this.state.isLoading)
+        try {
+            if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            .test(this.state.email.toLowerCase())) {
+                throw new Error("Please enter a valid email");
+            }
+
+            if (/([@,^"()/\\;:])/.test(this.state.username)) { 
+                throw new Error("Please use alphanumeric username");
+            }
+
+            if (this.state.password.length < 8 || this.state.password. length > 32 ) {
+                throw new Error("Passwords needs to be at least 8 characters long, and less than 32 characters.")
+            }
+            if (this.state.password != this.state.confirmPassword) {
+                throw new Error("Passwords didn't match")
+            }
+            if (this.state.password != this.state.confirmPassword) {
+                throw new Error("Passwords didn't match")
+            }
+
+
+            this.setState({isLoading: true});
+            this.createAndAuth(this.state.email.trim(), this.state.username.trim(), this.state.password)
+            .then(() => {
+                this.props.navigation.dispatch(
+                    NavigationActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                      }))
+            }).catch(error => {
+                MessageBarManager.showAlert({
+                    message: error.message,
+                    alertType: "error",
+                });
+            }).finally(() => 
+            this.setState({isLoading: false}
+            ));                                
+        } catch (error) {
+            MessageBarManager.showAlert({
+                message: error.message,
+                alertType: "error",
+            });
+        }
+    }
+
     render() {
 
         const { navigate } = this.props.navigation;
@@ -104,58 +152,14 @@ export default class NewUser extends React.Component {
                         autoCorrect={false}
                         style={styles.input}
                         onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                        onSubmitEditing={() => this._submit()}
                     />
                 </View>
 
              {/* ------ LOGIN BUTTONS -------*/}
              <TouchableOpacity
                         style={styles.buttonContainer}
-                        onPress={() => {
-                            if (!this.state.isLoading)
-                            try {
-                                if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                                .test(this.state.email.toLowerCase())) {
-                                    throw new Error("Please enter a valid email");
-                                }
-
-                                if (/([@,^"()/\\;:])/.test(this.state.username)) { 
-                                    throw new Error("Please use alphanumeric username");
-                                }
-
-                                if (this.state.password.length < 8 || this.state.password. length > 32 ) {
-                                    throw new Error("Passwords needs to be at least 8 characters long, and less than 32 characters.")
-                                }
-                                if (this.state.password != this.state.confirmPassword) {
-                                    throw new Error("Passwords didn't match")
-                                }
-                                if (this.state.password != this.state.confirmPassword) {
-                                    throw new Error("Passwords didn't match")
-                                }
-
-
-                                this.setState({isLoading: true});
-                                this.CreateandAuth(this.state.email.trim(), this.state.username.trim(), this.state.password)
-                                .then(() => {
-                                    this.props.navigation.dispatch(
-                                        NavigationActions.reset({
-                                            index: 0,
-                                            actions: [NavigationActions.navigate({ routeName: 'Home'})]
-                                          }))
-                                }).catch(error => {
-                                    MessageBarManager.showAlert({
-                                        message: error.message,
-                                        alertType: "error",
-                                    });
-                                }).finally(() => 
-                                this.setState({isLoading: false}
-                                ));                                
-                            } catch (error) {
-                                MessageBarManager.showAlert({
-                                    message: error.message,
-                                    alertType: "error",
-                                });
-                            }
-                        }}
+                        onPress={() => this._submit()}
                     >
                     <Text style={[styles.buttonText, {paddingLeft: this.state.isLoading ? 45 : 0}]}>SIGN UP</Text>  
                     {this.state.isLoading && <ActivityIndicator style={{paddingLeft: 25}}/>}

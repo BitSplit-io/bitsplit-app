@@ -30,13 +30,37 @@ export default class Login extends React.Component {
         this.state = { username: '', password: '', isLoading: false };
     };
 
+    _login() {
+        !this.state.isLoading && (
+            this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
+            LoginWithUsername(this.state.username, this.state.password)
+                .then(results => {
+                    //No point showing success message on success
+                    results.status == "success" ?
+                        this.props.navigation.dispatch(
+                            NavigationActions.reset({
+                                index: 0,
+                                actions: [NavigationActions.navigate({ routeName: 'Home' })]
+                            })) :
+                        MessageBarManager.showAlert({
+                            message: results.message,
+                            alertType: results.status,
+                        });
+                }).catch((error) =>
+                    alert("error when processing login result"))
+                .finally(() => {
+                    this.setState({ isLoading: false });
+                })
+        )
+    }
+
     render() {
 
         const { navigate } = this.props.navigation;
 
         return (
 
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
                 <View style={styles.logoContainer}>
 
@@ -83,36 +107,18 @@ export default class Login extends React.Component {
                         style={styles.input}
                         onChangeText={(password) => this.setState({ password })}
                         value={this.state.password}
+                        onSubmitEditing={() => this._login()}
                     />
 
                     <TouchableOpacity
                         style={styles.buttonContainer}
-                        onPress={() => {
-                            !this.state.isLoading && ( 
-                                this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
-                                LoginWithUsername(this.state.username, this.state.password)
-                                    .then(results => {
-                                        //No point showing success message on success
-                                        results.status == "success" ? 
-                                        this.props.navigation.dispatch(
-                                            NavigationActions.reset({
-                                                index: 0,
-                                                actions: [NavigationActions.navigate({ routeName: 'Home'})]
-                                              })) :
-                                            MessageBarManager.showAlert({
-                                                message: results.message,
-                                                alertType: results.status,
-                                            });
-                                    }).catch((error) =>
-                                        alert("error when processing login result"))
-                                    .finally(() => {
-                                        this.setState({ isLoading: false });
-                                    })
-                                )
-                            }
-                        }
+                        onPress={() => this._login()}
                     >
-                        <Text style={[styles.buttonText, { paddingLeft: this.state.isLoading ? 45 : 0 }]}>LOG IN</Text>
+
+                        <Text style={[styles.buttonText, { paddingLeft: this.state.isLoading ? 45 : 0 }]}>
+                            LOG IN
+                        </Text>
+
                         {this.state.isLoading && <ActivityIndicator style={{ paddingLeft: 25 }} />}
 
                     </TouchableOpacity>
@@ -137,11 +143,8 @@ export default class Login extends React.Component {
                 />
 
             </View>
-
         )
-
     }
-
 };
 
 const styles = StyleSheet.create({
@@ -185,7 +188,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#55ac45',
         paddingVertical: 15,
     },
-    
+
     buttonText: {
         textAlign: 'center',
         color: '#f5fff5',
