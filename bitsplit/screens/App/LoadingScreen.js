@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, ActivityIndicator, AsyncStorage, StyleSheet, Image } from 'react-native';
 import { RootNavigator } from '../../config/router';
-
+import { NavigationActions } from 'react-navigation';
 export default class LoadingScreen extends React.Component {
 
     constructor(props) {
@@ -19,7 +19,11 @@ export default class LoadingScreen extends React.Component {
                 }
                 this.props.navigation.navigate('ConfirmPasswordScreen', {value})
             }).catch((error) => {
-                this.props.navigation.navigate('Login', {})
+                this.props.navigation.dispatch(
+                    NavigationActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Login'})]
+                      }));
             })}, 1000    
         )
     }

@@ -3,6 +3,7 @@ import { AppRegistry, StyleSheet, View, ScrollView, StatusBar, Text, Image, Touc
 import { Logout } from '../../src/api/ApiUtils'
 import { RootNavigator } from '../../config/router';
 import { CurrentUser } from '../../src/components/User/CurrentUser';
+import { NavigationActions } from 'react-navigation';
 
 export default class Settings extends Component {
 
