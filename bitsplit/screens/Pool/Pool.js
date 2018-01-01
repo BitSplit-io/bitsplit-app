@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity, TextInput} from 'react-native';
+import Modal from 'react-native-modal';
 import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import { StackNavigator } from 'react-navigation';
@@ -7,6 +8,8 @@ import Pie from 'react-native-pie';
 import PoolComponent from '../../src/components/Pool/PoolComponent'
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
 import { GetPool, DoTransaction } from '../../src/api/ApiUtils';
+import MessageBar from '../Notification/MessageBar';
+import MessageBarManager from '../Notification/MessageBarManager';
 
 const activePool = '';
 
@@ -14,7 +17,67 @@ export default class Pool extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { activePool: this.props.navigation.state.params.item };
+        this.state = { activePool: this.props.navigation.state.params.item, visibleModal: false, enteredPassword: null};
+    }
+
+    toggleModal(state) {
+        this.setState({ visibleModal: state });
+    }
+
+    showError(message) {
+        console.log("Error shown");
+        MessageBarManager.showAlert({
+            message: message,
+            alertType: "error",
+        });
+    }
+
+    renderModalContent() {
+        return (
+            <View style={styles.modalContent}>
+                <View style={styles.contailer}>
+                <Text style={{marginBottom: 15}}>
+                    Enter password for {this.state.activePool.poolDetails.poolName}
+                </Text>
+
+               <TextInput 
+                    placeholder="Password"
+                    secureTextEntry
+                    placeholderTextColor="rgba(0,0,0,0.5)"
+                    underlineColorAndroid='rgba(0,0,0,0.5)'
+                    textAlign='center'
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                    onChangeText={(password) => this.setState({ enteredPassword: password })}
+                    value={this.state.enteredPassword}
+                />
+                </View>
+
+                <TouchableOpacity 
+                onPress={() => {
+                    DoTransaction(this.state.enteredPassword, this.state.activePool.poolDetails.poolId).then((result) => {
+                        result.status == "success" ?
+                            console.log("Success!") :
+                            result.message ?
+                                this.showError(result.message) :
+                                console.log("no error message")
+                    }).catch((error) => {
+                        alert("there was an error")
+                    });
+                }}>
+                        <Text  style={styles.modalButton}>Submit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    this.toggleModal(false);
+                    this.setState({enteredPassword: null})
+                }}>
+
+                    <Text style={[styles.modalButton, {backgroundColor: '#ac4545'}]}>Cancel</Text>
+                </TouchableOpacity>
+
+            </View>
+        );
     }
 
     render() {
@@ -24,6 +87,15 @@ export default class Pool extends Component {
         return (
 
             <View style={styles.container}>
+                <Modal
+                    isVisible={this.state.visibleModal}
+                    animationInTiming={2000}
+                    animationOutTiming={2000}
+                    backdropTransitionInTiming={2000}
+                    backdropTransitionOutTiming={2000}
+                >
+                    {this.renderModalContent()}
+                </Modal>
 
                 <ScrollView style={{ flex: 1 }}>
 
@@ -35,22 +107,22 @@ export default class Pool extends Component {
                     </View>
 
                     <View style={styles.qrContainer}>
-                            <Text style={[{textAlignVertical: 'center', fontSize: 16}]}>
-                                Press icon to receive a transaction:
+                        <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
+                            Press icon to receive a transaction:
                             </Text>
-                            <Icon
-                                name='qrcode'
-                                type='font-awesome'
-                                raised={true}
-                                style={styles.receiveButton}
-                                onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
-                            />
-                        </View>
+                        <Icon
+                            name='qrcode'
+                            type='font-awesome'
+                            raised={true}
+                            style={styles.receiveButton}
+                            onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                        />
+                    </View>
 
                     <Button
                         title="Split revenue"
                         color="#00BCFF"
-                        onPress={() => DoTransaction('password', this.state.activePool.poolDetails.poolId)}
+                        onPress={() => this.toggleModal(true)}
                     />
 
                     <View style={styles.infoContainer}>
@@ -101,7 +173,17 @@ export default class Pool extends Component {
                     </View>
 
                 </ScrollView>
-
+                <MessageBar
+                    ref="alert"
+                    duration={2000}
+                    viewTopOffset={10}
+                    stylesheetSuccess={{
+                        backgroundColor: '#97b7e5',
+                        strokeColor: '#97b7e5',
+                        titleColor: '#ffffff',
+                        messageColor: '#ffffff'
+                    }}
+                />
             </View>
 
         )
@@ -112,6 +194,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5fff5',
+    },
+    input: {
+        marginTop: 0,
+        marginBottom: 10,
+        height: 40,
+        backgroundColor: 'rgba(255, 255 ,255, 0.5)',
+        marginBottom: 10,
+        paddingHorizontal: 10,
+        fontSize: 16
+    },
+    modalContent: {
+        backgroundColor: '#f5fff5',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     qrContainer: {
         flex: 1,
@@ -165,5 +264,19 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
+    },
+    modalButton: {
+        textAlignVertical:'center',
+        backgroundColor:'#55ac45',
+        alignSelf: 'center',
+        padding: 3,
+        width: 200,
+        height: 40,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 0,
+        color: '#f5fff5'
     }
 })
