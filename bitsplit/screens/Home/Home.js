@@ -88,7 +88,7 @@ export default class Home extends Component {
                 <FlatList
                     data={this.state.poolComponents}
                     renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#55ac45'>
+                        <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#fff'>
                             <ListItem
                                 roundAvatar
                                 title={item ? item.poolDetails.poolName +" (balance: "+ item.poolDetails.balance + ")": ''}
@@ -116,7 +116,7 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5fff5'
+        backgroundColor: '#fff'
     },
     text: {
         fontSize: 16,

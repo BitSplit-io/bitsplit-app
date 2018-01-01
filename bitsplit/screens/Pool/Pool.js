@@ -159,7 +159,19 @@ export default class Pool extends Component {
 
                         <View style={styles.infoSegment}>
                             <Text style={styles.title}>
-                                Revenue
+                                Balance
+                            </Text>
+                            <Text style={styles.subtitle}>
+                                satoshi {this.state.activePool.poolDetails.balance}
+                            </Text>
+                        </View>
+                        
+                        <View style={styles.infoSegment}>
+                            <Text style={styles.title}>
+                                Total revenue
+                            </Text>
+                            <Text style={styles.subtitle}>
+                                satoshi += {this.state.activePool.poolDetails.balance}
                             </Text>
                         </View>
 

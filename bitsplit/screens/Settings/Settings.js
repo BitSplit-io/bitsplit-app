@@ -8,106 +8,122 @@ import { NavigationActions } from 'react-navigation';
 export default class Settings extends Component {
 
     render() {
-        
+
         const { navigate } = this.props.navigation;
 
         return (
-            <View style={styles.container}>
-                <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
+            <View style={styles.fullScreen}>
+                <View style={styles.container}>
+                    <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
 
-                <View style={styles.header}>
-                    <Image
-                        style={styles.logo}
-                        source={require('../../src/images/Logo.png')} />
+                    <View style={styles.header}>
+                        <Image
+                            style={styles.logo}
+                            source={require('../../src/images/Logo.png')} />
 
-                    <Text style={styles.title}>
-                        BitSplit
+                        <Text style={styles.title}>
+                            BitSplit
                     </Text>
+                    </View>
+
+
+                    <ScrollView style={styles.settingsList}>
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('AccountScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                Account
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('PreferencesScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                Preferences
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('SecurityScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                Security
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('UserGuideScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                User Guide
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('SupportScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                Support
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.buttonStyle}
+                            onPress={() => navigate('AboutScreen', {})}
+                        >
+                            <Text style={styles.category}>
+                                About
+                    </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+
+                            style={styles.buttonStyle}
+
+                            onPress={() => {
+                                Logout().then(() =>
+                                    this.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 0,
+                                            actions: [NavigationActions.navigate({ routeName: 'Login' })]
+                                        }))
+                                )
+                            }}
+                        >
+
+                            <Text style={styles.category}>
+                                Sign Out
+                        </Text>
+                        </TouchableOpacity>
+
+
+                    </ScrollView>
                 </View>
 
-
-                <ScrollView style={styles.settingsList}>
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('AccountScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            Account
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('PreferencesScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            Preferences
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('SecurityScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            Security
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('UserGuideScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            User Guide
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('SupportScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            Support
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity 
-                        style={styles.buttonStyle}
-                        onPress={ () => navigate('AboutScreen', {})}
-                    >
-                        <Text style={styles.category}>
-                            About
-                    </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-
-                        style={styles.buttonStyle}
-                        
-                        onPress={() => {
-                            Logout().then(() =>
-                            this.props.navigation.dispatch(
-                                NavigationActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({ routeName: 'Login'})]
-                                  }))
-                            )}}
-                    >
-
-                        <Text style={styles.category}>
-                            Sign Out
-                        </Text>
-                    </TouchableOpacity>
-
-
-                </ScrollView>
+                <View style={styles.tabStyle}>
+                    <View style={[{height: 56, backgroundColor: '#7EC480'}]}>
+                    </View>
+                </View>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    fullScreen: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    tabStyle: {
+        width: 20,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
         backgroundColor: '#7EC480',
