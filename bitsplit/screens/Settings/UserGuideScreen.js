@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppRegistry, View, Text, TextInput, Button, StyleSheet, Animated, ScrollView, StatusBar, FlatList, TouchableOpacity, Image, Clipboard, Keyboard } from 'react-native';
-import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 export default class ReceiveScreen extends Component {
 
@@ -9,8 +8,19 @@ export default class ReceiveScreen extends Component {
 
             <View style={styles.container}>
 
-                <Text>
-                    How to make lots and lots of money:{"\n"}Create wallet ---> ??? ---> PROFIT!
+                <Text style={styles.fontProps}>
+                    BitSplit is a service that helps you and your team to share income of cryptocurrencies to your projects in a trustful matter.
+                    {"\n"}
+                    {"\n"}
+                    The way you use this service is to create an account in which you can moderate the members of each wallet that you want to recieve donations to.
+                    {"\n"}
+                    {"\n"}
+                    To get started press the 'plus' icon in the top right section of the Home Screen. From here you can name your wallet, so you and your
+                     members know what project this wallet belongs to. Secondly you add two or more members to the wallet, either using their public Bitcoin-address
+                     or using their BitSplit-username.
+                    {"\n"}
+                    {"\n"}
+                    The application will split the members part evenly by default. You have the ability to change each members share of the wallet to fit your projects desired outcome.
                 </Text>
 
             </View>
@@ -22,64 +32,10 @@ export default class ReceiveScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 20,
         backgroundColor: '#f5fff5',
     },
-    inputWrapper: {
-        flex: 1,
-        flexDirection: 'row',
-        margin: 7,
-        marginLeft: 20,
-        justifyContent: "center",
-        alignItems: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        maxHeight: 100,
+    fontProps: {
+        fontSize: 16,
     },
-    inputLabel: {
-        flex: 1,
-        justifyContent: 'center',
-        textAlignVertical: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        height: 50,
-    },
-    inputField: {
-        flex: 1,
-        justifyContent: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        height: 50,
-    },
-    infoContainer: {
-        // top: 100,
-        flex: 1,
-        backgroundColor: '#f5fff5',
-        minHeight: 500,
-        borderTopWidth: 2,
-        borderTopColor: '#E0E0E0',
-        zIndex: 100,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: '500',
-    },
-    subtitle: {
-        fontSize: 12,
-        fontWeight: '100',
-        paddingLeft: 24,
-    },
-    titleSegment: {
-        paddingLeft: 30,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
-    },
-    infoSegment: {
-        paddingLeft: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
-    }
 })

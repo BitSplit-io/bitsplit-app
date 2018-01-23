@@ -9,29 +9,29 @@ export default class ReceiveScreen extends Component {
 
             <View style={styles.container}>
 
-                <View style={styles.infoSegment}>
-                    <Text>
+                <TouchableOpacity style={styles.infoSegment}>
+                    <Text style={styles.fontProps}>
                         Change password
                     </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.infoSegment}>
-                    <Text>
+                <TouchableOpacity style={styles.infoSegment}>
+                    <Text style={styles.fontProps}>
                         Request new wallet
                     </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.infoSegment}>
-                    <Text>
+                <TouchableOpacity style={styles.infoSegment}>
+                    <Text style={styles.fontProps}>
                         Backup personal wallet
                     </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.infoSegment}>
-                    <Text>
+                <TouchableOpacity style={styles.infoSegment}>
+                    <Text style={styles.fontProps}>
                         Backup wallet
                     </Text>
-                </View>
+                </TouchableOpacity>
 
             </View>
 
@@ -44,62 +44,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f5fff5',
     },
-    inputWrapper: {
-        flex: 1,
-        flexDirection: 'row',
-        margin: 7,
-        marginLeft: 20,
-        justifyContent: "center",
-        alignItems: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        maxHeight: 100,
-    },
-    inputLabel: {
-        flex: 1,
-        justifyContent: 'center',
-        textAlignVertical: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        height: 50,
-    },
-    inputField: {
-        flex: 1,
-        justifyContent: 'center',
-        borderColor: "#222",
-        borderWidth: 1,
-        height: 50,
-    },
-    infoContainer: {
-        // top: 100,
-        flex: 1,
-        backgroundColor: '#f5fff5',
-        minHeight: 500,
-        borderTopWidth: 2,
-        borderTopColor: '#E0E0E0',
-        zIndex: 100,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: '500',
-    },
-    subtitle: {
-        fontSize: 12,
-        fontWeight: '100',
-        paddingLeft: 24,
-    },
-    titleSegment: {
-        paddingLeft: 30,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
-    },
     infoSegment: {
         paddingLeft: 30,
         paddingTop: 10,
         paddingBottom: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
-    }
+    },
+    fontProps: {
+        fontSize: 17,
+    },
 })

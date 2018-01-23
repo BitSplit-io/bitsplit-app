@@ -12,43 +12,43 @@ export default class ReceiveScreen extends Component {
             <View style={styles.container}>
 
                 <View style={styles.infoSegment}>
-                    <Text>
+                    <Text style={styles.infoFont}>
                         Welcome {GetUserName()}!
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
+                    <Text style={styles.infoFont}>
                         Your user-ID is: {GetUserId()}
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
+                    <Text style={styles.infoFont}>
                         Your administrate ?? pools.
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
-                        Total amount of BTC received from pools: 
+                    <Text style={styles.infoFont}>
+                        Total amount of BTC received from pools:
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
-                        Total amount of BTC received from pools: 
+                    <Text style={styles.infoFont}>
+                        Total amount of BTC received from pools:
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
+                    <Text style={styles.infoFont}>
                         Total revenue of BTC earned by all shared pools:
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
-                    <Text>
+                    <Text style={styles.infoFont}>
                         Explore transaction history from all pools
                     </Text>
                 </View>
@@ -99,28 +99,16 @@ const styles = StyleSheet.create({
         borderTopColor: '#E0E0E0',
         zIndex: 100,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: '500',
-    },
-    subtitle: {
-        fontSize: 12,
+    infoFont: {
+        fontSize: 20,
         fontWeight: '100',
-        paddingLeft: 24,
-    },
-    titleSegment: {
-        paddingLeft: 30,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
     },
     infoSegment: {
         flexDirection: 'row',
         paddingLeft: 30,
         paddingTop: 10,
         paddingBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#A0A0A0',
     }
 })

@@ -22,7 +22,7 @@ export default class EditPoolMembers extends Component {
             console.log("SETTING FOR ONE USER"),
                 recipient.proportion = 1 / this.state.activePool.poolDetails.recipients.length
         })
-        console.log("FINNISHED SETTING PROPORTIONS");
+        console.log("FINISHED SETTING PROPORTIONS");
     }
 
     render() {

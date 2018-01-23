@@ -171,7 +171,7 @@ export default class Pool extends Component {
                                 Total revenue
                             </Text>
                             <Text style={styles.subtitle}>
-                                satoshi += {this.state.activePool.poolDetails.balance}
+                                satoshi = {this.state.activePool.poolDetails.balance}
                             </Text>
                         </View>
 
