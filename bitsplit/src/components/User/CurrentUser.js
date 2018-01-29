@@ -1,13 +1,15 @@
 var username = {};
 var userId = {};
+var userAddress = {};
 var userPools = [];
 var userCoinPrefix = {};
 var userCurrency = {};
 var userColor = {};
 
-export function SetUser(username, userId, userCoinPrefix, userCurrency, userColor){
+export function SetUser(username, userId, userAddress, userCoinPrefix, userCurrency, userColor){
     this.username = username;
     this.userId = userId;
+    this.userAddress = userAddress;
     this.userCoinPrefix = userCoinPrefix;
     this.userCurrency = userCurrency;
     this.userColor = userColor;
@@ -19,6 +21,10 @@ export function GetUserName(){
 
 export function GetUserId(){
     return this.userId;
+}
+
+export function GetUserAddress(){
+    return this.userAddress;
 }
 
 export function GetUserCoinPrefix(){

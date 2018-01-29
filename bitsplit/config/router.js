@@ -76,7 +76,7 @@ export const HomeTabs = TabNavigator({
         initialRouteName: 'Home',
         tabBarOptions: {
             style: {
-                backgroundColor: '#55ac45',
+                backgroundColor: '#275629',
             },
             showLabel: false,
             showIcon: true,
@@ -113,7 +113,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 0,
+                elevation: 5,
             }
         }
     },
@@ -122,7 +122,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 0,
+                elevation: 5,
             }
         }
     },
@@ -140,7 +140,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 0,
+                elevation: 5,
             }
         }
     },
@@ -149,7 +149,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 0,
+                elevation: 5,
             }
         }
     },
@@ -158,6 +158,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },
@@ -166,6 +167,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },
@@ -174,6 +176,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },
@@ -182,6 +185,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },
@@ -190,6 +194,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },
@@ -198,6 +203,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#7EC480',
+                elevation: 5,                
             }
         }
     },

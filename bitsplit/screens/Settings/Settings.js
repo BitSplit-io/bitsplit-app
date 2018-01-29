@@ -126,10 +126,15 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#7EC480',
+        backgroundColor: '#275629',
         paddingTop: 20,
         paddingLeft: 20,
         paddingRight: 20,
+        elevation: 20,
+        shadowColor: "#000",
+        shadowOpacity: 1.0,
+        shadowRadius: 1,
+        shadowOffset: {width: -10, height: 0},
     },
     header: {
         flexDirection: 'row',

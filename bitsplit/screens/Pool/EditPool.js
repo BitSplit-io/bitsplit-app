@@ -21,10 +21,7 @@ export default class EditPool extends Component {
         };
         this.state.poolAdmin = GetUserId();
         console.log(this.state.activePool.poolDetails.poolAdmin);
-        console.log('this.state.activePool.poolDetails.poolAdmin');
     }
-
-
 
 
     render() {
@@ -136,6 +133,8 @@ export default class EditPool extends Component {
 
                     </View>
 
+                    <View style={{height: 100}}>
+                    </View>
                     
 
                 </ScrollView>
@@ -149,24 +148,20 @@ export default class EditPool extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5fff5',
+        backgroundColor: '#fff',
     },
     pieContainer: {
         flex: 1,
         margin: 70,
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: -10,
-        // position: 'absolute',
     },
     infoContainer: {
-        // top: 100,
         flex: 1,
         backgroundColor: '#f5fff5',
-        minHeight: 500,
         borderTopWidth: 2,
         borderTopColor: '#E0E0E0',
-        zIndex: 100,
+        elevation: 10,
     },
     title: {
         fontSize: 24,

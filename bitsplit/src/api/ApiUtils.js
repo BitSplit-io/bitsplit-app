@@ -226,18 +226,6 @@ export function GetReceiveQR(poolId, BTCamount) {
         console.log(error);
         alert("THERE WAS AN ERROR");
     })
-
-    /*
-}).then(response => response.blob()).then(myBlob => {
-        console.log("CREATING URL FOR BLOB")
-        return URL.createObjectURL(myBlob);
-    })
-    .catch(error => {
-        console.log(error)
-        alert("THERE WAS A NETWORK ERROR");
-    })
- 
-*/
 }
 
 export function GetExchangeRate() {
