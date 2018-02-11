@@ -23,6 +23,7 @@ export default class Login extends React.Component {
     }
     componentWillUnmount() {
         MessageBarManager.unregisterMessageBar();
+        this.setState({ isLoading: false });
     }
 
     constructor() {
@@ -46,10 +47,11 @@ export default class Login extends React.Component {
                             message: results.message,
                             alertType: results.status,
                         });
-                }).catch((error) =>
-                    alert("error when processing login result"))
-                .finally(() => {
-                    this.setState({ isLoading: false });
+                }).catch((error) => {
+                    alert("error when processing login result");
+                    console.log(error)
+                }).finally(() => {
+                    
                 })
         )
     }

@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, ScrollView, Text, TextInput, StatusBar, TouchableOpacity, Alert, Vibration, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, ScrollView, Text, TextInput, StatusBar, TouchableOpacity, Alert, Vibration, TouchableHighlight, } from 'react-native';
 import { List, ListItem, Icon, Button, Slider } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
-
+import Swipeout from "react-native-swipeout";
+import Modal from "react-native-modal";
+import {GetUserAddress, GetUserId} from "../../src/components/User/CurrentUser";
 
 export default class EditPoolMembers extends Component {
 
     constructor(props) {
         super(props);
+        console.log("");
         console.log(props.navigation.state.params.props);
         var pool = props.navigation.state.params.props;
         this.state = {
             activePool: pool,
             isNewPool: !pool.poolDetails.recipients.length,
             numberInput: 0,
-            textfields: []
+            textfields: [],
+            currentRecipient: "",
+            modalState: {
+                visible: false,
+                item: undefined,
+            }
+        };
+        
+        if (this.state.isNewPool && GetUserId()) {
+            this.state.activePool.addPoolRecipient({address: GetUserId(), proportion: 1 });
         }
     };
 
@@ -30,10 +42,17 @@ export default class EditPoolMembers extends Component {
     }
 
     evenSplit() {
+        console.log(this.state.activePool);
         this.state.activePool.poolDetails.recipients.forEach((recipient) => {
+            console.log("innan split");
             recipient.proportion = 1 / this.state.activePool.poolDetails.recipients.length
+            console.log("efter split");
         })
     };
+
+    componentWillUnmount() {
+        this.props.navigation.state.params.onGoBack();
+    }
 
     proportionHandler(item) {
         var maxValue = 1, freeProportion = 0;
@@ -60,106 +79,180 @@ export default class EditPoolMembers extends Component {
             var freeSliderChangePoportion = freeSliderTotal / freeProportion;
             freeSliders.forEach((slider) => slider.proportion *= freeSliderChangePoportion)
         }
-        this.props.navigation.state.params.onGoBack()
     }
 
-    renderRow(item) {
+    renderRow(index) {
+        var item = this.state.activePool.poolDetails.recipients[index];
+        let swipeoutBtns = [{
+            text: 'Delete',
+            backgroundColor: 'red',
+            underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+            onPress: () => {
+                this.toggleModal(true, item);
+            }
+        }];
+
         return (
-            <View style={styles.listComponent}>
-                <View style={styles.topListRow}>
+            <Swipeout
+                right={swipeoutBtns}
+                autoClose={false}
+                backgroundColor="#fff"
+                close={false}
+                key = {item.address}
+            //disabled = {true}
+            >
 
-                    <View>
-                        <Text>
-                            {item.address}
-                        </Text>
-                    </View>
+                <View style={styles.listComponent}  >
 
-                    <View style={styles.percentageField}>
-                        <TextInput ref={component => this.addTextfield(component)}
-                            style={[{
-                                width: 45,
-                                textAlign: "right",
-                            }]}
-                            underlineColorAndroid="transparent"
+                    <View style={styles.topListRow}>
 
-                            onChangeText={(value) => {
-                                if (!item.isLocked) {
-                                    this.setState({ numberInput: value })
-                                    var numValue = parseFloat(value);
-                                    if (!isNaN(numValue)) {
-                                        this.state.isNewPool = false;
-                                        item.proportion = numValue / 100;
+                        <View>
+                            <Text>
+                                {item.address}
+                            </Text>
+                        </View>
+
+                        <View style={styles.percentageField}>
+                            <TextInput ref={component => this.addTextfield(component)}
+                                style={[{
+                                    width: 60,
+                                    textAlign: "right",
+                                }]}
+                                underlineColorAndroid="transparent"
+
+                                onChangeText={(value) => {
+                                    if (!item.isLocked) {
                                         this.setState({ numberInput: value })
+                                        var numValue = parseFloat(value);
+                                        if (!isNaN(numValue)) {
+                                            this.state.isNewPool = false;
+                                            item.proportion = numValue / 100;
+                                            this.setState({ numberInput: value })
+                                        }
                                     }
-                                }
-                            }}
-                            placeholder={(item.proportion * 100).toFixed(1)}
-                            placeholderTextColor="#555"
-                            keyboardType="numeric"
-                            onSubmitEditing={() => {
-                                if (!item.isLocked) {
-                                    this.proportionHandler(item);
-                                }
-                                this.clearText();
-                                this.setState({ numberInput: "" })
-                                this.forceUpdate();
-                            }}
-                        />
-                        <Text>
-                            %
+                                }}
+                                placeholder={(item.proportion * 100).toFixed(1)}
+                                placeholderTextColor="#555"
+                                keyboardType="numeric"
+                                onSubmitEditing={() => {
+                                    if (!item.isLocked) {
+                                        this.proportionHandler(item);
+                                    }
+                                    this.setState({ numberInput: "" })
+                                    this.clearText();
+                                    this.forceUpdate();
+                                }}
+                            />
+                            <Text>
+                                %
                         </Text>
 
+                        </View>
                     </View>
-                </View>
 
-                <View style={styles.bottomListRow}>
+                    <View style={styles.bottomListRow}>
 
-                    <Slider
-                        style={styles.slider}
-                        thumbTintColor="#00BCFF"
-                        maximumTrackTintColor="#b0e0e6"
-                        minimumTrackTintColor="#4169e1"
-                        disabled={item.isLocked}
-                        step={0.001}
-                        value={item.proportion}
-                        //Hack to make slider go back to max if > max
-                        onSlidingComplete={() => { if (item.proportion) item.proportion += 1e-10; this.forceUpdate(); }}
-                        onValueChange={(value) => {
-                            this.state.isNewPool = false;
-                            console.log("item.proportion BEFORE: " + item.proportion);
-                            item.proportion = value;
-                            console.log("item.proportion AFTER: " + item.proportion);
-                            this.proportionHandler(item);
-                            this.forceUpdate();
-                        }}
-                    />
-
-                    <View style={styles.lockIcon}>
-                        <Icon
-                            name={item.isLocked ? 'lock' : 'lock-open'}
-                            color={item.isLocked ? '#000' : '#aaa'}
-                            type='FontAwesome'
-                            onPress={() => { item.isLocked = !item.isLocked; this.forceUpdate() }}
+                        <Slider
+                            style={styles.slider}
+                            thumbTintColor="#00BCFF"
+                            maximumTrackTintColor="#b0e0e6"
+                            minimumTrackTintColor="#4169e1"
+                            disabled={item.isLocked}
+                            step={0.001}
+                            value={this.state.activePool.poolDetails.recipients[index].proportion}
+                            //Hack to make slider go back to max if > max
+                            onSlidingComplete={() => { if (item.proportion) item.proportion += 1e-10; this.forceUpdate(); }}
+                            onValueChange={(value) => {
+                                this.state.isNewPool = false;
+                                console.log("item.proportion BEFORE: " + item.proportion);
+                                item.proportion = value;
+                                console.log("item.proportion AFTER: " + item.proportion);
+                                this.proportionHandler(item);
+                                this.clearText();
+                                this.setState(this.state);
+                                //this.updateListObjects();
+                            }}
                         />
+
+                        <View style={styles.lockIcon}>
+                            <Icon
+                                name={item.isLocked ? 'lock' : 'lock-open'}
+                                color={item.isLocked ? '#000' : '#aaa'}
+                                type='FontAwesome'
+                                onPress={() => { item.isLocked = !item.isLocked; this.forceUpdate() }}
+                            />
+                        </View>
                     </View>
                 </View>
-            </View>
+            </Swipeout>
+
         );
     }
 
     renderList(list) {
         var view = [];
-        list.forEach((item) => view.push(this.renderRow(item)));
+        console.log("inne");
+        for (var i = 0; i < list.length; i++) {
+            view.push(this.renderRow(i));
+        }
+        //list.forEach((item) => view.push(this.renderRow(item)));
         return (view);
+    }
+
+    toggleModal(state, item) {
+        this.setState({ modalState:{ visible: state, item: item }});
+    }
+
+    renderModalContent() {
+        return (
+            <View style={styles.modalContent}>
+                <View style={styles.contailer}>
+                <Text style={{marginBottom: 15}}>
+                    Do you really want to remove {this.state.modalState.item ?  this.state.modalState.item.address : ""} from this pool?
+                </Text>
+                </View>
+
+                <TouchableOpacity 
+                onPress={() => {
+                    this.state.activePool.removeRecipient(this.state.modalState.item);
+                    this.toggleModal(false);
+                }}>
+                        <Text  style={styles.modalButton}>Yes</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                    this.toggleModal(false);
+                }}>
+                    <Text style={[styles.modalButton, {backgroundColor: '#ac4545'}]}>Cancel</Text>
+                </TouchableOpacity>
+
+            </View>
+        );
     }
 
     render() {
 
         super.render;
 
-        return (
+        var swipeoutBtns = [
+            {
+                text: 'Button'
+            }
+        ]
 
+        return (
+            // Swipeout component
             <View style={styles.container}>
+
+                <Modal
+                    isVisible={this.state.modalState.visible}
+                    animationInTiming={500}
+                    animationOutTiming={500}
+                    backdropTransitionInTiming={300}
+                    backdropTransitionOutTiming={900}
+                >
+                    {this.renderModalContent()}
+                </Modal>
 
                 <View style={styles.title}>
 
@@ -172,16 +265,20 @@ export default class EditPoolMembers extends Component {
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoCorrect={false}
-                        onChangeText={(recipient) => {
-                            this.currentRecipient = { address: recipient, proportion: 0 },
-                                this.setState({ currentRecipient: recipient })
-                        }}
+                        onChangeText={(currentRecipient) =>
+                            this.setState({ currentRecipient })
+                        }
                         value={this.state.currentRecipient}
                         onSubmitEditing={() => {
-                            this.state.activePool.addPoolRecipient(this.currentRecipient);
+                            console.log("inte crash1");
+                            this.state.activePool.addPoolRecipient({ address: this.state.currentRecipient, proportion: 0 });
+                            console.log("inte crash2");
                             if (this.state.isNewPool) this.evenSplit();
+                            console.log("inte crash3");
                             this.setState({ currentRecipient: "" })
-                            this.props.navigation.state.params.onGoBack()
+                            console.log("inte crash4");
+                            this.clearText();
+                            console.log("inte crash5");
                         }}
 
                     >
@@ -216,13 +313,13 @@ const styles = StyleSheet.create({
         flex: 1,
         // height: 50,
         color: '#000',
-        backgroundColor: '#eee',        
+        backgroundColor: '#eee',
         textAlign: 'center',
         fontSize: 16,
         // padding: 20,
     },
     title: {
-        backgroundColor: '#f5fff5',        
+        backgroundColor: '#f5fff5',
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
         height: 42,
@@ -261,15 +358,37 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignContent: 'center',
         justifyContent: 'space-between',
-        marginTop: 10,     
+        marginTop: 10,
     },
     lockIcon: {
         alignContent: 'center',
-        marginLeft: 25,
-        marginRight: 20,
+        marginLeft: 40,
+        marginRight: 30,
         paddingBottom: 5,
     },
     slider: {
         flex: 1,
+    },
+    modalContent: {
+        backgroundColor: '#f5fff5',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    modalButton: {
+        textAlignVertical:'center',
+        backgroundColor:'#55ac45',
+        alignSelf: 'center',
+        padding: 3,
+        width: 200,
+        height: 40,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 0,
+        color: '#f5fff5'
     },
 });

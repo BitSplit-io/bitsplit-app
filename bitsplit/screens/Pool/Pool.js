@@ -89,10 +89,10 @@ export default class Pool extends Component {
             <View style={styles.container}>
                 <Modal
                     isVisible={this.state.visibleModal}
-                    animationInTiming={2000}
-                    animationOutTiming={2000}
-                    backdropTransitionInTiming={2000}
-                    backdropTransitionOutTiming={2000}
+                    animationInTiming={500}
+                    animationOutTiming={500}
+                    backdropTransitionInTiming={300}
+                    backdropTransitionOutTiming={900}
                 >
                     {this.renderModalContent()}
                 </Modal>

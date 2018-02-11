@@ -1,7 +1,8 @@
 import RNFetchBlob from 'react-native-fetch-blob';
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage } from 'react-native';
+import { SetUser, ClearUser, GetUserId } from "../components/User/CurrentUser"
 
-var bitsplitURL = "http://172.20.10.2:8080";
+var bitsplitURL = "http://172.20.10.3:8080";
 var Auth_Headers = null;
 
 export function GetBitsplitURL() {
@@ -41,8 +42,10 @@ export function LoginWithUsername(username, password) {
                     AsyncStorage.setItem('@UserStore:username', responseJson.data.username);                    
                 } catch (error) {
                     alert("DANGER DANGER");
-                  }
-            }
+                };
+                var userData = responseJson.data;
+                SetUser(userData.username, userData.userId, userData.userAddress);
+            }            
             return responseJson;
         })
         .catch((error) => {
@@ -53,15 +56,17 @@ export function LoginWithUsername(username, password) {
 }
 
 export function Logout() {
+    ClearUser();
     var headers = Object.assign({}, Auth_Headers)
     Auth_Headers = null
-    return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => {console.log("error")})
+    return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => {console.log("error")}
+    ).then(
     fetch(bitsplitURL + "/auth/logout", {
         method: 'POST',
         headers: new Headers(
             headers
         )
-    });
+    }))
 }
 
 
@@ -85,7 +90,6 @@ export function CreateNewUser(email, username, password) {
             console.log(error)
             throw new error(error.message ? error.message : "Could not create user");
         })
-
 }
 
 

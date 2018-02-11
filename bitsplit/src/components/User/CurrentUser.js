@@ -1,10 +1,10 @@
-var username = {};
-var userId = {};
-var userAddress = {};
+var username;
+var userId;
+var userAddress;
 var userPools = [];
-var userCoinPrefix = {};
-var userCurrency = {};
-var userColor = {};
+var userCoinPrefix;
+var userCurrency;
+var userColor;
 
 export function SetUser(username, userId, userAddress, userCoinPrefix, userCurrency, userColor){
     this.username = username;
@@ -13,6 +13,19 @@ export function SetUser(username, userId, userAddress, userCoinPrefix, userCurre
     this.userCoinPrefix = userCoinPrefix;
     this.userCurrency = userCurrency;
     this.userColor = userColor;
+}
+
+export function ClearUser(){
+    this.username = null;
+    this.userId = null;
+    this.userAddress = null;
+    this.userCoinPrefix = null;
+    this.userCurrency = null;
+    this.userColor = null;
+}
+
+export function SetUserAddress(address) {
+    this.userAddress = address;
 }
 
 export function GetUserName(){
@@ -38,15 +51,3 @@ export function GetUserCurrency(){
 export function  GetUserColor(){
     return this.userColor;
 }
-
-// export function setPools(poolData){
-//     PoolComponent
-//     this.userPools = []
-//     poolData.array.forEach(function(pool) {
-//         this.userPools.push(new PoolComponent(pool))
-//     }, this);
-// }
-
-// export function getPools(){
-//     return userPools;
-// }

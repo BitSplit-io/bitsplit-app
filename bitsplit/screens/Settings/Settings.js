@@ -83,9 +83,7 @@ export default class Settings extends Component {
                         </TouchableOpacity>
 
                         <TouchableOpacity
-
                             style={styles.buttonStyle}
-
                             onPress={() => {
                                 Logout().then(() =>
                                     this.props.navigation.dispatch(
@@ -107,7 +105,7 @@ export default class Settings extends Component {
                 </View>
 
                 <View style={styles.tabStyle}>
-                    <View style={[{height: 56, backgroundColor: '#7EC480'}]}>
+                    <View style={[{height: 56, backgroundColor: '#7EC480',}]}>
                     </View>
                 </View>
             </View>
@@ -144,7 +142,8 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     settingsList: {
-        paddingTop: 50,
+        // paddingTop: 50,
+        // paddingBottom: -50,
     },
     logo: {
         width: 70,

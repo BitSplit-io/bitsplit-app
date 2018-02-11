@@ -1,7 +1,7 @@
 import React, { Component, FlatList, } from 'react';
 import { List, ListItem, } from "react-native-elements";
 import Pie from 'react-native-pie';
-
+import Toast from 'react-native-simple-toast';
 
 const colors = [    
                     '#55ac45',
@@ -36,7 +36,9 @@ export default class PoolComponent extends Component {
     }
 
     
-    addPoolRecipient(recipient){
+    addPoolRecipient(recipient){  
+        this.poolDetails.recipients.map(a => a.address).includes(recipient.address) ?
+        Toast.show('Can not add two members with same address.') :
         this.poolDetails.recipients.push(recipient);
     }
 
@@ -45,7 +47,13 @@ export default class PoolComponent extends Component {
     }
 
     setTransactionFee(transactionFee) {
-        this.poolDetails.transactionFee= transactionFee;
+        this.poolDetails.transactionFee = transactionFee;
+    }
+
+    removeRecipient(recipient) {
+        console.log("före")
+        this.poolDetails.recipients = this.poolDetails.recipients.filter(item => item !== recipient);
+        console.log("efter")
     }
 
     renderPoolPieChart() {
