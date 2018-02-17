@@ -55,8 +55,11 @@ export default class NewUser extends React.Component {
                 throw new Error("Please enter a valid email");
             }
 
-            if (/([@,^"()/\\;:])/.test(this.state.username)) { 
+            if (/([@,^"()/\\;: ])/.test(this.state.username)) { 
                 throw new Error("Please use alphanumeric username");
+            }
+            if ( this.state.username.length < 5 || this.state.username.length > 20 ){
+                throw new Error("Username must be between 5-20 characters");
             }
 
             if (this.state.password.length < 8 || this.state.password. length > 32 ) {

@@ -4,11 +4,11 @@ import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
 import { getPools, setPools, } from '../../src/components/User/CurrentUser';
-
 import { GetUserPools } from '../../src/api/ApiUtils';
 import PoolComponent from '../../src/components/Pool/PoolComponent';
 import SectionHeader from './components/SectionHeader'
-
+import Swipeout from "react-native-swipeout";
+import Modal from "react-native-modal";
 // const ds = new ListView.DataSource({
 //     rowHasChanged: (r1, r2) => r1 !== r2,
 // });
@@ -93,7 +93,7 @@ export default class Home extends Component {
                                 roundAvatar
                                 title={item ? item.poolDetails.poolName +" (balance: "+ item.poolDetails.balance + ")": ''}
                                 subtitle={item ? item.poolDetails.intermediateAddress : ''}
-                            /* avatar={{ uri: item.picture.thumbnail }} */
+                                /* avatar={{ uri: item.picture.thumbnail }} */
                             />
                         </TouchableOpacity>
                     }

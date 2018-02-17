@@ -4,7 +4,9 @@ import { List, ListItem, Icon, Button, Slider } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
-import {GetUserAddress, GetUserId} from "../../src/components/User/CurrentUser";
+import { GetUserAddress, GetUserId } from "../../src/components/User/CurrentUser";
+import { validateAddress, validateUserAsRecipient } from "../../src/api/ApiUtils";
+import Toast from 'react-native-simple-toast';
 
 export default class EditPoolMembers extends Component {
 
@@ -24,11 +26,36 @@ export default class EditPoolMembers extends Component {
                 item: undefined,
             }
         };
-        
+
         if (this.state.isNewPool && GetUserId()) {
-            this.state.activePool.addPoolRecipient({address: GetUserId(), proportion: 1 });
+            this.state.activePool.addPoolRecipient({ address: GetUserId(), proportion: 1 });
         }
     };
+
+    AddRecipient(recipient) {
+
+        var promise;
+
+        if (recipient.length > 5 && recipient.length < 20) {
+            promise = validateUserAsRecipient(recipient);
+        }
+        else {
+            promise = validateAddress(recipient);
+        }
+        promise.then((response) => {
+            if (response.status && response.status == "error") {
+                Toast.show("Could not create valid recipient for the user or address submitted.")
+            } else {
+                this.state.activePool.addPoolRecipient({ address: recipient, proportion: 0 });
+                if (this.state.isNewPool) this.evenSplit();
+                this.setState({ currentRecipient: "" })
+                this.clearText();
+            }
+        }).catch((error) => {
+            alert(error);
+            return false;
+        })
+    }
 
     addTextfield(textfield) {
         if (textfield && !this.state.textfields.includes(textfield))
@@ -98,7 +125,7 @@ export default class EditPoolMembers extends Component {
                 autoClose={false}
                 backgroundColor="#fff"
                 close={false}
-                key = {item.address}
+                key={item.address}
             //disabled = {true}
             >
 
@@ -200,30 +227,30 @@ export default class EditPoolMembers extends Component {
     }
 
     toggleModal(state, item) {
-        this.setState({ modalState:{ visible: state, item: item }});
+        this.setState({ modalState: { visible: state, item: item } });
     }
 
     renderModalContent() {
         return (
             <View style={styles.modalContent}>
                 <View style={styles.contailer}>
-                <Text style={{marginBottom: 15}}>
-                    Do you really want to remove {this.state.modalState.item ?  this.state.modalState.item.address : ""} from this pool?
+                    <Text style={{ marginBottom: 15 }}>
+                        Do you really want to remove {this.state.modalState.item ? this.state.modalState.item.address : ""} from this pool?
                 </Text>
                 </View>
 
-                <TouchableOpacity 
-                onPress={() => {
-                    this.state.activePool.removeRecipient(this.state.modalState.item);
-                    this.toggleModal(false);
-                }}>
-                        <Text  style={styles.modalButton}>Yes</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.state.activePool.removeRecipient(this.state.modalState.item);
+                        this.toggleModal(false);
+                    }}>
+                    <Text style={styles.modalButton}>Yes</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => {
                     this.toggleModal(false);
                 }}>
-                    <Text style={[styles.modalButton, {backgroundColor: '#ac4545'}]}>Cancel</Text>
+                    <Text style={[styles.modalButton, { backgroundColor: '#ac4545' }]}>Cancel</Text>
                 </TouchableOpacity>
 
             </View>
@@ -241,8 +268,9 @@ export default class EditPoolMembers extends Component {
         ]
 
         return (
-            // Swipeout component
             <View style={styles.container}>
+
+
 
                 <Modal
                     isVisible={this.state.modalState.visible}
@@ -270,15 +298,7 @@ export default class EditPoolMembers extends Component {
                         }
                         value={this.state.currentRecipient}
                         onSubmitEditing={() => {
-                            console.log("inte crash1");
-                            this.state.activePool.addPoolRecipient({ address: this.state.currentRecipient, proportion: 0 });
-                            console.log("inte crash2");
-                            if (this.state.isNewPool) this.evenSplit();
-                            console.log("inte crash3");
-                            this.setState({ currentRecipient: "" })
-                            console.log("inte crash4");
-                            this.clearText();
-                            console.log("inte crash5");
+                            this.AddRecipient(this.state.currentRecipient);
                         }}
 
                     >
@@ -287,6 +307,7 @@ export default class EditPoolMembers extends Component {
                 <ScrollView style={{ flex: 1 }}>
                     {this.renderList(this.state.activePool.poolDetails.recipients)}
                 </ScrollView>
+
             </View>
         );
     };
@@ -378,8 +399,8 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     modalButton: {
-        textAlignVertical:'center',
-        backgroundColor:'#55ac45',
+        textAlignVertical: 'center',
+        backgroundColor: '#55ac45',
         alignSelf: 'center',
         padding: 3,
         width: 200,

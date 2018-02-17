@@ -7,21 +7,31 @@ import PoolComponent from '../../src/components/Pool/PoolComponent';
 import { GetUserId } from '../../src/components/User/CurrentUser';
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent';
 import { GetPool, CreateNewPool } from '../../src/api/ApiUtils';
+import MessageBar from '../Notification/MessageBar';
+import MessageBarManager from '../Notification/MessageBarManager';
+
 
 const activePool = '';
 
 export default class EditPool extends Component {
 
-    constructor() {
+    constructor(props) {
+        var pool = props.navigation.state.params ? props.navigation.state.params.props : null;
         super();
+
         this.state = {
-            activePool: new PoolComponent(),
+            activePool: pool,
             recipients: [],
             transactionFee: 0.5,
         };
-        this.state.poolAdmin = GetUserId();
-        console.log(this.state.activePool.poolDetails.poolAdmin);
+        if (!this.state.activePool) {
+            this.state.activePool =  new PoolComponent()
+            this.state.activePool.poolDetails.poolAdmin =  GetUserId();
+        }
     }
+
+
+
 
 
     render() {
@@ -82,7 +92,7 @@ export default class EditPool extends Component {
                             <List>
 
                                 <FlatList
-                                    data={this.state.recipients}
+                                    data={this.state.activePool.poolDetails.recipients}
                                     extraData={this.state}
                                     renderItem={({ item }) =>
                                         <ListItem
@@ -90,7 +100,6 @@ export default class EditPool extends Component {
                                             subtitle={item ? item.address : ''}
                                             hideChevron={true}
                                         >
-                                            {console.log('bahs')}
                                         </ListItem>
                                     }
                                     keyExtractor={(item, index) => item.address}

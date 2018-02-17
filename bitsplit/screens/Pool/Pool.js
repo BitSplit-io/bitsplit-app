@@ -181,6 +181,15 @@ export default class Pool extends Component {
                             </Text>
                         </View>
 
+                        <Button
+                        title="Edit pool"
+                        color="#00BCFF"
+                        onPress={() => navigate('EditPool', {
+                            props: this.state.activePool,
+                            onGoBack: (pool) => { this.setState({activePool: pool}); 
+                                console.log('back') }
+                        })}
+                    />
 
                     </View>
 

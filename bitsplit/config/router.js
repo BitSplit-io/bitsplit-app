@@ -37,8 +37,8 @@ export const HomeTabs = TabNavigator({
         navigationOptions: {
             tabBarIcon: ({ focused }) => (
                 <Icon
-                    name={focused ? 'gear' : 'gear'}
-                    type='evilicon'
+                    name={focused ? 'settings' : 'settings'}
+                    type='MaterialcommunityIcons'
                     size={26}
                     style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
                 />
@@ -111,10 +111,16 @@ export const RootNavigator = StackNavigator({
     Pool: {
         screen: Pool,
         navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#7EC480',
-                elevation: 5,
-            }
+                headerStyle: {
+                    backgroundColor: '#7EC480',
+                    elevation: 5,
+                }
+                //header: 
+                //right   : <Icon                     
+                //name={'settings'}
+                //type='MaterialcommunityIcons'
+                //size={26}
+                //style={'#f5fff5'} />  
         }
     },
     EditPool: {
