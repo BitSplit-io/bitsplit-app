@@ -23,6 +23,7 @@ import SupportScreen from '../screens/Settings/SupportScreen';
 import AboutScreen from '../screens/Settings/AboutScreen';
 import LoadingScreen from '../screens/App/LoadingScreen';
 import ConfirmPasswordScreen from '../screens/Login/ConfirmPasswordScreen'
+import AddressSettings from '../screens/Settings/AddressSettings';
 
 export default class Start extends Component {
     render() {
@@ -106,6 +107,10 @@ export const RootNavigator = StackNavigator({
     },
     NewUser: {
         screen: NewUser,
+        navigationOptions: { header: null, }
+    },
+    AddressSettings: {
+        screen: AddressSettings,
         navigationOptions: { header: null, }
     },
     Pool: {

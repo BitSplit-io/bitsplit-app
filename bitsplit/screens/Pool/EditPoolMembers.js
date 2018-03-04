@@ -27,8 +27,8 @@ export default class EditPoolMembers extends Component {
             }
         };
 
-        if (this.state.isNewPool && GetUserId()) {
-            this.state.activePool.addPoolRecipient({ address: GetUserId(), proportion: 1 });
+        if (this.state.isNewPool && GetUserAddress()) {
+            this.state.activePool.addPoolRecipient({ address: GetUserAddress(), proportion: 1 });
         }
     };
 

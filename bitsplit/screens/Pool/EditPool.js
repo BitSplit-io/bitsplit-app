@@ -9,6 +9,8 @@ import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool
 import { GetPool, CreateNewPool } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
+import Toast from 'react-native-simple-toast';
+import { NavigationActions } from 'react-navigation';
 
 
 const activePool = '';
@@ -16,8 +18,8 @@ const activePool = '';
 export default class EditPool extends Component {
 
     constructor(props) {
-        var pool = props.navigation.state.params ? props.navigation.state.params.props : null;
         super();
+        var pool = props.navigation.state.params ? props.navigation.state.params.props : null;
 
         this.state = {
             activePool: pool,
@@ -53,11 +55,12 @@ export default class EditPool extends Component {
                     </View>
 
                     <View style={styles.infoContainer}>
+                    
 
                         <View style={styles.titleSegment}>
                             <TextInput
                                 style={styles.title}
-                                placeholder="Enter pool name"
+                                placeholder={(this.state.activePool.poolDetails && this.state.activePool.poolDetails.poolName) ? this.state.activePool.poolDetails.poolName :  "Enter pool name"} 
                                 placeholderTextColor="rgba(128,128,128,0.5)"
                                 underlineColorAndroid='rgba(0,0,0,0)'
                                 textAlign='left'
@@ -72,7 +75,7 @@ export default class EditPool extends Component {
                         <View style={styles.titleSegment}>
                             <TextInput
                                 style={styles.title}
-                                placeholder="Enter pool password"
+                                placeholder="Enter pool password" 
                                 secureTextEntry
                                 placeholderTextColor="rgba(128,128,128,0.5)"
                                 underlineColorAndroid='rgba(0,0,0,0)'
@@ -110,10 +113,9 @@ export default class EditPool extends Component {
                                 style={styles.editMembers}
                                 onPress={() => navigate('EditPoolMembers', {
                                     props: this.state.activePool,
-                                    onGoBack: () => { this.setState({ 
+                                    onGoBack: () => { this.setState({
                                         recipients: this.state.activePool.poolDetails.recipients }); 
-                                        console.log('back') }
-                                })}
+                                }})}
                                 underlayColor='#55ac45'
                             >
                                 <Text>
@@ -135,9 +137,19 @@ export default class EditPool extends Component {
                             this.state.activePool.poolDetails.poolName, 
                             GetUserId(), 
                             this.state.activePool.poolDetails.poolPassword, 
-                            this.state.recipients, 
+                            this.state.activePool.poolDetails.recipients, 
                             this.state.transactionFee
-                            )}
+                            ).then((response) => {
+                                if (response.status && response.status == "success") {
+                                    this.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 0,
+                                            actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                                          }));
+                                } else {
+                                    Toast.show("Could not create pool.\n" + (response.message ? response.message : ""));
+                                }
+                            }).catch((error) =>  Toast.show("Something went wrong."))}
                         />
 
                     </View>

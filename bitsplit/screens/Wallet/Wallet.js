@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     tabStyle: {
         width: 20,
-        backgroundColor: '#fff',
+        backgroundColor: 'rgb(250,250,250)',
     },
     container: {
         flex: 1,

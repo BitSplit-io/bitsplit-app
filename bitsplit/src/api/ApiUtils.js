@@ -1,8 +1,8 @@
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AsyncStorage } from 'react-native';
-import { SetUser, ClearUser, GetUserId } from "../components/User/CurrentUser"
+import { SetUser, ClearUser, GetUserId, SetUserPools } from "../components/User/CurrentUser"
 
-var bitsplitURL = "http://192.168.100.190:8080";
+var bitsplitURL = "http://172.20.10.3:8080";
 var Auth_Headers = null;
 
 export function GetBitsplitURL() {
@@ -36,16 +36,16 @@ export function LoginWithUsername(username, password) {
                 }
                 console.log(Auth_Headers);
             }
-            if(responseJson.status && responseJson.status == "success") {
+            if (responseJson.status && responseJson.status == "success") {
                 try {
                     AsyncStorage.setItem('@UserStore:userId', responseJson.data.userId);
-                    AsyncStorage.setItem('@UserStore:username', responseJson.data.username);                    
+                    AsyncStorage.setItem('@UserStore:username', responseJson.data.username);
                 } catch (error) {
                     alert("DANGER DANGER");
                 };
                 var userData = responseJson.data;
                 SetUser(userData.username, userData.userId, userData.userAddress);
-            }            
+            }
             return responseJson;
         })
         .catch((error) => {
@@ -59,14 +59,14 @@ export function Logout() {
     ClearUser();
     var headers = Object.assign({}, Auth_Headers)
     Auth_Headers = null
-    return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => {console.log("error")}
+    return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => { console.log("error") }
     ).then(
-    fetch(bitsplitURL + "/auth/logout", {
-        method: 'POST',
-        headers: new Headers(
-            headers
-        )
-    }))
+        fetch(bitsplitURL + "/auth/logout", {
+            method: 'POST',
+            headers: new Headers(
+                headers
+            )
+        }))
 }
 
 
@@ -105,13 +105,18 @@ export function GetUserPools() {
             headers
         ),
     }).then(response => {
-        return response.json();
+        var responseJson = response.json();
+        if (responseJson.status == "success") {
+            SetUserPools(responseJson.data);
+            console.log(responseJson.data);
+        }
+        return responseJson;
     }).then(responseJson => {
         return responseJson;
     })
         .catch((error) => {
             console.log(error)
-            alert("THERE WAS A NETWORK ERROR");
+            alert("THERE WAS A NETWORK ERROR" + error.message);
         })
 }
 
@@ -175,14 +180,14 @@ export function UpdatePool(poolName, poolAdmin, poolPassword, recipients, poolTr
         headers: new Headers(
             headers
         ),
-            "poolName": poolName,
-            "poolAdmin": poolAdmin,
-            "poolPassword": poolPassword,
-            "recipients": recipients,
-            "poolTransactionFee": poolTransactionFee,
-            // "poolAutomization": poolAutomization,
-        } // <-- Post parameters)
-        )
+        "poolName": poolName,
+        "poolAdmin": poolAdmin,
+        "poolPassword": poolPassword,
+        "recipients": recipients,
+        "poolTransactionFee": poolTransactionFee,
+        // "poolAutomization": poolAutomization,
+    } // <-- Post parameters)
+    )
         .then(response => {
             console.log(response);
             return response.json();
@@ -195,10 +200,10 @@ export function UpdatePool(poolName, poolAdmin, poolPassword, recipients, poolTr
 
 // ----------- Recipient  ------------ //
 
-export function validateUserAsRecipient (username) {
+export function validateUserAsRecipient(username) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";
-    return fetch (bitsplitURL + "/users/validateUserAsRecipient", {
+    return fetch(bitsplitURL + "/users/validateUserAsRecipient", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -206,31 +211,31 @@ export function validateUserAsRecipient (username) {
         body: JSON.stringify({
             "username": username,
         })
-        }).then((response) =>{
-            return response.json();
-        }).catch(error => {
-            console.log(error);
-            alert("THERE WAS AN ERROR, CHECK LOGS");
-        })
+    }).then((response) => {
+        return response.json();
+    }).catch(error => {
+        console.log(error);
+        alert("THERE WAS AN ERROR, CHECK LOGS");
+    })
 }
 
-export function validateAddress (address) {
+export function validateAddress(address) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";
-    return fetch (bitsplitURL + "/bitcoin/validateAddress", {
+    return fetch(bitsplitURL + "/bitcoin/validateAddress", {
         method: 'POST',
         headers: new Headers(
             headers
-        ),body: 
-        JSON.stringify({
+        ), body:
+            JSON.stringify({
                 "address": address,
             })
-        }).then((response) =>{
-            return response.json();
-        }).catch(error => {
-            console.log(error);
-            alert("THERE WAS AN ERROR, CHECK LOGS");
-        })
+    }).then((response) => {
+        return response.json();
+    }).catch(error => {
+        console.log(error);
+        alert("THERE WAS AN ERROR, CHECK LOGS");
+    })
 }
 
 /*------------------- Transaction APIs -----------------------*/

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, View, Text, TextInput, Button, StyleSheet, Animated, ScrollView, StatusBar, FlatList, TouchableOpacity, Image, Clipboard, Keyboard } from 'react-native';
 import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
-import { GetUserName, GetUserId } from '../../src/components/User/CurrentUser';
+import { GetUserName, GetUserId, GetUserPools } from '../../src/components/User/CurrentUser';
 
 export default class ReceiveScreen extends Component {
 
@@ -25,13 +25,7 @@ export default class ReceiveScreen extends Component {
 
                 <View style={styles.infoSegment}>
                     <Text style={styles.infoFont}>
-                        Your administrate ?? pools.
-                    </Text>
-                </View>
-
-                <View style={styles.infoSegment}>
-                    <Text style={styles.infoFont}>
-                        Total amount of BTC received from pools:
+                        Your administrate {GetUserPools().length} pools.
                     </Text>
                 </View>
 

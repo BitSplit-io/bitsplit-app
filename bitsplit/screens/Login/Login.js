@@ -37,21 +37,25 @@ export default class Login extends React.Component {
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
                     //No point showing success message on success
-                    results.status == "success" ?
+
+                    if (results.status == "success") {
                         this.props.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
-                            })) :
+                            }))
+                    } else {
                         MessageBarManager.showAlert({
                             message: results.message,
                             alertType: results.status,
                         });
+                        this.setState({ isLoading: false });
+                    }
                 }).catch((error) => {
                     alert("error when processing login result");
                     console.log(error)
                 }).finally(() => {
-                    
+
                 })
         )
     }

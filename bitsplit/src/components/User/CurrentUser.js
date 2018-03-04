@@ -28,6 +28,14 @@ export function SetUserAddress(address) {
     this.userAddress = address;
 }
 
+export function SetUserPools(pools){
+    this.userPools = pools;
+}
+
+export function GetUserPools() {
+    return this.userPools;
+}
+
 export function GetUserName(){
     return this.username;
 }
@@ -37,7 +45,8 @@ export function GetUserId(){
 }
 
 export function GetUserAddress(){
-    return this.userAddress;
+    return "mi2dxB9zRydgxLxKRTgJpqF9XSoqKnyEUp";
+    // return this.userAddress;
 }
 
 export function GetUserCoinPrefix(){

@@ -79,7 +79,7 @@ export default class NewUser extends React.Component {
                 this.props.navigation.dispatch(
                     NavigationActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                        actions: [NavigationActions.navigate({ routeName: 'AddressSettings'})]
                       }))
             }).catch(error => {
                 MessageBarManager.showAlert({

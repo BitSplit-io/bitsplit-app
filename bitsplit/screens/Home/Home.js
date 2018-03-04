@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, Alert, RefreshControl, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
 import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
@@ -27,12 +27,14 @@ export default class Home extends Component {
         }
     };
 
-    componentWillMount(){
+    componentWillMount() {
         this.refreshPools();
     }
 
     refreshPools() {
+        if (this.state.refreshing) return;
         console.log("REFRESHING POOLS")
+        this.setState({ refreshing: true });
         this.setState({
             poolComponents: []
         })
@@ -46,15 +48,54 @@ export default class Home extends Component {
             this.setState({
                 poolComponents: _poolComponents,
             })
-            this.setState({ refreshing: false });            
+            this.setState({ refreshing: false });
             console.log("AT THIS POINT RESULT DATA IS: ")
             console.log(this.state.poolComponents);
         });
     }
 
     _onRefresh() {
-        this.setState({ refreshing: true });
         this.refreshPools();
+    }
+
+    renderFlatlist(navigate) {
+        return (
+            <FlatList
+                data={this.state.poolComponents}
+                renderItem={({ item }) =>
+                    <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#fff'>
+                        <ListItem
+                            roundAvatar
+                            title={item ? item.poolDetails.poolName + " (balance: " + item.poolDetails.balance + ")" : ''}
+                            subtitle={item ? item.poolDetails.intermediateAddress : ''}
+                        /* avatar={{ uri: item.picture.thumbnail }} */
+                        />
+                    </TouchableOpacity>
+                }
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh.bind(this)}
+                    />
+                }
+                keyExtractor={item => item.poolDetails.poolId}
+            />
+        )
+    }
+
+    renderInfoField() {
+        if (!this.state.loading && !this.state.refreshing)
+            return (
+                <View style={styles.emptyPoolField}>
+                    <Text style={{ alignSelf: "center", fontSize: 26, paddingTop: 40 }}>
+                        Welcome
+                    </Text>
+                    <Text style={{ fontSize: 20, paddingTop: 40 }}>
+                        You don't have any pools registered yet.
+                        To create a new pool, use the plus sign in the top right corner.
+                    </Text>
+                </View>
+            )
     }
 
     render() {
@@ -62,49 +103,53 @@ export default class Home extends Component {
         super.render;
 
         const { navigate } = this.props.navigation;
+        const resizeMode = 'center';
 
         return (
 
             <View style={styles.container}>
 
+                <Image
+                    style={{
+                        flex: 1,
+                        alignSelf: "center",
+                        position: "absolute",
+                        // resizeMode
+                    }}
+                    source={require('../../src/images/Logo_transparent.png')}
+                />
+
                 <View style={styles.header}>
-                    <Button
+
+                    <TouchableOpacity
                         onPress={() => this.refreshPools()}
-                        icon={{ name: 'refresh' }}
-                        backgroundColor={'rgba(0,0,0,0)'}
                         style={styles.headerIcon}
-                    />
+                    >
+                        <Icon
+                            name='refresh'
+                            color="#fff"
+                        />
+                    </TouchableOpacity>
 
                     <Text style={styles.title}>Pools</Text>
 
-                    <Button
+                    <TouchableOpacity
                         onPress={() => navigate('EditPool', { props: new PoolComponent() })}
-                        icon={{ name: 'plus', type: 'foundation' }}
-                        backgroundColor={'rgba(0,0,0,0)'}
-                    />
+                        style={styles.headerIcon}
+                    >
+                        <Icon
+                            name='plus'
+                            type='foundation'
+                            color="#fff"
+                        />
+                    </TouchableOpacity>
+
 
                 </View>
 
-                <FlatList
-                    data={this.state.poolComponents}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#fff'>
-                            <ListItem
-                                roundAvatar
-                                title={item ? item.poolDetails.poolName +" (balance: "+ item.poolDetails.balance + ")": ''}
-                                subtitle={item ? item.poolDetails.intermediateAddress : ''}
-                                /* avatar={{ uri: item.picture.thumbnail }} */
-                            />
-                        </TouchableOpacity>
-                    }
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh.bind(this)}
-                        />
-                    }
-                    keyExtractor={item => item.poolDetails.poolId}
-                />
+                {!this.state.poolComponents.length ? this.renderInfoField() : this.renderFlatlist(navigate)}
+
+
 
             </View>
 
@@ -123,10 +168,10 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 56,
-        padding: 8,
+        // padding: 8,
         flexDirection: 'row',
+        justifyContent: 'space-around',
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: '#7EC480',
     },
     headerIcon: {
@@ -149,5 +194,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    emptyPoolField: {
+        padding: 20,
+        alignContent: "center",
     },
 });
