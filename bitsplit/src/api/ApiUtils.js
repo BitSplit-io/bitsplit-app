@@ -105,18 +105,16 @@ export function GetUserPools() {
             headers
         ),
     }).then(response => {
-        var responseJson = response.json();
+        return response.json();
+    }).then(responseJson => {
         if (responseJson.status == "success") {
             SetUserPools(responseJson.data);
-            console.log(responseJson.data);
-        }
-        return responseJson;
-    }).then(responseJson => {
+        };
         return responseJson;
     })
         .catch((error) => {
             console.log(error)
-            alert("THERE WAS A NETWORK ERROR" + error.message);
+            alert("THERE WAS A NETWORK ERROR");
         })
 }
 

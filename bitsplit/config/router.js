@@ -120,12 +120,6 @@ export const RootNavigator = StackNavigator({
                     backgroundColor: '#7EC480',
                     elevation: 5,
                 }
-                //header: 
-                //right   : <Icon                     
-                //name={'settings'}
-                //type='MaterialcommunityIcons'
-                //size={26}
-                //style={'#f5fff5'} />  
         }
     },
     EditPool: {
@@ -167,10 +161,16 @@ export const RootNavigator = StackNavigator({
     AccountScreen: {
         screen: AccountScreen,
         navigationOptions: {
+            title: "ACCOUNT",
+            headerTitleStyle: {
+                color: "#fff",
+                textAlign: 'center',
+                alignSelf:'center',
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
                 elevation: 5,                
-            }
+            },
         }
     },
     PreferencesScreen: {

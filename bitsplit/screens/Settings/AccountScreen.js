@@ -4,7 +4,7 @@ import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import { GetUserName, GetUserId, GetUserPools } from '../../src/components/User/CurrentUser';
 
-export default class ReceiveScreen extends Component {
+export default class AccountScreen extends Component {
 
     render() {
         return (
@@ -17,15 +17,18 @@ export default class ReceiveScreen extends Component {
                     </Text>
                 </View>
 
-                <View style={styles.infoSegment}>
+                <View style={styles.infoSegmentCol}>
                     <Text style={styles.infoFont}>
-                        Your user-ID is: {GetUserId()}
+                        Your user-ID is:
+                    </Text>
+                    <Text style={[{fontSize: 15}]}>
+                    {GetUserId()}
                     </Text>
                 </View>
 
                 <View style={styles.infoSegment}>
                     <Text style={styles.infoFont}>
-                        Your administrate {GetUserPools().length} pools.
+                        You administrate {GetUserPools().length} pools.
                     </Text>
                 </View>
 
@@ -104,5 +107,11 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         // borderBottomWidth: 1,
         // borderBottomColor: '#A0A0A0',
-    }
+    },
+    infoSegmentCol: {
+        flexDirection: 'column',
+        paddingLeft: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
 })
