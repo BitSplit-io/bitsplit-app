@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, TextInput, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { AppRegistry, View, Text, TextInput, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { List, ListItem, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
 import Pie from 'react-native-pie';
 import PoolComponent from '../../src/components/Pool/PoolComponent';
 import { GetUserId } from '../../src/components/User/CurrentUser';
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent';
-import { GetPool, CreateNewPool } from '../../src/api/ApiUtils';
+import { GetPool, CreateNewPool, UpdatePool } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
 import Toast from 'react-native-simple-toast';
 import { NavigationActions } from 'react-navigation';
+import DeletePoolModal from './DeletePoolModal';
 
 
 const activePool = '';
@@ -24,16 +25,18 @@ export default class EditPool extends Component {
         this.state = {
             activePool: pool,
             recipients: [],
-            transactionFee: 0.5,
+            transactionFee: 10,
+            deleteModal: undefined,
         };
         if (!this.state.activePool) {
-            this.state.activePool =  new PoolComponent()
-            this.state.activePool.poolDetails.poolAdmin =  GetUserId();
-        }
+            this.state.activePool = new PoolComponent()
+            this.state.activePool.poolDetails.poolAdmin = GetUserId();
+        } else {
+            this.state.deleteModal = new DeletePoolModal(this.state.activePool.poolDetails.poolId, props.navigation);
+            alert("THIS IS THE poolId: " + this.state.activePool.poolDetails.poolId)
+            this.state.deleteModal.setUpdateCallback(() => this.forceUpdate());
+        };
     }
-
-
-
 
 
     render() {
@@ -43,7 +46,15 @@ export default class EditPool extends Component {
         return (
 
             <View style={styles.container}>
-
+             <Modal
+                    visible={this.state.deleteModal ? this.state.deleteModal.isEnabled() : false}
+                    animationInTiming={500}
+                    animationOutTiming={500}
+                    backdropTransitionInTiming={300}
+                    backdropTransitionOutTiming={900}
+                >
+                    {this.state.deleteModal.render()}
+                </Modal>
 
                 <ScrollView style={{ flex: 1 }}>
 
@@ -55,37 +66,43 @@ export default class EditPool extends Component {
                     </View>
 
                     <View style={styles.infoContainer}>
-                    
+
 
                         <View style={styles.titleSegment}>
                             <TextInput
                                 style={styles.title}
-                                placeholder={(this.state.activePool.poolDetails && this.state.activePool.poolDetails.poolName) ? this.state.activePool.poolDetails.poolName :  "Enter pool name"} 
+                                placeholder={(this.state.activePool.poolDetails && this.state.activePool.poolDetails.poolName) ? this.state.activePool.poolDetails.poolName : "Enter pool name"}
                                 placeholderTextColor="rgba(128,128,128,0.5)"
                                 underlineColorAndroid='rgba(0,0,0,0)'
                                 textAlign='left'
                                 autoCapitalize="words"
                                 autoCorrect={false}
-                                onSubmitEditing={() => this.passwordInput.focus()}
+                                onSubmitEditing={() => this.state.activePool.poolDetails.intermediateAddress ? null : this.passwordInput.focus()}
                                 onChangeText={(poolName) => this.state.activePool.setPoolName(poolName)}
                             >
                             </TextInput>
                         </View>
 
-                        <View style={styles.titleSegment}>
-                            <TextInput
-                                style={styles.title}
-                                placeholder="Enter pool password" 
-                                secureTextEntry
-                                placeholderTextColor="rgba(128,128,128,0.5)"
-                                underlineColorAndroid='rgba(0,0,0,0)'
-                                textAlign='left'
-                                ref={(input) => this.passwordInput = input}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                onChangeText={(poolPassword) => this.state.activePool.setPoolPassword(poolPassword)}
-                            />
-                        </View>
+                        {this.state.activePool.poolDetails.intermediateAddress ?
+                            <View></View>
+                            :
+                            <View style={styles.titleSegment}>
+                                <TextInput
+                                    style={styles.title}
+                                    placeholder="Enter pool password"
+                                    secureTextEntry
+                                    placeholderTextColor="rgba(128,128,128,0.5)"
+                                    underlineColorAndroid='rgba(0,0,0,0)'
+                                    textAlign='left'
+                                    ref={(input) => this.passwordInput = input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={(poolPassword) => this.state.activePool.setPoolPassword(poolPassword)}
+                                />
+                            </View>
+                        }
+
+
 
                         <View style={styles.infoSegment}>
                             <Text style={styles.title}>
@@ -113,9 +130,12 @@ export default class EditPool extends Component {
                                 style={styles.editMembers}
                                 onPress={() => navigate('EditPoolMembers', {
                                     props: this.state.activePool,
-                                    onGoBack: () => { this.setState({
-                                        recipients: this.state.activePool.poolDetails.recipients }); 
-                                }})}
+                                    onGoBack: () => {
+                                        this.setState({
+                                            recipients: this.state.activePool.poolDetails.recipients
+                                        });
+                                    }
+                                })}
                                 underlayColor='#55ac45'
                             >
                                 <Text>
@@ -131,35 +151,67 @@ export default class EditPool extends Component {
                         </View>
 
                         <Button
-                        title="Submit"
-                        color="#00BCFF"
-                        onPress={() => CreateNewPool(
-                            this.state.activePool.poolDetails.poolName, 
-                            GetUserId(), 
-                            this.state.activePool.poolDetails.poolPassword, 
-                            this.state.activePool.poolDetails.recipients, 
-                            this.state.transactionFee
-                            ).then((response) => {
-                                if (response.status && response.status == "success") {
-                                    this.props.navigation.dispatch(
-                                        NavigationActions.reset({
-                                            index: 0,
-                                            actions: [NavigationActions.navigate({ routeName: 'Home'})]
-                                          }));
+                            title={!this.state.activePool.poolDetails.intermediateAddress ? "Submit" : "Save changes"}
+                            color="#00BCFF"
+                            onPress={() => {
+
+                                pool = Object.assign({}, this.state.activePool.poolDetails);
+
+                                if (this.state.activePool.poolDetails.intermediateAddress) {
+
+                                    UpdatePool(pool)
+                                        .then((response) => {
+                                            if (response.status && response.status == "success") {
+                                                this.props.navigation.dispatch(
+                                                    NavigationActions.reset({
+                                                        index: 0,
+                                                        actions: [NavigationActions.navigate({ routeName: 'Home' })]
+                                                    }));
+                                            } else {
+                                                Toast.show("Could not update pool.\n" + (response.message ? response.message : ""));
+                                            }
+                                        }).catch((error) => Toast.show("Something went wrong."))
+
                                 } else {
-                                    Toast.show("Could not create pool.\n" + (response.message ? response.message : ""));
+
+                                    pool["poolAdmin"] = GetUserId();
+
+                                    CreateNewPool(pool)
+                                        .then((response) => {
+                                            if (response.status && response.status == "success") {
+                                                this.props.navigation.dispatch(
+                                                    NavigationActions.reset({
+                                                        index: 0,
+                                                        actions: [NavigationActions.navigate({ routeName: 'Home' })]
+                                                    }));
+                                            } else {
+                                                Toast.show("Could not create pool.\n" + (response.message ? response.message : ""));
+                                            }
+                                        }).catch((error) => Toast.show("Something went wrong."))
                                 }
-                            }).catch((error) =>  Toast.show("Something went wrong."))}
+
+                            }}
                         />
 
                     </View>
 
-                    <View style={{height: 100}}>
+                    <View style={{ height: 100 }}>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.state.deleteModal.toggleModal(true)
+                                this.forceUpdate();
+                            }}
+                        >
+                            <Text style={styles.deletePoolButton}>DELETE POOL</Text>
+                        </TouchableOpacity>
+
                     </View>
-                    
+
 
                 </ScrollView>
 
+               
             </View>
 
         )
@@ -209,5 +261,17 @@ const styles = StyleSheet.create({
     },
     editMembers: {
         paddingTop: 7,
+    },
+    deletePoolButton: {
+        alignSelf: 'center',
+        padding: 3,
+        width: 200,
+        borderWidth: 0.5,
+        borderColor: '#ff0000',
+        textAlign: 'center',
+        marginTop: 50,
+        marginBottom: 50,
+        color: '#ff0000',
+        opacity: 0.5
     }
 })

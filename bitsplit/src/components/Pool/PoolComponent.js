@@ -19,8 +19,9 @@ export default class PoolComponent extends Component {
     
     constructor(data) {
         super();
-        this.poolDetails = data == undefined ?  { poolName: undefined, poolAdmin: undefined, poolPassword: undefined, poolId: undefined, recipients: [], transactionFee: 0.5} :
-        this.poolDetails = data;
+        this.poolDetails = data == undefined ?
+            { intermediateAddress: undefined, poolName: undefined, poolAdmin: undefined, poolPassword: undefined, poolId: undefined, recipients: [], transactionFee: 0.5}
+            : data;
     }
 
     setPoolName(name){
@@ -34,7 +35,6 @@ export default class PoolComponent extends Component {
     setPoolAdmin(admin){
         this.poolDetails.poolAdmin = admin;
     }
-
     
     addPoolRecipient(recipient){  
         this.poolDetails.recipients.map(a => a.address).includes(recipient.address) ?

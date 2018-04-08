@@ -233,7 +233,7 @@ export default class EditPoolMembers extends Component {
     renderModalContent() {
         return (
             <View style={styles.modalContent}>
-                <View style={styles.contailer}>
+                <View style={styles.container}>
                     <Text style={{ marginBottom: 15 }}>
                         Do you really want to remove {this.state.modalState.item ? this.state.modalState.item.address : ""} from this pool?
                 </Text>

@@ -192,6 +192,9 @@ export default class Pool extends Component {
                     />
 
                     </View>
+                    
+                    <View style={{ height: 100 }}>
+                    </View>
 
                 </ScrollView>
                 <MessageBar

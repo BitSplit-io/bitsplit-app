@@ -2,7 +2,7 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import { AsyncStorage } from 'react-native';
 import { SetUser, ClearUser, GetUserId, SetUserPools } from "../components/User/CurrentUser"
 
-var bitsplitURL = "http://172.20.10.3:8080";
+var bitsplitURL = "http://10.0.2.2:8080";
 var Auth_Headers = null;
 
 export function GetBitsplitURL() {
@@ -140,7 +140,7 @@ export function GetPool(poolId) {
         })
 }
 
-export function CreateNewPool(poolName, poolAdmin, poolPassword, recipients, poolTransactionFee) {
+export function CreateNewPool(pool) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
@@ -149,14 +149,8 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, recipients, poo
         headers: new Headers(
             headers
         ),
-        body: JSON.stringify({
-            "poolName": poolName,
-            "poolAdmin": poolAdmin,
-            "poolPassword": poolPassword,
-            "recipients": recipients,
-            "poolTransactionFee": poolTransactionFee,
-            // "poolAutomization": poolAutomization,
-        } // <-- Post parameters)
+        body: JSON.stringify(
+            pool // <-- Post parameters)
         )
     })
         .then(response => {
@@ -169,21 +163,18 @@ export function CreateNewPool(poolName, poolAdmin, poolPassword, recipients, poo
         })
 }
 
-export function UpdatePool(poolName, poolAdmin, poolPassword, recipients, poolTransactionFee) {
+export function UpdatePool(pool) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
-    return fetch(bitsplitURL + "/pools/" + poolId, {
+    return fetch(bitsplitURL + "/pools/" + pool.poolId, {
         method: 'PUT',
         headers: new Headers(
             headers
         ),
-        "poolName": poolName,
-        "poolAdmin": poolAdmin,
-        "poolPassword": poolPassword,
-        "recipients": recipients,
-        "poolTransactionFee": poolTransactionFee,
-        // "poolAutomization": poolAutomization,
+        body: JSON.stringify(
+            pool
+        )
     } // <-- Post parameters)
     )
         .then(response => {
@@ -191,6 +182,25 @@ export function UpdatePool(poolName, poolAdmin, poolPassword, recipients, poolTr
             return response.json();
         })
         .catch((error) => {
+            console.log(error)
+            alert("THERE WAS A NETWORK ERROR");
+        })
+}
+
+export function DeletePool(poolId) {
+
+    var headers = Object.assign({}, Auth_Headers);
+    return fetch(bitsplitURL + "/pools/" + poolId, {
+        method: 'DELETE',
+        headers: new Headers(
+            headers
+        )
+    })
+        .then(response => {
+            console.log(response);
+            return response.json();
+        })
+        .catch(error => {
             console.log(error)
             alert("THERE WAS A NETWORK ERROR");
         })
