@@ -33,11 +33,26 @@ export default class EditPool extends Component {
             this.state.activePool.poolDetails.poolAdmin = GetUserId();
         } else {
             this.state.deleteModal = new DeletePoolModal(this.state.activePool.poolDetails.poolId, props.navigation);
-            alert("THIS IS THE poolId: " + this.state.activePool.poolDetails.poolId)
             this.state.deleteModal.setUpdateCallback(() => this.forceUpdate());
         };
     }
 
+    renderDeleteBtn() {
+        return (
+            <View style={{ height: 100 }}>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        this.state.deleteModal.toggleModal(true)
+                        this.forceUpdate();
+                    }}
+                >
+                    <Text style={styles.deletePoolButton}>DELETE POOL</Text>
+                </TouchableOpacity>
+
+            </View>
+        )
+    }
 
     render() {
 
@@ -46,7 +61,7 @@ export default class EditPool extends Component {
         return (
 
             <View style={styles.container}>
-             <Modal
+                <Modal
                     visible={this.state.deleteModal ? this.state.deleteModal.isEnabled() : false}
                     animationInTiming={500}
                     animationOutTiming={500}
@@ -195,23 +210,12 @@ export default class EditPool extends Component {
 
                     </View>
 
-                    <View style={{ height: 100 }}>
-
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.state.deleteModal.toggleModal(true)
-                                this.forceUpdate();
-                            }}
-                        >
-                            <Text style={styles.deletePoolButton}>DELETE POOL</Text>
-                        </TouchableOpacity>
-
-                    </View>
+                            {this.state.activePool.poolDetails.intermediateAddress ? this.renderDeleteBtn() : <View style={{margin: 20}}></View>}
 
 
                 </ScrollView>
 
-               
+
             </View>
 
         )

@@ -9,6 +9,7 @@ import PoolComponent from '../../src/components/Pool/PoolComponent';
 import SectionHeader from './components/SectionHeader'
 import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
+import Settings from '../Settings/Settings';
 // const ds = new ListView.DataSource({
 //     rowHasChanged: (r1, r2) => r1 !== r2,
 // });
@@ -60,6 +61,7 @@ export default class Home extends Component {
 
     renderFlatlist(navigate) {
         return (
+            <View style={{flex: +!!this.state.poolComponents.length}}>
             <FlatList
                 data={this.state.poolComponents}
                 renderItem={({ item }) =>
@@ -80,29 +82,41 @@ export default class Home extends Component {
                 }
                 keyExtractor={item => item.poolDetails.poolId}
             />
+                <View>
+                    {this.renderInfoField()}
+                </View>
+            </View>
+
         )
     }
 
     renderInfoField() {
-        if (!this.state.loading && !this.state.refreshing)
-            return (
-                <View style={styles.emptyPoolField}>
-                    <Text style={{ alignSelf: "center", fontSize: 26, paddingTop: 40 }}>
-                        Welcome
+        if (!this.state.loading && !this.state.refreshing) {
+
+            if (!this.state.poolComponents.length) {
+
+                return (
+                    <View style={styles.emptyPoolField}>
+                        <Text style={{ alignSelf: "center", fontSize: 26, paddingTop: 40 }}>
+                            Welcome!
                     </Text>
-                    <Text style={{ fontSize: 20, paddingTop: 40 }}>
-                        You don't have any pools registered yet.
-                        To create a new pool, use the plus sign in the top right corner.
+                        <Text style={{  textAlign: "center", fontSize: 20, paddingTop: 40 }}>
+                            You don't have any pools registered yet.
+                            To create a new pool, use the plus sign in the top right corner.
                     </Text>
-                </View>
-            )
+                    </View>
+                )
+
+            }
+
+        }
     }
 
     render() {
 
         super.render;
 
-        const { navigate } = this.props.navigation;
+        const navigate = this.props.navigation.navigate;
         const resizeMode = 'center';
 
         return (
@@ -122,7 +136,7 @@ export default class Home extends Component {
                 <View style={styles.header}>
 
                     <TouchableOpacity
-                        onPress={() => this.refreshPools()}
+                        onPress={() => navigate('Settings')}
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -147,7 +161,7 @@ export default class Home extends Component {
 
                 </View>
 
-                {!this.state.poolComponents.length ? this.renderInfoField() : this.renderFlatlist(navigate)}
+                {this.renderFlatlist(navigate)}
 
 
 
@@ -196,7 +210,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     emptyPoolField: {
-        padding: 20,
+        padding: 5,
         alignContent: "center",
+        elevation: -10,
     },
 });

@@ -61,6 +61,8 @@ export default class AddressSettings extends Component {
     renderAddAddressModal() {
         return (
             <View style={styles.modalContent}>
+
+
                 <Text style={styles.welcomeFont}>
                     Enter you existing BTC address.
                 </Text>
@@ -68,31 +70,6 @@ export default class AddressSettings extends Component {
                     onChangeText={(value) => this.setState({ textInputValue: value })}>
 
                 </TextInput>
-                <View style={[styles.button, { width: "150%", marginBottom: 10 }]}>
-                    <TouchableOpacity style={{}} onPress={() => Linking.openURL("coinbase://")}>
-                        <Text style={styles.infoFont}>
-                            Connect using Coinbase app
-                    </Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* TODO ADD ANDROID NATIVE LAUNCH OTHER APP piuk.blockchain.android: 
-             <View style={[styles.button, {width:"150%"}]}>
-                <TouchableOpacity style={{}} onPress={() => Linking.openURL("piuk.blockchain.android://")}>
-                    <Text style={styles.infoFont}>
-                        Connect using Blockchain app
-                    </Text>
-                </TouchableOpacity>
-                </View>
-                */}
-
-                <View style={[styles.button, { width: "150%" }]}>
-                    <TouchableOpacity style={{}} onPress={() => Linking.openURL("mycelium://")}>
-                        <Text style={styles.infoFont}>
-                            Connect using Mycelium app
-                    </Text>
-                    </TouchableOpacity>
-                </View>
 
                 <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity style={styles.modalButton}
@@ -105,7 +82,7 @@ export default class AddressSettings extends Component {
                                     } else {
                                         Toast.show("Invalid Bitcoin address.")
                                     }
-                                }).catch((error) => {})
+                                }).catch((error) => { })
                         }}>
                         <Text style={styles.modalbuttonText}>Confirm</Text>
                     </TouchableOpacity>
@@ -126,7 +103,7 @@ export default class AddressSettings extends Component {
                 <View>
                     <Text> you have linked: </Text>
                     <Text style={{ fontStyle: 'italic' }}>{this.state.currentAddress} </Text>
-                    <Text>{"to your account.\n\nIf you check \"Let others add me to their pool\", other users can add you to their pool using your BtiSplit username."} </Text>
+                    <Text>{"to your account.\n\nIf you check \"Let others add me to their pool\", other users can add you to their pool using your BitSplit username."} </Text>
                 </View>
             )
         }
@@ -148,6 +125,20 @@ export default class AddressSettings extends Component {
         } else {
             this.toggleConfirmModal(true);
         }
+    }
+
+    renderCheckbox() {
+        return (
+            <View style={styles.checkboxSegment}>
+                <Text style={styles.welcomeFont}>
+                    Let others add me to Pools
+                        </Text>
+                <CheckBox
+                    onValueChange={(value) => this.setState({ allowAddUserToPools: value })}
+                    value={this.state.allowAddUserToPools}
+                />
+            </View>
+        )
     }
 
     render() {
@@ -191,19 +182,6 @@ export default class AddressSettings extends Component {
                             </Text>
                     </View>
 
-                    {/*<View style={styles.button}>
-                        <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#fff'>
-                            <Text style={styles.infoFont}>
-                                Create Bitcoin address
-                        </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.infoSegment}>
-                        <Text>
-                            This will generate a new Bitcoin address that you will create using your unique signature. Proceed?
-                    </Text>
-                    </View> */}
-
                     <View style={styles.button}>
                         <TouchableOpacity onPress={() => this.toggleAddressModal(true)}>
                             <Text style={styles.infoFont}>
@@ -219,23 +197,18 @@ export default class AddressSettings extends Component {
 
                     </View>
 
-
-                    <View style={styles.checkboxSegment}>
-                        <Text style={styles.welcomeFont}>
-                            Let others add me to Pools
-                    </Text>
-                        <CheckBox
-                            onValueChange={(value) => this.setState({ allowAddUserToPools: value })}
-                            value={this.state.allowAddUserToPools}
-                        />
-                    </View>
-
-
+                    {this.state.currentAddress ? this.renderCheckbox() : null}
 
                 </ScrollView>
 
                 <View style={styles.doneButton}>
-                    <TouchableOpacity onPress={() => this.showmodalOrContinue()} underlayColor='#fff'>
+                    <TouchableOpacity
+                        onPress={() =>
+                            this.showmodalOrContinue()
+                        }
+
+                        underlayColor='#fff'>
+
                         <Text style={styles.infoFont}>
                             Done
                         </Text>

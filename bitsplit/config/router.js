@@ -9,7 +9,6 @@ import Home from '../screens/Home/Home';
 import Pool from '../screens/Pool/Pool';
 import EditPool from '../screens/Pool/EditPool';
 import EditPoolMembers from '../screens/Pool/EditPoolMembers';
-import Wallet from '../screens/Wallet/Wallet';
 import Send from '../screens/Transactions/Send';
 import Receive from '../screens/Transactions/Receive';
 import Login from '../screens/Login/Login';
@@ -59,19 +58,6 @@ export const HomeTabs = TabNavigator({
             )
         },
     },
-    Wallet: {
-        screen: Wallet,
-        navigationOptions: {
-            tabBarIcon: ({ focused }) => (
-                <Icon
-                    name={focused ? 'wallet' : 'wallet'}
-                    type='entypo'
-                    size={26}
-                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
-                />
-            )
-        },
-    },
 }, {
         tabBarPosition: 'bottom',
         initialRouteName: 'Home',
@@ -85,6 +71,9 @@ export const HomeTabs = TabNavigator({
                 backgroundColor: '#f5fff5',
             },
         },
+        navigationOptions: {
+            tabBarVisible: false,
+        }
     },
 );
 

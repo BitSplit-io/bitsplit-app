@@ -45,7 +45,7 @@ export function GetUserId(){
 }
 
 export function GetUserAddress(){
-    return "mi2dxB9zRydgxLxKRTgJpqF9XSoqKnyEUp";
+    return this.userAddress;
     // return this.userAddress;
 }
 
