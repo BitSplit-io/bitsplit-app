@@ -39,7 +39,7 @@ export default class EditPool extends Component {
 
     renderDeleteBtn() {
         return (
-            <View style={{ height: 100 }}>
+            <View style={{ height: 100, justifyContent: "center" }}>
 
                 <TouchableOpacity
                     onPress={() => {
@@ -67,6 +67,7 @@ export default class EditPool extends Component {
                     animationOutTiming={500}
                     backdropTransitionInTiming={300}
                     backdropTransitionOutTiming={900}
+                    style={styles.deleteModal}
                 >
                     {this.state.deleteModal.render()}
                 </Modal>
@@ -210,7 +211,7 @@ export default class EditPool extends Component {
 
                     </View>
 
-                            {this.state.activePool.poolDetails.intermediateAddress ? this.renderDeleteBtn() : <View style={{margin: 20}}></View>}
+                            {this.state.activePool.poolDetails.intermediateAddress ? this.renderDeleteBtn() : <View style={{margin: 70}}></View>}
 
 
                 </ScrollView>
@@ -270,12 +271,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         padding: 3,
         width: 200,
-        borderWidth: 0.5,
+        borderWidth: 0.7,
         borderColor: '#ff0000',
         textAlign: 'center',
-        marginTop: 50,
-        marginBottom: 50,
         color: '#ff0000',
-        opacity: 0.5
+        backgroundColor: "rgba(255,0,0,0.2)",
+        opacity: 0.8
+    },
+    deleteModal: {
+        height: 100,
     }
 })

@@ -42,16 +42,17 @@ export default class ReceiveScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: "10%",
         backgroundColor: '#f5fff5',
     },
     infoSegment: {
-        paddingLeft: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
+        marginBottom: 20,
+        padding: 15,
+        borderWidth: 0.5,
+        borderColor: '#A0A0A0',
     },
     fontProps: {
-        fontSize: 17,
+        textAlign: "center",
+        fontSize: 20,
     },
 })

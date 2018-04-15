@@ -34,43 +34,12 @@ export default class Start extends Component {
 export const HomeTabs = TabNavigator({
     Settings: {
         screen: Settings,
-        navigationOptions: {
-            tabBarIcon: ({ focused }) => (
-                <Icon
-                    name={focused ? 'settings' : 'settings'}
-                    type='MaterialcommunityIcons'
-                    size={26}
-                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
-                />
-            )
-        },
     },
     Home: {
         screen: Home,
-        navigationOptions: {
-            tabBarIcon: ({ focused }) => (
-                <Icon
-                    name={focused ? 'home' : 'home'}
-                    type='MaterialcommunityIcons'
-                    size={26}
-                    style={{ color: focused ? '#f5fff5' : '#f5fff5' }}
-                />
-            )
-        },
     },
 }, {
-        tabBarPosition: 'bottom',
         initialRouteName: 'Home',
-        tabBarOptions: {
-            style: {
-                backgroundColor: '#275629',
-            },
-            showLabel: false,
-            showIcon: true,
-            indicatorStyle: {
-                backgroundColor: '#f5fff5',
-            },
-        },
         navigationOptions: {
             tabBarVisible: false,
         }
@@ -80,11 +49,11 @@ export const HomeTabs = TabNavigator({
 export const RootNavigator = StackNavigator({
     LoadingScreen: {
         screen: LoadingScreen,
-        navigationOptions: {header: null, }
+        navigationOptions: { header: null, }
     },
     ConfirmPasswordScreen: {
         screen: ConfirmPasswordScreen,
-        navigationOptions: {header: null, }
+        navigationOptions: { header: null, }
     },
     Login: {
         screen: Login,
@@ -105,15 +74,23 @@ export const RootNavigator = StackNavigator({
     Pool: {
         screen: Pool,
         navigationOptions: {
-                headerStyle: {
-                    backgroundColor: '#7EC480',
-                    elevation: 5,
-                }
+            title: "Pool Details",
+            headerTitleStyle: {
+                color: "#fff",
+            },
+            headerStyle: {
+                backgroundColor: '#7EC480',
+                elevation: 5,
+            }
         }
     },
     EditPool: {
         screen: EditPool,
         navigationOptions: {
+            title: "Settings",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
                 elevation: 5,
@@ -123,6 +100,10 @@ export const RootNavigator = StackNavigator({
     EditPoolMembers: {
         screen: EditPoolMembers,
         navigationOptions: {
+            title: "Edit Pool Members",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
                 elevation: 0,
@@ -150,60 +131,78 @@ export const RootNavigator = StackNavigator({
     AccountScreen: {
         screen: AccountScreen,
         navigationOptions: {
-            title: "ACCOUNT",
+            title: "Account",
             headerTitleStyle: {
                 color: "#fff",
-                textAlign: 'center',
-                alignSelf:'center',
             },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             },
         }
     },
     PreferencesScreen: {
         screen: PreferencesScreen,
         navigationOptions: {
+            title: "Preferences",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             }
         }
     },
     SecurityScreen: {
         screen: SecurityScreen,
         navigationOptions: {
+            title: "Security",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             }
         }
     },
     UserGuideScreen: {
         screen: UserGuideScreen,
         navigationOptions: {
+            title: "User Guide",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             }
         }
     },
     SupportScreen: {
         screen: SupportScreen,
         navigationOptions: {
+            title: "Support",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             }
         }
     },
     AboutScreen: {
         screen: AboutScreen,
         navigationOptions: {
+            title: "About",
+            headerTitleStyle: {
+                color: "#fff",
+            },
             headerStyle: {
                 backgroundColor: '#7EC480',
-                elevation: 5,                
+                elevation: 5,
             }
         }
     },

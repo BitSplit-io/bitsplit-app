@@ -17,12 +17,12 @@ export default class ReceiveScreen extends Component {
     settingWithDropdown(list, description, onChanged, stateVariable) {
         return (
             <View style={styles.container}>
-                <View style={{ width: '66%', height: 70 }}>
-                    <Text style={{ fontSize: 17, paddingTop: 14, paddingLeft: 10 }}>
+                <View style={{ width: '66%' }}>
+                    <Text style={{ fontSize: 17, padding: 14}}>
                         {description}
                     </Text>
                 </View>
-                <View style={{ width: '34%', height: 70 }}>
+                <View style={{ width: '34%' }}>
                     <Picker
                         mode="dropdown"
                         selectedValue={stateVariable}
@@ -51,8 +51,11 @@ export default class ReceiveScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        height: 70,
         flexDirection: 'row',
         backgroundColor: '#fff',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
+        alignItems: "center",
+        justifyContent: "center"
     },
 })

@@ -122,13 +122,13 @@ export default class Home extends Component {
         return (
 
             <View style={styles.container}>
+            <StatusBar backgroundColor="#275629"/>
 
                 <Image
                     style={{
                         flex: 1,
                         alignSelf: "center",
                         position: "absolute",
-                        // resizeMode
                     }}
                     source={require('../../src/images/Logo_transparent.png')}
                 />
@@ -140,8 +140,9 @@ export default class Home extends Component {
                         style={styles.headerIcon}
                     >
                         <Icon
-                            name='refresh'
-                            color="#fff"
+                            name='settings'
+                            type="MaterialCommunityIcons"
+                            color="#275629"
                         />
                     </TouchableOpacity>
 
@@ -154,7 +155,7 @@ export default class Home extends Component {
                         <Icon
                             name='plus'
                             type='foundation'
-                            color="#fff"
+                            color="#275629"
                         />
                     </TouchableOpacity>
 
@@ -162,8 +163,6 @@ export default class Home extends Component {
                 </View>
 
                 {this.renderFlatlist(navigate)}
-
-
 
             </View>
 
@@ -182,7 +181,6 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 56,
-        // padding: 8,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -190,6 +188,8 @@ const styles = StyleSheet.create({
     },
     headerIcon: {
         flex: 1,
+        height: 56,
+        justifyContent: 'center',
     },
     title: {
         flex: 1,

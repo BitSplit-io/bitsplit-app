@@ -129,6 +129,9 @@ export default class DeletePoolModal extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     modalContent: {
         backgroundColor: '#f5fff5',
         padding: 22,

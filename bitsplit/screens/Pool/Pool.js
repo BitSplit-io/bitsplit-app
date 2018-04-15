@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity, TextInput} from 'react-native';
+import { AppRegistry, View, Text, Button, StyleSheet, ScrollView, StatusBar, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { List, ListItem, Icon, } from "react-native-elements";
 import { RootNavigator } from '../../config/router';
@@ -17,7 +17,7 @@ export default class Pool extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { activePool: this.props.navigation.state.params.item, visibleModal: false, enteredPassword: null};
+        this.state = { activePool: this.props.navigation.state.params.item, visibleModal: false, enteredPassword: null };
     }
 
     toggleModal(state) {
@@ -36,44 +36,44 @@ export default class Pool extends Component {
         return (
             <View style={styles.modalContent}>
                 <View style={styles.contailer}>
-                <Text style={{marginBottom: 15}}>
-                    Enter password for {this.state.activePool.poolDetails.poolName}
-                </Text>
+                    <Text style={{ marginBottom: 15 }}>
+                        Enter password for {this.state.activePool.poolDetails.poolName}
+                    </Text>
 
-               <TextInput 
-                    placeholder="Password"
-                    secureTextEntry
-                    placeholderTextColor="rgba(0,0,0,0.5)"
-                    underlineColorAndroid='rgba(0,0,0,0.5)'
-                    textAlign='center'
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    onChangeText={(password) => this.setState({ enteredPassword: password })}
-                    value={this.state.enteredPassword}
-                />
+                    <TextInput
+                        placeholder="Password"
+                        secureTextEntry
+                        placeholderTextColor="rgba(0,0,0,0.5)"
+                        underlineColorAndroid='rgba(0,0,0,0.5)'
+                        textAlign='center'
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        style={styles.input}
+                        onChangeText={(password) => this.setState({ enteredPassword: password })}
+                        value={this.state.enteredPassword}
+                    />
                 </View>
 
-                <TouchableOpacity 
-                onPress={() => {
-                    DoTransaction(this.state.enteredPassword, this.state.activePool.poolDetails.poolId).then((result) => {
-                        result.status == "success" ?
-                            console.log("Success!") :
-                            result.message ?
-                                this.showError(result.message) :
-                                console.log("no error message")
-                    }).catch((error) => {
-                        alert("there was an error")
-                    });
-                }}>
-                        <Text  style={styles.modalButton}>Submit</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        DoTransaction(this.state.enteredPassword, this.state.activePool.poolDetails.poolId).then((result) => {
+                            result.status == "success" ?
+                                console.log("Success!") :
+                                result.message ?
+                                    this.showError(result.message) :
+                                    console.log("no error message")
+                        }).catch((error) => {
+                            alert("there was an error")
+                        });
+                    }}>
+                    <Text style={styles.modalButton}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     this.toggleModal(false);
-                    this.setState({enteredPassword: null})
+                    this.setState({ enteredPassword: null })
                 }}>
 
-                    <Text style={[styles.modalButton, {backgroundColor: '#ac4545'}]}>Cancel</Text>
+                    <Text style={[styles.modalButton, { backgroundColor: '#ac4545' }]}>Cancel</Text>
                 </TouchableOpacity>
 
             </View>
@@ -99,24 +99,25 @@ export default class Pool extends Component {
 
                 <ScrollView style={{ flex: 1 }}>
 
-                    <View style={styles.pieContainer}>
+                    <View style={{height: "40%"}}>
+                        <View style={styles.pieContainer}>
 
-                        {this.state.activePool.renderPoolPieChart()}
+                            {this.state.activePool.renderPoolPieChart()}
 
+                        </View>
 
-                    </View>
-
-                    <View style={styles.qrContainer}>
-                        <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
-                            Press icon to receive a transaction:
+                        <View style={styles.qrContainer}>
+                            <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
+                                Press icon to receive a transaction:
                             </Text>
-                        <Icon
-                            name='qrcode'
-                            type='font-awesome'
-                            raised={true}
-                            style={styles.receiveButton}
-                            onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
-                        />
+                            <Icon
+                                name='qrcode'
+                                type='font-awesome'
+                                raised={true}
+                                style={styles.receiveButton}
+                                onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                            />
+                        </View>
                     </View>
 
                     <Button
@@ -165,7 +166,7 @@ export default class Pool extends Component {
                                 satoshi {this.state.activePool.poolDetails.balance}
                             </Text>
                         </View>
-                        
+
                         <View style={styles.infoSegment}>
                             <Text style={styles.title}>
                                 Total revenue
@@ -182,17 +183,19 @@ export default class Pool extends Component {
                         </View>
 
                         <Button
-                        title="Edit pool"
-                        color="#00BCFF"
-                        onPress={() => navigate('EditPool', {
-                            props: this.state.activePool,
-                            onGoBack: (pool) => { this.setState({activePool: pool}); 
-                                console.log('back') }
-                        })}
-                    />
+                            title="Edit pool"
+                            color="#00BCFF"
+                            onPress={() => navigate('EditPool', {
+                                props: this.state.activePool,
+                                onGoBack: (pool) => {
+                                    this.setState({ activePool: pool });
+                                    console.log('back')
+                                }
+                            })}
+                        />
 
                     </View>
-                    
+
                     <View style={{ height: 100 }}>
                     </View>
 
@@ -237,12 +240,10 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     qrContainer: {
-        flex: 1,
         marginLeft: 30,
         marginRight: 30,
         padding: 30,
         flexDirection: 'row',
-        alignSelf: 'flex-end',
     },
     receiveButton: {
         flex: 1,
@@ -255,10 +256,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: -10,
-        // position: 'absolute',
     },
     infoContainer: {
-        // top: 100,
         flex: 1,
         backgroundColor: '#f5fff5',
         minHeight: 500,
@@ -290,8 +289,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#A0A0A0',
     },
     modalButton: {
-        textAlignVertical:'center',
-        backgroundColor:'#55ac45',
+        textAlignVertical: 'center',
+        backgroundColor: '#55ac45',
         alignSelf: 'center',
         padding: 3,
         width: 200,
