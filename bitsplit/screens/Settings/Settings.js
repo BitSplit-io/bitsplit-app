@@ -14,7 +14,6 @@ export default class Settings extends Component {
         return (
             <View style={styles.fullScreen}>
                 <View style={styles.container}>
-                    <StatusBar backgroundColor="#7EC480" barStyle="light-content" />
 
                     <View style={styles.header}>
                         <Image
@@ -105,6 +104,7 @@ export default class Settings extends Component {
                 </View>
 
                 <View style={styles.tabStyle}>
+                
                     <View style={[{height: 56, backgroundColor: '#7EC480',}]}>
                     </View>
                 </View>
@@ -141,13 +141,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ffffff',
         paddingBottom: 20,
     },
-    settingsList: {
-        // paddingTop: 50,
-        // paddingBottom: -50,
-    },
     logo: {
         width: 70,
         height: 70,
+        marginLeft: "15%",
         marginRight: 10,
     },
     title: {

@@ -142,7 +142,7 @@ export default class Home extends Component {
                         <Icon
                             name='settings'
                             type="MaterialCommunityIcons"
-                            color="#275629"
+                            color="#3b7830"
                         />
                     </TouchableOpacity>
 
@@ -155,7 +155,7 @@ export default class Home extends Component {
                         <Icon
                             name='plus'
                             type='foundation'
-                            color="#275629"
+                            color="#3b7830"
                         />
                     </TouchableOpacity>
 

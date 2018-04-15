@@ -132,7 +132,7 @@ export default class EditPool extends Component {
                                     extraData={this.state}
                                     renderItem={({ item }) =>
                                         <ListItem
-                                            title={item ? (item.proportion * 100) + '%' : 'asdasd'}
+                                            title={item ? (item.proportion * 100).toFixed(1) + '%' : 'asdasd'}
                                             subtitle={item ? item.address : ''}
                                             hideChevron={true}
                                         >

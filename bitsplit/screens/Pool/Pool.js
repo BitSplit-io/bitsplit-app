@@ -122,7 +122,7 @@ export default class Pool extends Component {
 
                     <Button
                         title="Split revenue"
-                        color="#00BCFF"
+                        color="#55ac45"
                         onPress={() => this.toggleModal(true)}
                     />
 
@@ -147,7 +147,7 @@ export default class Pool extends Component {
                                     data={this.state.activePool.poolDetails.recipients}
                                     renderItem={({ item }) =>
                                         <ListItem
-                                            title={item ? (item.proportion * 100) + '%' : ''}
+                                            title={item ? (item.proportion * 100).toFixed(1) + '%' : ''}
                                             subtitle={item ? item.address : ''}
                                             hideChevron={true}
                                         />
