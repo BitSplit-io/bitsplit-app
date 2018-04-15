@@ -22,10 +22,10 @@ export default class DeletePoolModal extends Component {
             poolId: props,
             deleteStage: 0,
             updateCallback: null,
-            keywords: "poop"
+            keywords: "poop",
+            navigation: navigation,
         };
 
-        const navigatiop = navigation;
     }
 
     toggleModal(toggle) {
@@ -93,7 +93,7 @@ export default class DeletePoolModal extends Component {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        this.navigation.dispatch(
+                        this.state.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
