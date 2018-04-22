@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "777513958101",
+    "firebase_url": "https://bitsplitpn.firebaseio.com",
+    "project_id": "bitsplitpn",
+    "storage_bucket": "bitsplitpn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777513958101:android:bbbd109d80aeb796",
+        "android_client_info": {
+          "package_name": "com.bitsplit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777513958101-h9b2jfsfo5ibnnba5q5lmg7fg0js5e00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeGldiTHmyNOvRX3zxmUOizWNrGxvAMBQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

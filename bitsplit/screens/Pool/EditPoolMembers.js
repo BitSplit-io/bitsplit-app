@@ -128,7 +128,6 @@ export default class EditPoolMembers extends Component {
                 backgroundColor="#fff"
                 close={false}
                 key={item.address}
-            //disabled = {true}
             >
 
                 <View style={styles.listComponent}  >

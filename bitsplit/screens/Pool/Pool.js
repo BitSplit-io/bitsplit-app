@@ -122,8 +122,9 @@ export default class Pool extends Component {
 
                     <Button
                         title="Split revenue"
-                        color="#55ac45"
+                        color={this.state.activePool.poolDetails.balance = 0 ? "#fff" : "#55ac45"}
                         onPress={() => this.toggleModal(true)}
+                        disabled={this.state.activePool.poolDetails.balance = 0 ? true : false}
                     />
 
                     <View style={styles.infoContainer}>
@@ -163,7 +164,7 @@ export default class Pool extends Component {
                                 Balance
                             </Text>
                             <Text style={styles.subtitle}>
-                                satoshi {this.state.activePool.poolDetails.balance}
+                                satoshi = {this.state.activePool.poolDetails.balance}
                             </Text>
                         </View>
 

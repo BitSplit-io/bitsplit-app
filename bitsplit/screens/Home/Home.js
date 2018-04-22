@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, Animated, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
 import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
@@ -59,29 +59,49 @@ export default class Home extends Component {
         this.refreshPools();
     }
 
-    renderFlatlist(navigate) {
+    animationListObj(item) {
+
+        var bgColor = new Animated.Value();
+
+        bgColor.interpolate({
+            inputRange: [0, 300],
+            outputRange: ['rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 1)']
+        });
+
+        item.poolDetails.balance > 0 ? bgColor = "rgba(256, 0, 256, 1)" : bgColor = "rgba(0, 256, 256, 1)";
+
         return (
-            <View style={{flex: +!!this.state.poolComponents.length}}>
-            <FlatList
-                data={this.state.poolComponents}
-                renderItem={({ item }) =>
-                    <TouchableOpacity onPress={() => navigate('Pool', { item })} underlayColor='#fff'>
-                        <ListItem
-                            roundAvatar
-                            title={item ? item.poolDetails.poolName + " (balance: " + item.poolDetails.balance + ")" : ''}
-                            subtitle={item ? item.poolDetails.intermediateAddress : ''}
-                        /* avatar={{ uri: item.picture.thumbnail }} */
+            <View style={{ backgroundColor: bgColor, height: 10, width: 10 }}></View>
+        )
+    }
+
+    renderFlatlist(navigate) {
+
+        return (
+            <View style={{ flex: +!!this.state.poolComponents.length }}>
+                <FlatList
+                    data={this.state.poolComponents}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity onPress={() => navigate('Pool', { item })}>
+                        
+                            {this.animationListObj(item)}
+                            <ListItem
+                                roundAvatar
+                                title={item ? item.poolDetails.poolName + " (balance: " + item.poolDetails.balance + ")" : ''}
+                                subtitle={item ? item.poolDetails.intermediateAddress : ''}
+                                style={{ backgroundColor: (item.poolDetails.balance > 0) ? "rgba(256, 0, 256, 1)" : "rgba(0, 256, 256, 1)" }}
+                            /* avatar={{ uri: item.picture.thumbnail }} */
+                            />
+                        </TouchableOpacity>
+                    }
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh.bind(this)}
                         />
-                    </TouchableOpacity>
-                }
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={this._onRefresh.bind(this)}
-                    />
-                }
-                keyExtractor={item => item.poolDetails.poolId}
-            />
+                    }
+                    keyExtractor={item => item.poolDetails.poolId}
+                />
                 <View>
                     {this.renderInfoField()}
                 </View>
@@ -100,7 +120,7 @@ export default class Home extends Component {
                         <Text style={{ alignSelf: "center", fontSize: 26, paddingTop: 40 }}>
                             Welcome!
                     </Text>
-                        <Text style={{  textAlign: "center", fontSize: 20, paddingTop: 40 }}>
+                        <Text style={{ textAlign: "center", fontSize: 20, paddingTop: 40 }}>
                             You don't have any pools registered yet.
                             To create a new pool, use the plus sign in the top right corner.
                     </Text>
@@ -122,7 +142,7 @@ export default class Home extends Component {
         return (
 
             <View style={styles.container}>
-            <StatusBar backgroundColor="#275629"/>
+                <StatusBar backgroundColor="#275629" />
 
                 <Image
                     style={{
@@ -200,7 +220,7 @@ const styles = StyleSheet.create({
     },
     poolSegment: {
         flex: 1,
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.3,
         borderBottomColor: '#A0A0A0',
         height: 70,
     },

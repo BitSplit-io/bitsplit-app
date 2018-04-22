@@ -26,6 +26,7 @@ export default class ConfirmPasswordScreen extends React.Component {
         MessageBarManager.unregisterMessageBar();
     }
 
+
     constructor(props) {
         super();
         this.state = { username: props.navigation.state.params.value, password: '', isLoading: false };

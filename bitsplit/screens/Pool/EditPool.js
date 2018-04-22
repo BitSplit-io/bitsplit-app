@@ -68,6 +68,9 @@ export default class EditPool extends Component {
                     backdropTransitionInTiming={300}
                     backdropTransitionOutTiming={900}
                     style={styles.deleteModal}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                      }}
                 >
                     {this.state.deleteModal.render()}
                 </Modal>

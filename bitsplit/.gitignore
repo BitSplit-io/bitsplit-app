@@ -36,13 +36,22 @@ buck-out
 /ReactAndroid/src/main/jni/prebuilt/lib/armeabi-v7a/
 /ReactAndroid/src/main/jni/prebuilt/lib/x86/
 /ReactAndroid/src/main/gen
+/Android/*/BUCK*
 
 # Android
 .idea
 .gradle
 local.properties
 *.iml
-/android/
+/android/app/build/
+/android/app/src/main/assets
+/android/app/src/main/res
+/android/build/
+/android/gradle/
+*proguard*
+gradlew*
+*.class
+
 
 # Node
 node_modules

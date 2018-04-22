@@ -10,6 +10,7 @@ import {
     StatusBar,
     ActivityIndicator,
 } from 'react-native';
+import  RNFirebaseToken   from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
@@ -20,6 +21,10 @@ export default class Login extends React.Component {
 
     componentDidMount() {
         MessageBarManager.registerMessageBar(this.refs.alert);
+        RNFirebaseToken((msg) => {
+            console.log(msg)
+        }
+    );
     }
     componentWillUnmount() {
         MessageBarManager.unregisterMessageBar();
