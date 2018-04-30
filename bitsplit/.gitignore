@@ -54,10 +54,11 @@ gradlew*
 
 
 # Node
-node_modules
+/node_modules/*
 *.log
 .nvm
 /danger/node_modules/
+bitsplit_modules/*/android/build/*
 
 # OS X
 .DS_Store

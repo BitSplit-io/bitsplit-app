@@ -1,16 +1,17 @@
 import RNFetchBlob from 'react-native-fetch-blob';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import { SetUser, ClearUser, GetUserId, SetUserPools } from "../components/User/CurrentUser"
 
-var bitsplitURL = "http://10.0.2.2:8080";
+var bitsplitURL = "http://172.20.10.3:8080";
 var Auth_Headers = null;
+
+const OS = Platform.OS;
 
 export function GetBitsplitURL() {
     return bitsplitURL;
 }
 
 // ----------- USER ----------- //
-
 
 export function LoginWithUsername(username, password) {
     return fetch(bitsplitURL + "/auth/login", {
@@ -90,6 +91,31 @@ export function CreateNewUser(email, username, password) {
             console.log(error)
             throw new error(error.message ? error.message : "Could not create user");
         })
+}
+
+export function RegisterFirebaseDeviceToken(token) {
+    var headers = Object.assign({}, Auth_Headers);
+    headers["Content-Type"] = "application/json";    
+    headers["Platform"] = OS;
+    return fetch(bitsplitURL + "/notifications/deviceTokens", {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+            "deviceToken": token
+        } // <-- Post parameters)
+        )
+    })
+        .then(response => {
+            console.log("registered device token");
+            return response.json();
+        }).then(responseJson => {
+            return responseJson;
+        })
+        .catch((error) => {
+            console.log(error)
+            alert("THERE WAS A NETWORK ERROR");
+        })
+
 }
 
 

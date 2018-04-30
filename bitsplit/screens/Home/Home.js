@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, Animated, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, AsyncStorage, Animated, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
 import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
 import { getPools, setPools, } from '../../src/components/User/CurrentUser';
-import { GetUserPools } from '../../src/api/ApiUtils';
+import {    GetUserPools,
+            RegisterFirebaseDeviceToken  
+        } from '../../src/api/ApiUtils';
 import PoolComponent from '../../src/components/Pool/PoolComponent';
 import SectionHeader from './components/SectionHeader'
 import Swipeout from "react-native-swipeout";
@@ -30,6 +32,10 @@ export default class Home extends Component {
 
     componentWillMount() {
         this.refreshPools();
+        AsyncStorage.getItem("@DeviceStore:firebaseIdToken").then((token) => {
+            console.log(token);
+            RegisterFirebaseDeviceToken(token);
+        })
     }
 
     refreshPools() {

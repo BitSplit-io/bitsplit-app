@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    DeviceEventEmitter,
     AppRegistry,
     StyleSheet,
     View,
@@ -9,8 +10,9 @@ import {
     TouchableOpacity,
     StatusBar,
     ActivityIndicator,
+    AsyncStorage
 } from 'react-native';
-import  RNFirebaseToken   from 'RNFirebaseToken';
+import  currentDeviceToken    from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
@@ -19,22 +21,45 @@ import { NavigationActions } from 'react-navigation'
 
 export default class Login extends React.Component {
 
-    componentDidMount() {
-        MessageBarManager.registerMessageBar(this.refs.alert);
-        RNFirebaseToken((msg) => {
-            console.log(msg)
-        }
-    );
+
+    constructor() {
+        super();
+        this.state = { username: '', password: '', isLoading: false, deviceToken: null};
+    };
+
+    componentWillMount() {
+        /*DeviceEventEmitter.addListener(
+            'firebaseIdTokenChanged',
+            (event) => this.receivedNewTokenResponder(event)
+        );
+        */
     }
+
+    componentDidMount() {
+        currentDeviceToken((token) => {
+            alert(token);
+            if (token){
+                AsyncStorage.setItem('@DeviceStore:firebaseIdToken', token);
+            }
+        });
+
+        console.log("registering listener");
+        MessageBarManager.registerMessageBar(this.refs.alert);
+    }
+
+    receivedNewTokenResponder(event) {
+    this.setState({deviceToken: event.firebaseIdToken});
+    AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
+    console.log("Now we are emitting");
+    console.log(event.firebaseIdToken);
+    alert(event.firebaseIdToken);
+    }
+
     componentWillUnmount() {
         MessageBarManager.unregisterMessageBar();
         this.setState({ isLoading: false });
     }
 
-    constructor() {
-        super();
-        this.state = { username: '', password: '', isLoading: false };
-    };
 
     _login() {
         !this.state.isLoading && (
@@ -42,8 +67,8 @@ export default class Login extends React.Component {
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
                     //No point showing success message on success
-
                     if (results.status == "success") {
+                            
                         this.props.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
@@ -56,7 +81,8 @@ export default class Login extends React.Component {
                         });
                         this.setState({ isLoading: false });
                     }
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     alert("error when processing login result");
                     console.log(error)
                 }).finally(() => {

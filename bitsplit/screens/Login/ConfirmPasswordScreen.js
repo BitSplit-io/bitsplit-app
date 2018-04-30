@@ -10,7 +10,9 @@ import {
     StatusBar,
     ActivityIndicator,
     AsyncStorage,
+    DeviceEventEmitter,
 } from 'react-native';
+import  RNFirebaseToken from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import MessageBar from '../Notification/MessageBar';
@@ -21,7 +23,19 @@ export default class ConfirmPasswordScreen extends React.Component {
 
     componentDidMount() {
         MessageBarManager.registerMessageBar(this.refs.alert);
+        DeviceEventEmitter.addListener(
+            'firebaseIdTokenChanged',
+            (event) => this.receivedNewTokenResponder(event)
+        );   
     }
+
+    receivedNewTokenResponder(event) {
+    //this.setState({deviceToken: event.firebaseIdToken});
+    AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
+    alert(event.firebaseIdToken);
+    }
+
+
     componentWillUnmount() {
         MessageBarManager.unregisterMessageBar();
     }
