@@ -7,6 +7,7 @@ import Modal from "react-native-modal";
 import { GetUserAddress, GetUserId } from "../../src/components/User/CurrentUser";
 import { validateAddress, validateUserAsRecipient } from "../../src/api/ApiUtils";
 import Toast from 'react-native-simple-toast';
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 export default class EditPoolMembers extends Component {
 
@@ -24,11 +25,14 @@ export default class EditPoolMembers extends Component {
             modalState: {
                 visible: false,
                 item: undefined,
+            },
+            qrScannerState: {
+                visible: false,
             }
         };
 
         if (this.state.isNewPool && GetUserAddress()) {
-            if( GetUserAddress() ){
+            if (GetUserAddress()) {
                 this.state.activePool.addPoolRecipient({ address: GetUserAddress(), proportion: 1 });
             }
         }
@@ -258,9 +262,38 @@ export default class EditPoolMembers extends Component {
         );
     }
 
+    renderQRScannerModalContent() {
+        return (
+            <QRCodeScanner
+                //   onRead={this.onSuccess.bind(this)}
+                topContent={
+                    <Text style={{color: "#fff", textAlign: "center"}}>
+                        Scan a QR code from Bitcoin address
+                    </Text>
+                }
+                bottomContent={
+                    <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                        <Icon
+                            name='qrcode'
+                            type='font-awesome'
+                            color='#222'
+                        />
+                        <Icon
+                            name='x'
+                            type='feather'
+                            color='#fff'
+                            onPress={() => this.setState({ qrScannerState: { visible: false } })}
+                        />
+                    </View>
+                }
+            />
+        );
+    }
+
     render() {
 
         super.render;
+        const { navigate } = this.props.navigation;
 
         var swipeoutBtns = [
             {
@@ -283,8 +316,17 @@ export default class EditPoolMembers extends Component {
                     {this.renderModalContent()}
                 </Modal>
 
-                <View style={styles.title}>
+                <Modal
+                    isVisible={this.state.qrScannerState.visible}
+                    animationInTiming={500}
+                    animationOutTiming={500}
+                    backdropTransitionInTiming={300}
+                    backdropTransitionOutTiming={900}
+                >
+                    {this.renderQRScannerModalContent()}
+                </Modal>
 
+                <View style={styles.title}>
                     <TextInput
                         style={styles.textField}
                         placeholder="Enter Bitcoin-address or BitSplit username"
@@ -305,6 +347,15 @@ export default class EditPoolMembers extends Component {
                     >
                     </TextInput>
                 </View>
+
+                <Icon
+                    raised
+                    name='qrcode'
+                    type='font-awesome'
+                    color='#000'
+                    onPress={() => this.setState({ qrScannerState: { visible: true } })}
+                />
+
                 <ScrollView style={{ flex: 1 }}>
                     {this.renderList(this.state.activePool.poolDetails.recipients)}
                 </ScrollView>

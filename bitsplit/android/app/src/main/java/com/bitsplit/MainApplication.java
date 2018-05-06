@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.bitsplit.RNFirebaseToken.RNFirebaseTokenPackage;
 import com.facebook.react.ReactApplication;
+import org.reactnative.camera.RNCameraPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -42,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication{
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNCameraPackage(),
             new RNFetchBlobPackage(),
             new VectorIconsPackage(),
             rnfbPackage

@@ -99,7 +99,7 @@ export default class Pool extends Component {
 
                 <ScrollView style={{ flex: 1 }}>
 
-                    <View style={{height: "40%"}}>
+                    <View style={{ height: "40%", flex: 1, flexDirection: "column", backgroundColor: "#fff" }}>
                         <View style={styles.pieContainer}>
 
                             {this.state.activePool.renderPoolPieChart()}
@@ -108,15 +108,19 @@ export default class Pool extends Component {
 
                         <View style={styles.qrContainer}>
                             <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
-                                Press icon to receive a transaction:
+                                Press
                             </Text>
                             <Icon
                                 name='qrcode'
                                 type='font-awesome'
-                                raised={true}
+                                raised
+                                reverse
                                 style={styles.receiveButton}
-                                onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                            onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
                             />
+                            <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
+                                to receive a transaction
+                            </Text>
                         </View>
                     </View>
 
@@ -243,7 +247,7 @@ const styles = StyleSheet.create({
     qrContainer: {
         marginLeft: 30,
         marginRight: 30,
-        padding: 30,
+        marginBottom: 40,
         flexDirection: 'row',
     },
     receiveButton: {
@@ -253,7 +257,7 @@ const styles = StyleSheet.create({
     },
     pieContainer: {
         flex: 1,
-        margin: 70,
+        margin: 50,
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: -10,
