@@ -1,5 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+//ext properties can be accessed in submodules gradle files with rootProject.hasProperty('PROPERTY NAME')
+project.ext {
+	supportLibVersion = "26.1.0"
+}
+
 buildscript {
     repositories {
         jcenter()
