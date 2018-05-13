@@ -80,7 +80,7 @@ export default class EditPool extends Component {
 
                     <View style={styles.pieContainer}>
 
-                        {this.state.activePool.renderPoolPieChart()}
+                        {this.state.activePool.renderPoolPieChart(100)}
 
                     </View>
 
@@ -155,9 +155,8 @@ export default class EditPool extends Component {
                                         });
                                     }
                                 })}
-                                underlayColor='#55ac45'
                             >
-                                <Text>
+                                <Text style={styles.editMembersButton}>
                                     Edit Members
                                 </Text>
                             </TouchableOpacity>
@@ -268,7 +267,20 @@ const styles = StyleSheet.create({
         borderBottomColor: '#A0A0A0',
     },
     editMembers: {
+        flex: 1,
         paddingTop: 7,
+        paddingRight: 30,
+        width: "100%",
+    },
+    editMembersButton: {
+        alignSelf: 'center',
+        padding: 3,
+        borderWidth: 0.7,
+        borderColor: '#00BCFF',
+        textAlign: 'center',
+        color: '#00BCFF',
+        backgroundColor: "rgba(0,188,255,0.2)",
+        opacity: 0.8
     },
     deletePoolButton: {
         alignSelf: 'center',

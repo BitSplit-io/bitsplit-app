@@ -7,7 +7,8 @@ import Modal from "react-native-modal";
 import { GetUserAddress, GetUserId } from "../../src/components/User/CurrentUser";
 import { validateAddress, validateUserAsRecipient } from "../../src/api/ApiUtils";
 import Toast from 'react-native-simple-toast';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+// import QRCodeScanner from 'react-native-qrcode-scanner';
+import QRScanner from "../../src/components/QRScanner/QRScanner";
 
 export default class EditPoolMembers extends Component {
 
@@ -16,6 +17,9 @@ export default class EditPoolMembers extends Component {
         console.log("");
         console.log(props.navigation.state.params.props);
         var pool = props.navigation.state.params.props;
+
+        this.QRScanner = new QRScanner();
+
         this.state = {
             activePool: pool,
             isNewPool: !pool.poolDetails.recipients.length,
@@ -30,7 +34,6 @@ export default class EditPoolMembers extends Component {
                 visible: false,
             }
         };
-
         if (this.state.isNewPool && GetUserAddress()) {
             if (GetUserAddress()) {
                 this.state.activePool.addPoolRecipient({ address: GetUserAddress(), proportion: 1 });
@@ -257,36 +260,27 @@ export default class EditPoolMembers extends Component {
                 }}>
                     <Text style={[styles.modalButton, { backgroundColor: '#ac4545' }]}>Cancel</Text>
                 </TouchableOpacity>
-
             </View>
+
         );
     }
 
     renderQRScannerModalContent() {
         return (
-            <QRCodeScanner
-                //   onRead={this.onSuccess.bind(this)}
-                topContent={
-                    <Text style={{color: "#fff", textAlign: "center"}}>
-                        Scan a QR code from Bitcoin address
-                    </Text>
-                }
-                bottomContent={
-                    <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                        <Icon
-                            name='qrcode'
-                            type='font-awesome'
-                            color='#222'
-                        />
-                        <Icon
-                            name='x'
-                            type='feather'
-                            color='#fff'
-                            onPress={() => this.setState({ qrScannerState: { visible: false } })}
-                        />
-                    </View>
-                }
-            />
+            <View style={styles.modalContent}>
+                <Text style={{ color: "#999", textAlign: "center" }}>
+                    Scan a QR code from Bitcoin address
+                </Text>
+
+                {this.QRScanner.render()}
+
+                <Icon
+                    name='x'
+                    type='feather'
+                    color='#999'
+                    onPress={() => this.setState({ qrScannerState: { visible: false } })}
+                />
+            </View>
         );
     }
 
@@ -323,7 +317,7 @@ export default class EditPoolMembers extends Component {
                     backdropTransitionInTiming={300}
                     backdropTransitionOutTiming={900}
                 >
-                    {this.renderQRScannerModalContent()}
+                    {this.renderQRScannerModalContent(this.state.qrScannerState.visible)}
                 </Modal>
 
                 <View style={styles.title}>
@@ -449,6 +443,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: "80%",
     },
     modalButton: {
         textAlignVertical: 'center',

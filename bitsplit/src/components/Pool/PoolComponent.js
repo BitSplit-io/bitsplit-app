@@ -51,18 +51,16 @@ export default class PoolComponent extends Component {
     }
 
     removeRecipient(recipient) {
-        console.log("före")
         this.poolDetails.recipients = this.poolDetails.recipients.filter(item => item !== recipient);
-        console.log("efter")
     }
 
-    renderPoolPieChart() {
+    renderPoolPieChart(chartSize) {
 
         var result = this.poolDetails.recipients.map(recipient => recipient.proportion * 100);
         console.log(result);
         return (
             <Pie
-                radius={100}
+                radius={chartSize}
                 series={result}
                 colors={colors}
             />

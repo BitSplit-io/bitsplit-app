@@ -4,9 +4,7 @@ import { List, ListItem, Icon, Button, } from "react-native-elements";
 import { HomeTabs, RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
 import { getPools, setPools, } from '../../src/components/User/CurrentUser';
-import {    GetUserPools,
-            RegisterFirebaseDeviceToken  
-        } from '../../src/api/ApiUtils';
+import { GetUserPools, RegisterFirebaseDeviceToken } from '../../src/api/ApiUtils';
 import PoolComponent from '../../src/components/Pool/PoolComponent';
 import SectionHeader from './components/SectionHeader'
 import Swipeout from "react-native-swipeout";
@@ -67,18 +65,31 @@ export default class Home extends Component {
 
     animationListObj(item) {
 
-        var bgColor = new Animated.Value();
+        if (item.poolDetails.balance > 0) {
 
-        bgColor.interpolate({
-            inputRange: [0, 300],
-            outputRange: ['rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 1)']
-        });
+            //TODO: return an RGBA-string with a cycling opacity
+            return ("rgba(0, 188, 255, "
+                + 0.1
+                // Animated.loop(
+                //     Animated.decay(0.0 ,
+                //         {
+                //             duration: 1000,
+                //             finalValue: 1.0
+                //         }
+                //     ),
+                //     Animated.decay(1.0 ,
+                //         {
+                //             duration: 1000,
+                //             finalValue: 0.0
+                //         }
+                //     ),
+                // ).start() 
+                +
+                ")");
 
-        item.poolDetails.balance > 0 ? bgColor = "rgba(256, 0, 256, 1)" : bgColor = "rgba(0, 256, 256, 1)";
-
-        return (
-            <View style={{ backgroundColor: bgColor, height: 10, width: 10 }}></View>
-        )
+        } else {
+            return "rgba(0, 0, 0, 0)";
+        }
     }
 
     renderFlatlist(navigate) {
@@ -89,15 +100,13 @@ export default class Home extends Component {
                     data={this.state.poolComponents}
                     renderItem={({ item }) =>
                         <TouchableOpacity onPress={() => navigate('Pool', { item })}>
-                        
-                            {this.animationListObj(item)}
-                            <ListItem
-                                roundAvatar
-                                title={item ? item.poolDetails.poolName + " (balance: " + item.poolDetails.balance + ")" : ''}
-                                subtitle={item ? item.poolDetails.intermediateAddress : ''}
-                                style={{ backgroundColor: (item.poolDetails.balance > 0) ? "rgba(256, 0, 256, 1)" : "rgba(0, 256, 256, 1)" }}
-                            /* avatar={{ uri: item.picture.thumbnail }} */
-                            />
+                            <Animated.View style={{ backgroundColor: (this.animationListObj(item))}}>
+                                <ListItem
+                                    title={item ? item.poolDetails.poolName : ''}
+                                    subtitle={item ? " Balance: " + item.poolDetails.balance : ''}
+                                    avatar={item.renderPoolPieChart(22)}
+                                />
+                            </Animated.View>
                         </TouchableOpacity>
                     }
                     refreshControl={
@@ -132,9 +141,7 @@ export default class Home extends Component {
                     </Text>
                     </View>
                 )
-
             }
-
         }
     }
 

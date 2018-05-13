@@ -102,7 +102,7 @@ export default class Pool extends Component {
                     <View style={{ height: "40%", flex: 1, flexDirection: "column", backgroundColor: "#fff" }}>
                         <View style={styles.pieContainer}>
 
-                            {this.state.activePool.renderPoolPieChart()}
+                            {this.state.activePool.renderPoolPieChart(100)}
 
                         </View>
 
