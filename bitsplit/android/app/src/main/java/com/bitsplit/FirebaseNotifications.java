@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,16 +50,9 @@ public class FirebaseNotifications extends FirebaseMessagingService {
             return null;
         }
     }
-
-
-    @Override
-    public void onCreate() {
-        Log.d(TAG, "CREATED");
-    }
-
     @Override
     public void onMessageReceived(final RemoteMessage var1) {
-        //TODO MAKE THIS VISIBLE FOR USER
+        MainApplication.receivedRemoteNotification(var1);
         Log.d(TAG, var1.getNotification().getBody());
     }
 }

@@ -1,22 +1,21 @@
 package com.bitsplit;
 
 import android.app.Application;
-import android.app.Service;
 import android.util.Log;
 
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.bitsplit.RNFirebaseNotification.RNFirebaseNotificationPackage;
 import com.bitsplit.RNFirebaseToken.RNFirebaseTokenPackage;
 import com.facebook.react.ReactApplication;
-import org.reactnative.camera.RNCameraPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.google.firebase.messaging.RemoteMessage;
+import com.oblador.vectoricons.VectorIconsPackage;
 
-import java.io.IOException;
+import org.reactnative.camera.RNCameraPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +25,11 @@ public class MainApplication extends Application implements ReactApplication{
   static final String TAG = "MAINAPPLICATION";
 
   static RNFirebaseTokenPackage rnfbPackage = new RNFirebaseTokenPackage();
+  //static RNFirebaseNotificationPackage rnfbPackage = new RNFirebaseTokenPackage();
+
+  static void receivedRemoteNotification(RemoteMessage message) {
+
+  }
 
   static void fbInstanceIdTokenRefreshed(String fbToken) {
         Log.d(TAG, "FirebaseIdTokens ID token set!");
@@ -43,9 +47,10 @@ public class MainApplication extends Application implements ReactApplication{
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNCameraPackage(),
-            new RNFetchBlobPackage(),
+            new RNFirebaseNotificationPackage(),
             new VectorIconsPackage(),
+            new RNFetchBlobPackage(),
+            new RNCameraPackage(),
             rnfbPackage
       );
     }

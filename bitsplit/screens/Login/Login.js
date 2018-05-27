@@ -19,6 +19,7 @@ import MessageBar from '../Notification/MessageBar';
 import MessageBarManager from '../Notification/MessageBarManager';
 import { NavigationActions } from 'react-navigation'
 
+
 export default class Login extends React.Component {
 
 
@@ -38,21 +39,21 @@ export default class Login extends React.Component {
     componentDidMount() {
         currentDeviceToken((token) => {
             alert(token);
+            console.log("js asked for token");
+            console.log(token);
             if (token){
                 AsyncStorage.setItem('@DeviceStore:firebaseIdToken', token);
             }
         });
-
-        console.log("registering listener");
         MessageBarManager.registerMessageBar(this.refs.alert);
     }
 
     receivedNewTokenResponder(event) {
     this.setState({deviceToken: event.firebaseIdToken});
     AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
-    console.log("Now we are emitting");
-    console.log(event.firebaseIdToken);
     alert(event.firebaseIdToken);
+    console.log("TOKEN PUSHED BY JAVA");
+    console.log(event.firebaseIdToken);
     }
 
     componentWillUnmount() {
@@ -63,7 +64,7 @@ export default class Login extends React.Component {
 
     _login() {
         !this.state.isLoading && (
-            this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
+            this.setState({ isLoading: true }) ||
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
                     //No point showing success message on success

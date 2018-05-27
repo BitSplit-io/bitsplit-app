@@ -16,10 +16,8 @@ import Settings from '../Settings/Settings';
 
 export default class Home extends Component {
 
-
     constructor(props) {
         super(props);
-
         this.state = {
             loading: false,
             poolComponents: [],
