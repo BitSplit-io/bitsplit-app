@@ -8,8 +8,7 @@ import Pie from 'react-native-pie';
 import PoolComponent from '../../src/components/Pool/PoolComponent'
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
 import { GetPool, DoTransaction } from '../../src/api/ApiUtils';
-import MessageBar from '../Notification/MessageBar';
-import MessageBarManager from '../Notification/MessageBarManager';
+import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
 
 const activePool = '';
 
@@ -24,12 +23,11 @@ export default class Pool extends Component {
         this.setState({ visibleModal: state });
     }
 
-    showError(message) {
-        console.log("Error shown");
-        MessageBarManager.showAlert({
-            message: message,
-            alertType: "error",
-        });
+    componentDidMount() {
+        registerMessageBar(this);
+    }
+
+    componentWillUnmount() {
     }
 
     renderModalContent() {
@@ -60,10 +58,10 @@ export default class Pool extends Component {
                             result.status == "success" ?
                                 console.log("Success!") :
                                 result.message ?
-                                    this.showError(result.message) :
+                                    showMessage(result.message, true) :
                                     console.log("no error message")
                         }).catch((error) => {
-                            alert("there was an error")
+                            showMessage("There was an error.", true);
                         });
                     }}>
                     <Text style={styles.modalButton}>Submit</Text>
@@ -205,17 +203,7 @@ export default class Pool extends Component {
                     </View>
 
                 </ScrollView>
-                <MessageBar
-                    ref="alert"
-                    duration={2000}
-                    viewTopOffset={10}
-                    stylesheetSuccess={{
-                        backgroundColor: '#97b7e5',
-                        strokeColor: '#97b7e5',
-                        titleColor: '#ffffff',
-                        messageColor: '#ffffff'
-                    }}
-                />
+                {MessageBarContainer()}
             </View>
 
         )

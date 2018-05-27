@@ -12,32 +12,19 @@ import {
     AsyncStorage,
     DeviceEventEmitter,
 } from 'react-native';
-import  RNFirebaseToken from 'RNFirebaseToken';
+import RNFirebaseToken from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
-import MessageBar from '../Notification/MessageBar';
-import MessageBarManager from '../Notification/MessageBarManager';
 import { NavigationActions } from 'react-navigation'
+import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
 
 export default class ConfirmPasswordScreen extends React.Component {
 
     componentDidMount() {
-        MessageBarManager.registerMessageBar(this.refs.alert);
-        DeviceEventEmitter.addListener(
-            'firebaseIdTokenChanged',
-            (event) => this.receivedNewTokenResponder(event)
-        );   
+        registerMessageBar(this);
     }
-
-    receivedNewTokenResponder(event) {
-    //this.setState({deviceToken: event.firebaseIdToken});
-    AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
-    alert(event.firebaseIdToken);
-    }
-
 
     componentWillUnmount() {
-        MessageBarManager.unregisterMessageBar();
     }
 
 
@@ -48,22 +35,20 @@ export default class ConfirmPasswordScreen extends React.Component {
 
     _login() {
         !this.state.isLoading && (
-            this.setState({ isLoading: true }) ||//                         <--- haha lol så väldigt fult :p
+            this.setState({ isLoading: true }) ||
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
-                    //No point showing success message on success
                     results.status == "success" ?
                         this.props.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
                             })) :
-                        MessageBarManager.showAlert({
-                            message: results.message,
-                            alertType: results.status,
-                        });
-                }).catch((error) =>
-                    alert("error when processing login result"))
+                        ShowMessage(results.message, true);
+                }).catch((error) =>{
+                    ShowMessage("An error occured", true);
+                    console.log(error);
+                })
                 .finally(() => {
                     this.setState({ isLoading: false });
                 })
@@ -81,7 +66,7 @@ export default class ConfirmPasswordScreen extends React.Component {
                         source={require('../../src/images/Logo.png')} />
                     <Text style={styles.title}>
                         BitSplit
-                                </Text>
+                    </Text>
                 </View>
                 <View>
                     <Text style={[styles.title, { fontSize: 20, marginBottom: 10 }]}>
@@ -119,17 +104,7 @@ export default class ConfirmPasswordScreen extends React.Component {
                         <Text style={styles.newUserButton}>Use a different account</Text>
                     </TouchableOpacity>
                 </View>
-                <MessageBar
-                    ref="alert"
-                    duration={2000}
-                    viewTopOffset={10}
-                    stylesheetSuccess={{
-                        backgroundColor: '#97b7e5',
-                        strokeColor: '#97b7e5',
-                        titleColor: '#ffffff',
-                        messageColor: '#ffffff'
-                    }}
-                />
+                {MessageBarContainer()}
             </View>
         )
     }

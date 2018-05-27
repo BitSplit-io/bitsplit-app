@@ -12,7 +12,7 @@ import {
     ActivityIndicator,
     AsyncStorage
 } from 'react-native';
-import  currentDeviceToken    from 'RNFirebaseToken';
+import currentDeviceToken from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import { NavigationActions } from 'react-navigation'
@@ -24,26 +24,21 @@ export default class Login extends React.Component {
 
     constructor() {
         super();
-        this.state = { username: '', password: '', isLoading: false, deviceToken: null};
+        this.state = { username: '', password: '', isLoading: false, deviceToken: null };
     };
 
-    
+
     componentDidMount() {
         currentDeviceToken((token) => {
-            if (token){
+            if (token) {
                 AsyncStorage.setItem('@DeviceStore:firebaseIdToken', token);
             }
         });
-        registerMessageBar(this);  
-    }
-
-    receivedNewTokenResponder(event) {
-    AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
+        registerMessageBar(this);
     }
 
     componentWillUnmount() {
         this.setState({ isLoading: false });
-        unregisterMessageBar();
     }
 
     _login() {
@@ -51,7 +46,7 @@ export default class Login extends React.Component {
             this.setState({ isLoading: true }) ||
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
-                    if (results.status == "success") {        
+                    if (results.status == "success") {
                         this.props.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
@@ -66,7 +61,7 @@ export default class Login extends React.Component {
                     alert("error when processing login result");
                     console.log(error)
                 }).finally(() => {
-
+                    this.setState({ isLoading: false });
                 })
         )
     }

@@ -38,7 +38,6 @@ export function MessageBarContainer() {
          <MessageBar
                 ref="alert"
                 duration={2000}
-                viewTopOffset={10}
                 stylesheetSuccess={{
                     backgroundColor: '#97b7e5',
                     strokeColor: '#97b7e5',

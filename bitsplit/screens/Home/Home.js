@@ -10,6 +10,7 @@ import SectionHeader from './components/SectionHeader'
 import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
 import Settings from '../Settings/Settings';
+import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
 // const ds = new ListView.DataSource({
 //     rowHasChanged: (r1, r2) => r1 !== r2,
 // });
@@ -32,6 +33,10 @@ export default class Home extends Component {
             console.log(token);
             RegisterFirebaseDeviceToken(token);
         })
+    }
+
+    componentDidMount() {
+        registerMessageBar(this);
     }
 
     refreshPools() {
@@ -151,10 +156,8 @@ export default class Home extends Component {
         const resizeMode = 'center';
 
         return (
-
             <View style={styles.container}>
                 <StatusBar backgroundColor="#275629" />
-
                 <Image
                     style={{
                         flex: 1,
@@ -189,12 +192,9 @@ export default class Home extends Component {
                             color="#3b7830"
                         />
                     </TouchableOpacity>
-
-
                 </View>
-
                 {this.renderFlatlist(navigate)}
-
+                {MessageBarContainer()}
             </View>
 
         );
