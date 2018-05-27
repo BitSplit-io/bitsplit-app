@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, AsyncStorage, Animated, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, AsyncStorage, Animated, Alert, RefreshControl, Image, TouchableHighlight, Menu, ScrollView } from 'react-native';
 import { List, ListItem, Icon, Button, } from "react-native-elements";
-import { HomeTabs, RootNavigator } from '../../config/router';
+import { NavigationActions } from 'react-navigation';
+import { RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
 import { getPools, setPools, } from '../../src/components/User/CurrentUser';
 import { GetUserPools, RegisterFirebaseDeviceToken } from '../../src/api/ApiUtils';
@@ -11,11 +12,44 @@ import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
 import Settings from '../Settings/Settings';
 import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
+import SideMenu from "react-native-side-menu";
 // const ds = new ListView.DataSource({
 //     rowHasChanged: (r1, r2) => r1 !== r2,
 // });
 
+
 export default class Home extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpen: false
+        }
+    }
+
+    toggleMenu() {
+        this.setState({isOpen: !this.state.isOpen})
+    }
+
+    render() {
+
+        const navigate = this.props.navigation.navigate;
+        var menu = <Settings {...this.props} />;
+
+        return (
+            <SideMenu 
+                menu={menu}
+                bounceBackOnOverdraw={false}
+                edgeHitWidth={100}
+                openMenuOffset={300}
+                >
+                <Content {...this.props}/>
+            </SideMenu>
+        );
+    }
+}
+
+export class Content extends Component {
 
     constructor(props) {
         super(props);
@@ -103,7 +137,7 @@ export default class Home extends Component {
                     data={this.state.poolComponents}
                     renderItem={({ item }) =>
                         <TouchableOpacity onPress={() => navigate('Pool', { item })}>
-                            <Animated.View style={{ backgroundColor: (this.animationListObj(item))}}>
+                            <Animated.View style={{ backgroundColor: (this.animationListObj(item)) }}>
                                 <ListItem
                                     title={item ? item.poolDetails.poolName : ''}
                                     subtitle={item ? " Balance: " + item.poolDetails.balance : ''}
@@ -170,7 +204,8 @@ export default class Home extends Component {
                 <View style={styles.header}>
 
                     <TouchableOpacity
-                        onPress={() => navigate('Settings')}
+                        // TODO: onPress should toggle SideMenu //
+                        onPress={() => this.toggleMenu()}
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -196,11 +231,11 @@ export default class Home extends Component {
                 {this.renderFlatlist(navigate)}
                 {MessageBarContainer()}
             </View>
-
         );
     };
 
 }
+
 
 const styles = StyleSheet.create({
     container: {
