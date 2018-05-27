@@ -18,8 +18,6 @@ export default class EditPoolMembers extends Component {
         console.log(props.navigation.state.params.props);
         var pool = props.navigation.state.params.props;
 
-        this.QRScanner = new QRScanner();
-
         this.state = {
             activePool: pool,
             isNewPool: !pool.poolDetails.recipients.length,
@@ -34,6 +32,9 @@ export default class EditPoolMembers extends Component {
                 visible: false,
             }
         };
+
+        this.QRScanner = new QRScanner(this);
+
         if (this.state.isNewPool && GetUserAddress()) {
             if (GetUserAddress()) {
                 this.state.activePool.addPoolRecipient({ address: GetUserAddress(), proportion: 1 });
@@ -41,9 +42,13 @@ export default class EditPoolMembers extends Component {
         }
     };
 
-    AddRecipient(recipient) {
+    AddRecipient(recipient, props) {
 
         var promise;
+
+        if(!this.props){
+            this.state = props.state;
+        }
 
         if (recipient.length > 5 && recipient.length < 20) {
             promise = validateUserAsRecipient(recipient);
