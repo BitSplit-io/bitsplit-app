@@ -94,7 +94,7 @@ export function RegisterFirebaseDeviceToken(token) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";    
     headers["Platform"] = OS;
-    return fetch( + "/notifications/deviceTokens", {
+    return fetch(apiUrl() + "/notifications/deviceTokens", {
         method: 'POST',
         headers: headers,
         body: JSON.stringify({

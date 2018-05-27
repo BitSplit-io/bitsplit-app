@@ -15,9 +15,8 @@ import {
 import  currentDeviceToken    from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
-import MessageBar from '../Notification/MessageBar';
-import MessageBarManager from '../Notification/MessageBarManager';
 import { NavigationActions } from 'react-navigation'
+import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
 
 
 export default class Login extends React.Component {
@@ -28,58 +27,38 @@ export default class Login extends React.Component {
         this.state = { username: '', password: '', isLoading: false, deviceToken: null};
     };
 
-    componentWillMount() {
-        /*DeviceEventEmitter.addListener(
-            'firebaseIdTokenChanged',
-            (event) => this.receivedNewTokenResponder(event)
-        );
-        */
-    }
-
+    
     componentDidMount() {
         currentDeviceToken((token) => {
-            alert(token);
-            console.log("js asked for token");
-            console.log(token);
             if (token){
                 AsyncStorage.setItem('@DeviceStore:firebaseIdToken', token);
             }
         });
-        MessageBarManager.registerMessageBar(this.refs.alert);
+        registerMessageBar(this);  
     }
 
     receivedNewTokenResponder(event) {
-    this.setState({deviceToken: event.firebaseIdToken});
     AsyncStorage.setItem('@DeviceStore:firebaseIdToken', event.firebaseIdToken);
-    alert(event.firebaseIdToken);
-    console.log("TOKEN PUSHED BY JAVA");
-    console.log(event.firebaseIdToken);
     }
 
     componentWillUnmount() {
-        MessageBarManager.unregisterMessageBar();
         this.setState({ isLoading: false });
+        unregisterMessageBar();
     }
-
 
     _login() {
         !this.state.isLoading && (
             this.setState({ isLoading: true }) ||
             LoginWithUsername(this.state.username, this.state.password)
                 .then(results => {
-                    //No point showing success message on success
-                    if (results.status == "success") {
-                            
+                    if (results.status == "success") {        
                         this.props.navigation.dispatch(
                             NavigationActions.reset({
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
                             }))
                     } else {
-                        MessageBarManager.showAlert({
-                            message: results.message,
-                            alertType: results.status,
-                        });
+                        ShowMessage(results.message, results.status);
                         this.setState({ isLoading: false });
                     }
                 })
@@ -93,9 +72,7 @@ export default class Login extends React.Component {
     }
 
     render() {
-
         const { navigate } = this.props.navigation;
-
         return (
 
             <View style={styles.container} >
@@ -168,17 +145,7 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
                 </View>
 
-                <MessageBar
-                    ref="alert"
-                    duration={2000}
-                    viewTopOffset={10}
-                    stylesheetSuccess={{
-                        backgroundColor: '#97b7e5',
-                        strokeColor: '#97b7e5',
-                        titleColor: '#ffffff',
-                        messageColor: '#ffffff'
-                    }}
-                />
+                {MessageBarContainer()}
 
             </View>
         )

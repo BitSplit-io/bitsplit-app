@@ -1,6 +1,7 @@
 package com.bitsplit;
 
 import android.app.Application;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -25,10 +26,13 @@ public class MainApplication extends Application implements ReactApplication{
   static final String TAG = "MAINAPPLICATION";
 
   static RNFirebaseTokenPackage rnfbPackage = new RNFirebaseTokenPackage();
-  //static RNFirebaseNotificationPackage rnfbPackage = new RNFirebaseTokenPackage();
+  static RNFirebaseNotificationPackage rnfbnPackage = new RNFirebaseNotificationPackage();
 
-  static void receivedRemoteNotification(RemoteMessage message) {
-
+  static void receivedRemoteNotification(RemoteMessage rMessage) {
+    Bundle message = new Bundle();
+    message.putString("title", rMessage.getNotification().getTitle());
+    message.putString("body", rMessage.getNotification().getBody());
+    rnfbnPackage.receivedRemoteNotification(message);
   }
 
   static void fbInstanceIdTokenRefreshed(String fbToken) {
@@ -47,11 +51,11 @@ public class MainApplication extends Application implements ReactApplication{
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNFirebaseNotificationPackage(),
-            new VectorIconsPackage(),
-            new RNFetchBlobPackage(),
-            new RNCameraPackage(),
-            rnfbPackage
+          new VectorIconsPackage(),
+          new RNFetchBlobPackage(),
+          new RNCameraPackage(),
+          rnfbnPackage,
+          rnfbPackage
       );
     }
 

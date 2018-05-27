@@ -1,6 +1,6 @@
 package com.bitsplit.RNFirebaseNotification;
 
-import android.os.Debug;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.facebook.react.ReactPackage;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class RNFirebaseNotificationPackage implements ReactPackage{
 
-    static final String TAG = "RNFirebaseNotificationPackage";
+    static final String TAG = "RNFirebaseNotification";
     RNFirebaseNotification instance = null;
 
     public RNFirebaseNotification packageInstance() {
@@ -39,5 +39,9 @@ public class RNFirebaseNotificationPackage implements ReactPackage{
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Collections.emptyList();
+    }
+
+    public void receivedRemoteNotification(Bundle message) {
+        instance.receivedRemoteNotification(message);
     }
 }

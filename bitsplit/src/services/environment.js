@@ -17,8 +17,7 @@ export function apiUrl() {
         env.server = "localhost";
     }
     if (env.server === "localhost") {
-        if (env.isEmulator && Platform.OS === "android") {             
-            console.log("running emulator android");
+        if (env.isEmulator && Platform.OS === "android") {
             return urls.emulatorAndroid;
         }
         return urls.localhost;
