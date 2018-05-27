@@ -7,9 +7,13 @@ import { NavigationActions } from 'react-navigation';
 
 export default class Settings extends Component {
 
+    constructor(props){
+        super(props);
+    }
+
     render() {
 
-        const { navigate } = this.props.navigation;
+        const navigate = this.props.navigation.navigate;
 
         return (
             <View style={styles.fullScreen}>
@@ -103,11 +107,6 @@ export default class Settings extends Component {
                     </ScrollView>
                 </View>
 
-                <View style={styles.tabStyle}>
-                
-                    <View style={[{height: 56, backgroundColor: '#7EC480',}]}>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -117,10 +116,6 @@ const styles = StyleSheet.create({
     fullScreen: {
         flex: 1,
         flexDirection: 'row',
-    },
-    tabStyle: {
-        width: 20,
-        backgroundColor: 'rgb(250,250,250)',
     },
     container: {
         flex: 1,
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOpacity: 1.0,
         shadowRadius: 1,
-        shadowOffset: {width: -10, height: 0},
+        shadowOffset: { width: -10, height: 0 },
     },
     header: {
         flexDirection: 'row',
@@ -144,7 +139,6 @@ const styles = StyleSheet.create({
     logo: {
         width: 70,
         height: 70,
-        marginLeft: "15%",
         marginRight: 10,
     },
     title: {
@@ -153,7 +147,7 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     category: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: '400',
         color: '#ffffff',
     },

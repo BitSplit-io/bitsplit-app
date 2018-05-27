@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, AsyncStorage, Animated, Alert, RefreshControl, Image, TouchableHighlight, } from 'react-native';
+import { StyleSheet, View, FlatList, ListView, Text, StatusBar, TouchableOpacity, AsyncStorage, Animated, Alert, RefreshControl, Image, TouchableHighlight, Menu, ScrollView } from 'react-native';
 import { List, ListItem, Icon, Button, } from "react-native-elements";
-import { HomeTabs, RootNavigator } from '../../config/router';
+import { NavigationActions } from 'react-navigation';
+import { RootNavigator } from '../../config/router';
 import HomeHeader from './components/HomeHeader'
 import { getPools, setPools, } from '../../src/components/User/CurrentUser';
 import { GetUserPools, RegisterFirebaseDeviceToken } from '../../src/api/ApiUtils';
@@ -11,14 +12,38 @@ import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
 import Settings from '../Settings/Settings';
 import ScreenComponent from '../ScreenComponent';
-// const ds = new ListView.DataSource({
-//     rowHasChanged: (r1, r2) => r1 !== r2,
-// });
+import SideMenu from "react-native-side-menu";
 
-export default class Home extends ScreenComponent {
+export default class Home extends React.Component {
 
     constructor(props) {
         super();
+        this.state = {
+            isOpen: false
+        }
+    }
+
+    render() {
+        const navigate = this.props.navigation.navigate;
+        var menu = <Settings {...this.props} />;
+
+        return (
+            <SideMenu 
+                menu={menu}
+                bounceBackOnOverdraw={false}
+                edgeHitWidth={100}
+                openMenuOffset={300}
+                >
+                <Content {...this.props}/>
+            </SideMenu>
+        );
+    }
+}
+
+export class Content extends ScreenComponent {
+
+	constructor(props) {
+        super(props);
         this.state = {
             loading: false,
             poolComponents: [],
@@ -27,6 +52,12 @@ export default class Home extends ScreenComponent {
         }
     };
 
+    
+    toggleMenu() {
+        this.setState({isOpen: !this.state.isOpen})
+    }
+
+
     componentWillMount() {
         this.refreshPools();
         AsyncStorage.getItem("@DeviceStore:firebaseIdToken").then((token) => {
@@ -34,7 +65,6 @@ export default class Home extends ScreenComponent {
             RegisterFirebaseDeviceToken(token);
         })
     }
-
 
     refreshPools() {
         if (this.state.refreshing) return;
@@ -49,7 +79,6 @@ export default class Home extends ScreenComponent {
             for (var i = 0; i < results.data.length; i++) {
                 _poolComponents.push(new PoolComponent(results.data[i]));
             }
-
             this.setState({
                 poolComponents: _poolComponents,
             })
@@ -64,9 +93,7 @@ export default class Home extends ScreenComponent {
     }
 
     animationListObj(item) {
-
         if (item.poolDetails.balance > 0) {
-
             //TODO: return an RGBA-string with a cycling opacity
             return ("rgba(0, 188, 255, "
                 + 0.1
@@ -86,7 +113,6 @@ export default class Home extends ScreenComponent {
                 // ).start() 
                 +
                 ")");
-
         } else {
             return "rgba(0, 0, 0, 0)";
         }
@@ -163,9 +189,9 @@ export default class Home extends ScreenComponent {
                 />
 
                 <View style={styles.header}>
-
                     <TouchableOpacity
-                        onPress={() => navigate('Settings', {onGoBack: () => { return this } })}
+                        // TODO: onPress should toggle SideMenu //
+                        onPress={() => this.toggleMenu()}
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -191,10 +217,8 @@ export default class Home extends ScreenComponent {
                 {this.renderFlatlist(navigate)}
                 {this.MessageBarContainer()}
             </View>
-
         );
     };
-
 }
 
 const styles = StyleSheet.create({

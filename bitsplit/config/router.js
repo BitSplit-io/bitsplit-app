@@ -1,4 +1,4 @@
-var bitsplitURL = "http://172.20.10.2:8080";
+var bitsplitURL = "http://10.0.2.2:8080";
 
 import React, { Component, Image, } from 'react';
 import { Icon } from 'react-native-elements';
@@ -28,23 +28,22 @@ export default class Start extends Component {
     render() {
         return <RootNavigator />
     }
-
 };
 
-export const HomeTabs = TabNavigator({
-    Settings: {
-        screen: Settings,
-    },
-    Home: {
-        screen: Home,
-    },
-}, {
-        initialRouteName: 'Home',
-        navigationOptions: {
-            tabBarVisible: false,
-        }
-    },
-);
+// export const HomeTabs = TabNavigator({
+//     Settings: {
+//         screen: Settings,
+//     },
+//     Home: {
+//         screen: Home,
+//     },
+// }, {
+//         initialRouteName: 'Home',
+//         navigationOptions: {
+//             tabBarVisible: false,
+//         }
+//     },
+// );
 
 export const RootNavigator = StackNavigator({
     LoadingScreen: {
@@ -60,7 +59,7 @@ export const RootNavigator = StackNavigator({
         navigationOptions: { header: null, }
     },
     Home: {
-        screen: HomeTabs,
+        screen: Home,
         navigationOptions: { header: null, }
     },
     NewUser: {

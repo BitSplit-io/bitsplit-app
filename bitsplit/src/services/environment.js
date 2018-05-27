@@ -2,7 +2,7 @@ import {Platform} from 'react-native'
 
 var env; //set from initialProps
 var urls = {
-    localhost: "http://localhost:8080",
+    localhost: "http://172.20.10.3:8080",
     emulatorAndroid: "http://10.0.2.2:8080",
     production: "http://api.bitsplit.io:8080",
     staging: "http://api.staging.bitsplit.io:8080"
