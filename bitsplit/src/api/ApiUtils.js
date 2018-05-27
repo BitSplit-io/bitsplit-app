@@ -1,20 +1,17 @@
 import RNFetchBlob from 'react-native-fetch-blob';
 import { AsyncStorage, Platform } from 'react-native';
 import { SetUser, ClearUser, GetUserId, SetUserPools } from "../components/User/CurrentUser"
+import { apiUrl } from '../services/environment'
 
-var bitsplitURL = "http://172.20.10.3:8080";
 var Auth_Headers = null;
 
 const OS = Platform.OS;
 
-export function GetBitsplitURL() {
-    return bitsplitURL;
-}
 
 // ----------- USER ----------- //
 
 export function LoginWithUsername(username, password) {
-    return fetch(bitsplitURL + "/auth/login", {
+    return fetch(apiUrl() + "/auth/login", {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json', // <-- Specifying the Content-Type
@@ -62,7 +59,7 @@ export function Logout() {
     Auth_Headers = null
     return AsyncStorage.multiRemove(['@UserStore:userId', '@UserStore:username']).catch(() => { console.log("error") }
     ).then(
-        fetch(bitsplitURL + "/auth/logout", {
+        fetch(apiUrl()  + "/auth/logout", {
             method: 'POST',
             headers: new Headers(
                 headers
@@ -72,7 +69,7 @@ export function Logout() {
 
 
 export function CreateNewUser(email, username, password) {
-    return fetch(bitsplitURL + "/users/create", {
+    return fetch(apiUrl()  + "/users/create", {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json', // <-- Specifying the Content-Type
@@ -97,7 +94,7 @@ export function RegisterFirebaseDeviceToken(token) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";    
     headers["Platform"] = OS;
-    return fetch(bitsplitURL + "/notifications/deviceTokens", {
+    return fetch( + "/notifications/deviceTokens", {
         method: 'POST',
         headers: headers,
         body: JSON.stringify({
@@ -124,7 +121,7 @@ export function RegisterFirebaseDeviceToken(token) {
 export function GetUserPools() {
     var headers = Object.assign({}, Auth_Headers)
     headers["Content-Type"] = "application/json"
-    return fetch(bitsplitURL + "/users/" + Auth_Headers["User-Id"] + "/pools", {
+    return fetch(apiUrl() + "/users/" + Auth_Headers["User-Id"] + "/pools", {
 
         method: 'GET',
         headers: new Headers(
@@ -148,7 +145,7 @@ export function GetPool(poolId) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
 
-    return fetch(bitsplitURL + "/pools/" + poolId, {
+    return fetch(apiUrl() + "/pools/" + poolId, {
         method: 'GET',
         headers: new Headers(
             headers
@@ -170,7 +167,7 @@ export function CreateNewPool(pool) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
-    return fetch(bitsplitURL + "/pools/create", {
+    return fetch(apiUrl() + "/pools/create", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -193,7 +190,7 @@ export function UpdatePool(pool) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json"
-    return fetch(bitsplitURL + "/pools/" + pool.poolId, {
+    return fetch(apiUrl() + "/pools/" + pool.poolId, {
         method: 'PUT',
         headers: new Headers(
             headers
@@ -216,7 +213,7 @@ export function UpdatePool(pool) {
 export function DeletePool(poolId) {
 
     var headers = Object.assign({}, Auth_Headers);
-    return fetch(bitsplitURL + "/pools/" + poolId, {
+    return fetch(apiUrl() + "/pools/" + poolId, {
         method: 'DELETE',
         headers: new Headers(
             headers
@@ -237,7 +234,7 @@ export function DeletePool(poolId) {
 export function validateUserAsRecipient(username) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";
-    return fetch(bitsplitURL + "/users/validateUserAsRecipient", {
+    return fetch(apiUrl() + "/users/validateUserAsRecipient", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -256,7 +253,7 @@ export function validateUserAsRecipient(username) {
 export function validateAddress(address) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";
-    return fetch(bitsplitURL + "/bitcoin/validateAddress", {
+    return fetch(apiUrl() + "/bitcoin/validateAddress", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -277,7 +274,7 @@ export function validateAddress(address) {
 export function DoTransaction(poolPassword, poolId) {
     var headers = Object.assign({}, Auth_Headers);
     headers["Content-Type"] = "application/json";
-    return fetch(bitsplitURL + "/pools/" + poolId + "/transact", {
+    return fetch(apiUrl() + "/pools/" + poolId + "/transact", {
         method: 'POST',
         headers: new Headers(
             headers
@@ -299,7 +296,7 @@ export function GetReceiveQR(poolId, BTCamount) {
 
     var headers = Object.assign({}, Auth_Headers);
     headers["BTC-Amount"] = BTCamount.toString();
-    return RNFetchBlob.fetch('GET', bitsplitURL + "/pools/" + poolId + "/receive-request", headers
+    return RNFetchBlob.fetch('GET', apiUrl() + "/pools/" + poolId + "/receive-request", headers
     ).then((res) => {
         var result = [res.respInfo.headers["Receive-Request-URL"], "data:image/jpg;base64," + res.base64()];
         return result
@@ -311,7 +308,7 @@ export function GetReceiveQR(poolId, BTCamount) {
 
 export function GetExchangeRate() {
     return fetch(
-        bitsplitURL + "/bitcoin/exchangerate", {
+        apiUrl() + "/bitcoin/exchangerate", {
             method: 'GET',
         }
     ).then((result) => {
