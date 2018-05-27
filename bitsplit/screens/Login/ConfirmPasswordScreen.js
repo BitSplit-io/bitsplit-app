@@ -15,19 +15,10 @@ import {
 import RNFirebaseToken from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
-import { NavigationActions } from 'react-navigation'
-import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
+import { NavigationActions } from 'react-navigation';
+import ScreenComponent from '../ScreenComponent';
 
-export default class ConfirmPasswordScreen extends React.Component {
-
-    componentDidMount() {
-        registerMessageBar(this);
-    }
-
-    componentWillUnmount() {
-    }
-
-
+export default class ConfirmPasswordScreen extends ScreenComponent {
     constructor(props) {
         super();
         this.state = { username: props.navigation.state.params.value, password: '', isLoading: false };
@@ -44,9 +35,9 @@ export default class ConfirmPasswordScreen extends React.Component {
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
                             })) :
-                        ShowMessage(results.message, true);
+                        this.ShowMessage(results.message, true);
                 }).catch((error) =>{
-                    ShowMessage("An error occured", true);
+                    this.ShowMessage("An error occured", true);
                     console.log(error);
                 })
                 .finally(() => {
@@ -104,7 +95,7 @@ export default class ConfirmPasswordScreen extends React.Component {
                         <Text style={styles.newUserButton}>Use a different account</Text>
                     </TouchableOpacity>
                 </View>
-                {MessageBarContainer()}
+                {this.MessageBarContainer()}
             </View>
         )
     }

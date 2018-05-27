@@ -7,20 +7,18 @@ import PoolComponent from '../../src/components/Pool/PoolComponent';
 import { GetUserId } from '../../src/components/User/CurrentUser';
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent';
 import { GetPool, CreateNewPool, UpdatePool } from '../../src/api/ApiUtils';
-import MessageBar from '../Notification/MessageBar';
-import MessageBarManager from '../Notification/MessageBarManager';
 import Toast from 'react-native-simple-toast';
 import { NavigationActions } from 'react-navigation';
 import DeletePoolModal from './DeletePoolModal';
-
+import ScreenComponent from '../ScreenComponent';
 
 const activePool = '';
 
-export default class EditPool extends Component {
+export default class EditPool extends ScreenComponent {
 
     constructor(props) {
         super();
-        var pool = props.navigation.state.params ? props.navigation.state.params.props : null;
+        var pool = props.navigation.state.params ? props.navigation.state.params.activePool : null;
 
         this.state = {
             activePool: pool,
@@ -35,6 +33,11 @@ export default class EditPool extends Component {
             this.state.deleteModal = new DeletePoolModal(this.state.activePool.poolDetails.poolId, props.navigation);
             this.state.deleteModal.setUpdateCallback(() => this.forceUpdate());
         };
+    }
+    
+
+    componentWillUnmount(){
+        this.onGoBack(this.state.activePool);
     }
 
     renderDeleteBtn() {
@@ -57,6 +60,7 @@ export default class EditPool extends Component {
     render() {
 
         const { navigate } = this.props.navigation;
+        const { goBack } = this.props.navigation;
 
         return (
 
@@ -153,7 +157,7 @@ export default class EditPool extends Component {
                                         this.setState({
                                             recipients: this.state.activePool.poolDetails.recipients
                                         });
-                                    }
+                                        return this;}
                                 })}
                             >
                                 <Text style={styles.editMembersButton}>
@@ -180,15 +184,19 @@ export default class EditPool extends Component {
                                     UpdatePool(pool)
                                         .then((response) => {
                                             if (response.status && response.status == "success") {
-                                                this.props.navigation.dispatch(
-                                                    NavigationActions.reset({
+                                                goBack(null);
+                                                goBack(null);
+                                                /*this.props.navigation.dispatch(
+                                                    
+                                                    NavigationActions.goBack()({
                                                         index: 0,
                                                         actions: [NavigationActions.navigate({ routeName: 'Home' })]
                                                     }));
+                                                    */
                                             } else {
-                                                Toast.show("Could not update pool.\n" + (response.message ? response.message : ""));
+                                                this.ShowMessage("Could not update pool.\n" + (response.message ? response.message : ""));
                                             }
-                                        }).catch((error) => Toast.show("Something went wrong."))
+                                        }).catch((error) => this.ShowMessage("Something went wrong."))
 
                                 } else {
 
@@ -212,15 +220,11 @@ export default class EditPool extends Component {
                         />
 
                     </View>
-
                             {this.state.activePool.poolDetails.intermediateAddress ? this.renderDeleteBtn() : <View style={{margin: 70}}></View>}
-
-
                 </ScrollView>
-
+                {this.MessageBarContainer()}
 
             </View>
-
         )
     }
 }

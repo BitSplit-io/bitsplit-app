@@ -8,27 +8,21 @@ import Pie from 'react-native-pie';
 import PoolComponent from '../../src/components/Pool/PoolComponent'
 import { renderPoolPieChart, renderMemberList, } from '../../src/components/Pool/PoolComponent'
 import { GetPool, DoTransaction } from '../../src/api/ApiUtils';
-import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
-
+import ScreenComponent from '../ScreenComponent';
 const activePool = '';
 
-export default class Pool extends Component {
+export default class Pool extends ScreenComponent {
 
     constructor(props) {
-        super(props);
-        this.state = { activePool: this.props.navigation.state.params.item, visibleModal: false, enteredPassword: null };
+        super();
+        this.state = { activePool: props.navigation.state.params.item, visibleModal: false, enteredPassword: null };
     }
 
     toggleModal(state) {
         this.setState({ visibleModal: state });
     }
 
-    componentDidMount() {
-        registerMessageBar(this);
-    }
 
-    componentWillUnmount() {
-    }
 
     renderModalContent() {
         return (
@@ -38,7 +32,8 @@ export default class Pool extends Component {
                         Enter password for {this.state.activePool.poolDetails.poolName}
                     </Text>
 
-                    <TextInput
+                    <TextInput 
+                        ref={(input) => this.passwordInput = input}
                         placeholder="Password"
                         secureTextEntry
                         placeholderTextColor="rgba(0,0,0,0.5)"
@@ -54,14 +49,16 @@ export default class Pool extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
+                        this.passwordInput.blur();
                         DoTransaction(this.state.enteredPassword, this.state.activePool.poolDetails.poolId).then((result) => {
                             result.status == "success" ?
                                 console.log("Success!") :
                                 result.message ?
-                                    showMessage(result.message, true) :
+                                    this.ShowMessage(result.message, true) :
                                     console.log("no error message")
-                        }).catch((error) => {
-                            showMessage("There was an error.", true);
+                        },  (data) => { this.ShowMessage(data.message)})
+                        .catch((error) => {
+                            this.ShowMessage("There was an error.", true);
                         });
                     }}>
                     <Text style={styles.modalButton}>Submit</Text>
@@ -79,7 +76,6 @@ export default class Pool extends Component {
     }
 
     render() {
-
         const { navigate } = this.props.navigation;
 
         return (
@@ -189,11 +185,8 @@ export default class Pool extends Component {
                             title="Edit pool"
                             color="#00BCFF"
                             onPress={() => navigate('EditPool', {
-                                props: this.state.activePool,
-                                onGoBack: (pool) => {
-                                    this.setState({ activePool: pool });
-                                    console.log('back')
-                                }
+                                activePool: this.state.activePool,
+                                onGoBack: (pool) => { this.setState({ activePool: pool }); return this;}
                             })}
                         />
 
@@ -203,7 +196,7 @@ export default class Pool extends Component {
                     </View>
 
                 </ScrollView>
-                {MessageBarContainer()}
+                {this.MessageBarContainer()}
             </View>
 
         )

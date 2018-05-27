@@ -10,15 +10,15 @@ import SectionHeader from './components/SectionHeader'
 import Swipeout from "react-native-swipeout";
 import Modal from "react-native-modal";
 import Settings from '../Settings/Settings';
-import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
+import ScreenComponent from '../ScreenComponent';
 // const ds = new ListView.DataSource({
 //     rowHasChanged: (r1, r2) => r1 !== r2,
 // });
 
-export default class Home extends Component {
+export default class Home extends ScreenComponent {
 
     constructor(props) {
-        super(props);
+        super();
         this.state = {
             loading: false,
             poolComponents: [],
@@ -35,9 +35,6 @@ export default class Home extends Component {
         })
     }
 
-    componentDidMount() {
-        registerMessageBar(this);
-    }
 
     refreshPools() {
         if (this.state.refreshing) return;
@@ -96,14 +93,14 @@ export default class Home extends Component {
     }
 
     renderFlatlist(navigate) {
-
         return (
             <View style={{ flex: +!!this.state.poolComponents.length }}>
                 <FlatList
                     data={this.state.poolComponents}
                     renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigate('Pool', { item })}>
-                            <Animated.View style={{ backgroundColor: (this.animationListObj(item))}}>
+                        <TouchableOpacity onPress={() => navigate('Pool', { item, onGoBack: () => {this.refreshPools(); return this} }
+                        )}>
+                            <Animated.View style={{ backgroundColor: (this.animationListObj(item)) }}>
                                 <ListItem
                                     title={item ? item.poolDetails.poolName : ''}
                                     subtitle={item ? " Balance: " + item.poolDetails.balance : ''}
@@ -149,9 +146,7 @@ export default class Home extends Component {
     }
 
     render() {
-
         super.render;
-
         const navigate = this.props.navigation.navigate;
         const resizeMode = 'center';
 
@@ -170,7 +165,7 @@ export default class Home extends Component {
                 <View style={styles.header}>
 
                     <TouchableOpacity
-                        onPress={() => navigate('Settings')}
+                        onPress={() => navigate('Settings', {onGoBack: () => { return this } })}
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -183,7 +178,7 @@ export default class Home extends Component {
                     <Text style={styles.title}>Pools</Text>
 
                     <TouchableOpacity
-                        onPress={() => navigate('EditPool', { props: new PoolComponent() })}
+                        onPress={() => navigate('EditPool', {activePool: new PoolComponent(), onGoBack: () => {this.refreshPools; return this } })}
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -194,7 +189,7 @@ export default class Home extends Component {
                     </TouchableOpacity>
                 </View>
                 {this.renderFlatlist(navigate)}
-                {MessageBarContainer()}
+                {this.MessageBarContainer()}
             </View>
 
         );

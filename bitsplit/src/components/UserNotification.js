@@ -17,19 +17,15 @@ export default class UserNotification extends React.Component{
         });
     }
 }
-var registered;
-
-
 
 export function registerMessageBar(registrar) {
     MessageBarManager.registerMessageBar(registrar.refs.alert);
-    registered = false;
 }
 
 export function unregisterMessageBar() {
+    return;
     if(registered){
         MessageBarManager.unregisterMessageBar();
-        registered = true;
     }
 }
 
@@ -49,6 +45,7 @@ export function MessageBarContainer() {
 }
 
 export function ShowMessage(message, error, duration) {
+    if(MessageBarManager._currentMessageBarAlert) 
     MessageBarManager.showAlert({
         message: message,
         alertType: !error ? "sucess" : "error",

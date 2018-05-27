@@ -16,28 +16,26 @@ import currentDeviceToken from 'RNFirebaseToken';
 import { RootNavigator } from '../../config/router';
 import { LoginWithUsername } from '../../src/api/ApiUtils';
 import { NavigationActions } from 'react-navigation'
-import { MessageBarContainer, ShowMessage, registerMessageBar, unregisterMessageBar } from '../../src/components/UserNotification'
+import ScreenComponent from '../ScreenComponent';
 
 
-export default class Login extends React.Component {
-
-
+export default class Login extends ScreenComponent {
     constructor() {
         super();
         this.state = { username: '', password: '', isLoading: false, deviceToken: null };
     };
 
-
     componentDidMount() {
+        super.componentDidMount();
         currentDeviceToken((token) => {
             if (token) {
                 AsyncStorage.setItem('@DeviceStore:firebaseIdToken', token);
             }
         });
-        registerMessageBar(this);
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount();
         this.setState({ isLoading: false });
     }
 
@@ -53,7 +51,7 @@ export default class Login extends React.Component {
                                 actions: [NavigationActions.navigate({ routeName: 'Home' })]
                             }))
                     } else {
-                        ShowMessage(results.message, results.status);
+                        this.ShowMessage(results.message, results.status);
                         this.setState({ isLoading: false });
                     }
                 })
@@ -140,7 +138,7 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
                 </View>
 
-                {MessageBarContainer()}
+                {this.MessageBarContainer()}
 
             </View>
         )

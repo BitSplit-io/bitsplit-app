@@ -9,8 +9,9 @@ import { validateAddress, validateUserAsRecipient } from "../../src/api/ApiUtils
 import Toast from 'react-native-simple-toast';
 // import QRCodeScanner from 'react-native-qrcode-scanner';
 import QRScanner from "../../src/components/QRScanner/QRScanner";
+import ScreenComponent from '../ScreenComponent';
 
-export default class EditPoolMembers extends Component {
+export default class EditPoolMembers extends ScreenComponent {
 
     constructor(props) {
         super(props);
@@ -85,10 +86,6 @@ export default class EditPoolMembers extends Component {
             console.log("efter split");
         })
     };
-
-    componentWillUnmount() {
-        this.props.navigation.state.params.onGoBack();
-    }
 
     proportionHandler(item) {
         var maxValue = 1, freeProportion = 0;
@@ -353,7 +350,7 @@ export default class EditPoolMembers extends Component {
                 <ScrollView style={{ flex: 1 }}>
                     {this.renderList(this.state.activePool.poolDetails.recipients)}
                 </ScrollView>
-
+                {this.MessageBarContainer()}
             </View>
         );
     };
