@@ -13,10 +13,11 @@ import {
 import { Icon } from "react-native-elements";
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import EditPoolMembers from '../../../screens/Pool/EditPoolMembers';
 
 export default class QRScanner extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       dataResult: null
@@ -24,14 +25,28 @@ export default class QRScanner extends Component {
   }
 
   onSuccess(e) {
-      this.setState({dataResult: (e.data)});
+
+    var result = e.data.substring(0, e.data.indexOf("?"));
+
+    result = result.replace("bitcoin", "");
+    result = result.replace(/\//g, "");
+    result = result.replace(/\:/g, "");
+
+    this.props._reactInternalInstance.type.prototype.AddRecipient(result, this.props);
+
+    this.props.setState({
+      qrScannerState: {
+        visible: false,
+      }
+    });
+
   }
 
   render() {
     return (
       <QRCodeScanner
-                onRead={this.onSuccess.bind(this)}
-            />
+        onRead={this.onSuccess.bind(this)}
+      />
     );
   }
 }

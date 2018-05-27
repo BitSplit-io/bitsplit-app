@@ -31,7 +31,7 @@ export default class Home extends React.Component {
             <SideMenu 
                 menu={menu}
                 bounceBackOnOverdraw={false}
-                edgeHitWidth={100}
+                edgeHitWidth={250}
                 openMenuOffset={300}
                 >
                 <Content {...this.props}/>
@@ -191,7 +191,7 @@ export class Content extends ScreenComponent {
                 <View style={styles.header}>
                     <TouchableOpacity
                         // TODO: onPress should toggle SideMenu //
-                        onPress={() => this.toggleMenu()}
+                        onPress={() => this.Home.toggleMenu()}
                         style={styles.headerIcon}
                     >
                         <Icon
