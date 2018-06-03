@@ -86,7 +86,7 @@ export const RootNavigator = StackNavigator({
     EditPool: {
         screen: EditPool,
         navigationOptions: {
-            title: "Settings",
+            title: "Edit Pool",
             headerTitleStyle: {
                 color: "#fff",
             },
