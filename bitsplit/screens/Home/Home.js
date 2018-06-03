@@ -28,11 +28,13 @@ export default class Home extends React.Component {
         var menu = <Settings {...this.props} />;
 
         return (
-            <SideMenu 
+            <SideMenu
                 menu={menu}
                 bounceBackOnOverdraw={false}
                 edgeHitWidth={250}
                 openMenuOffset={300}
+                isOpen={this.state.isOpen}
+                onChange={(status) => this.setState({isOpen: status})}
                 >
                 <Content {...this.props}/>
             </SideMenu>
@@ -52,7 +54,7 @@ export class Content extends ScreenComponent {
         }
     };
 
-    
+
     toggleMenu() {
         this.setState({isOpen: !this.state.isOpen})
     }
@@ -110,7 +112,7 @@ export class Content extends ScreenComponent {
                 //             finalValue: 0.0
                 //         }
                 //     ),
-                // ).start() 
+                // ).start()
                 +
                 ")");
         } else {
@@ -191,7 +193,7 @@ export class Content extends ScreenComponent {
                 <View style={styles.header}>
                     <TouchableOpacity
                         // TODO: onPress should toggle SideMenu //
-                        onPress={() => this.Home.toggleMenu()}
+                        onPress={() => {this.setState({isOpen: !this.state.isOpen}); console.log(this.state.isOpen)} }
                         style={styles.headerIcon}
                     >
                         <Icon
@@ -224,7 +226,7 @@ export class Content extends ScreenComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     text: {
         fontSize: 16,

@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     fullScreen: {
         flex: 1,
         flexDirection: 'row',
+        zIndex: -10,
     },
     container: {
         flex: 1,
