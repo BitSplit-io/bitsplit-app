@@ -96,7 +96,6 @@ export default class ConfirmPasswordScreen extends ScreenComponent {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={}
                     >
                         <Text style={styles.forgotPasswordButton}>forgot password?</Text>
                     </TouchableOpacity>

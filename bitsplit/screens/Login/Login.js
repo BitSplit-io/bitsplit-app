@@ -138,7 +138,6 @@ export default class Login extends ScreenComponent {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={}
                     >
                         <Text style={styles.forgotPasswordButton}>forgot password?</Text>
                     </TouchableOpacity>
