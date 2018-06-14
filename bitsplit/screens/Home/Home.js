@@ -14,51 +14,22 @@ import Settings from '../Settings/Settings';
 import ScreenComponent from '../ScreenComponent';
 import SideMenu from "react-native-side-menu";
 
-export default class Home extends React.Component {
+export default class Home extends ScreenComponent {
 
     constructor(props) {
-        super();
-        this.state = {
-            isOpen: false
-        }
-    }
-
-    render() {
-        const navigate = this.props.navigation.navigate;
-        var menu = <Settings {...this.props} />;
-
-        return (
-            <SideMenu
-                menu={menu}
-                bounceBackOnOverdraw={false}
-                edgeHitWidth={250}
-                openMenuOffset={300}
-                isOpen={this.state.isOpen}
-                onChange={(status) => this.setState({isOpen: status})}
-                >
-                <Content {...this.props}/>
-            </SideMenu>
-        );
-    }
-}
-
-export class Content extends ScreenComponent {
-
-	constructor(props) {
         super(props);
+
         this.state = {
+            isOpen: false,
             loading: false,
             poolComponents: [],
             error: null,
             refreshing: false,
+            // animationBackground: new Animated.Value(),
+            // animationStarted: false,
         }
-    };
-
-
-    toggleMenu() {
-        this.setState({isOpen: !this.state.isOpen})
+        // this.state.animationBackground.setValue(0.0);
     }
-
 
     componentWillMount() {
         this.refreshPools();
@@ -94,41 +65,44 @@ export class Content extends ScreenComponent {
         this.refreshPools();
     }
 
-    animationListObj(item) {
-        if (item.poolDetails.balance > 0) {
-            //TODO: return an RGBA-string with a cycling opacity
-            return ("rgba(0, 188, 255, "
-                + 0.1
-                // Animated.loop(
-                //     Animated.decay(0.0 ,
-                //         {
-                //             duration: 1000,
-                //             finalValue: 1.0
-                //         }
-                //     ),
-                //     Animated.decay(1.0 ,
-                //         {
-                //             duration: 1000,
-                //             finalValue: 0.0
-                //         }
-                //     ),
-                // ).start()
-                +
-                ")");
-        } else {
-            return "rgba(0, 0, 0, 0)";
-        }
-    }
+    // // TODO:
+    // // Animation to indicate pools that has a positive balance.
+    // // This is being called from the Flatlist component of pools and
+    // // returns an static RGBA-string, if the item is empty, or otherwise an animated RGBA-string otherwise.
+    // -------------------------------------------------------------------------------------------------------
+    // animationListObj() {
 
+    //     // Starts animation once
+    //     if (!this.state.animationStarted) {
+    //         this.setState({ animationStarted: true });
+
+    //         Animated.timing(this.state.animationBackground,
+    //             {
+    //                 duration: 5000,
+    //                 toValue: 1.0
+    //             }
+    //         ).start();
+    //     }
+    // }
+
+
+    // RENDER of every list object.
+    // Returns a link to every pool that the user is registered to.
+    // -------------------------------------------------------------------------------------------------------
     renderFlatlist(navigate) {
         return (
             <View style={{ flex: +!!this.state.poolComponents.length }}>
                 <FlatList
                     data={this.state.poolComponents}
                     renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigate('Pool', { item, onGoBack: () => {this.refreshPools(); return this} }
+                        <TouchableOpacity onPress={() => navigate('Pool', { item, onGoBack: () => { this.refreshPools(); return this } }
                         )}>
-                            <Animated.View style={{ backgroundColor: (this.animationListObj(item)) }}>
+
+                            {/* Starting an animation loop of the background color if a  */}
+                            {/* {(item.poolDetails.balance > 0 ? this.animationListObj() : null)} */}
+
+                            {/* Checking if this specific item represents a pool with a positive balance, thus animating it's background */}
+                            <Animated.View style={{ backgroundColor: "rgba(0, 188, 255, " + (item.poolDetails.balance > 0 ? 0.2 : 0) + ")" }}>
                                 <ListItem
                                     title={item ? item.poolDetails.poolName : ''}
                                     subtitle={item ? " Balance: " + item.poolDetails.balance : ''}
@@ -153,74 +127,91 @@ export class Content extends ScreenComponent {
         )
     }
 
+    // RENDER of a welcome message.
+    // Gives information to first time users and users that are not registered in any pool
+    // -------------------------------------------------------------------------------------------------------
     renderInfoField() {
         if (!this.state.loading && !this.state.refreshing) {
 
             if (!this.state.poolComponents.length) {
-
                 return (
                     <View style={styles.emptyPoolField}>
                         <Text style={{ alignSelf: "center", fontSize: 26, paddingTop: 40 }}>
                             Welcome!
-                    </Text>
+                        </Text>
                         <Text style={{ textAlign: "center", fontSize: 20, paddingTop: 40 }}>
                             You don't have any pools registered yet.
                             To create a new pool, use the plus sign in the top right corner.
-                    </Text>
+                        </Text>
                     </View>
                 )
             }
         }
     }
 
+    // Toggles the sidemenu
+    // -------------------------------------------------------------------------------------------------------
+    toggleMenu() {
+        this.setState({ isOpen: !this.state.isOpen })
+    }
+
     render() {
-        super.render;
         const navigate = this.props.navigation.navigate;
+        var menu = <Settings {...this.props} />;
         const resizeMode = 'center';
 
         return (
-            <View style={styles.container}>
-                <StatusBar backgroundColor="#275629" />
-                <Image
-                    style={{
-                        flex: 1,
-                        alignSelf: "center",
-                        position: "absolute",
-                    }}
-                    source={require('../../src/images/Logo_transparent.png')}
-                />
+            <SideMenu
+                menu={menu}
+                bounceBackOnOverdraw={false}
+                edgeHitWidth={250}
+                openMenuOffset={300}
+                isOpen={this.state.isOpen}
+                onChange={(status) => this.setState({ isOpen: status })}
+            >
 
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        // TODO: onPress should toggle SideMenu //
-                        onPress={() => {this.setState({isOpen: !this.state.isOpen}); console.log(this.state.isOpen)} }
-                        style={styles.headerIcon}
-                    >
-                        <Icon
-                            name='settings'
-                            type="MaterialCommunityIcons"
-                            color="#3b7830"
-                        />
-                    </TouchableOpacity>
+                <View style={styles.container}>
+                    <StatusBar backgroundColor="#275629" />
+                    <Image
+                        style={{
+                            flex: 1,
+                            alignSelf: "center",
+                            position: "absolute",
+                        }}
+                        source={require('../../src/images/Logo_transparent.png')}
+                    />
 
-                    <Text style={styles.title}>Pools</Text>
+                    <View style={styles.header}>
+                        <TouchableOpacity
+                            onPress={() => { this.toggleMenu() }}
+                            style={styles.headerIcon}
+                        >
+                            <Icon
+                                name='settings'
+                                type="MaterialCommunityIcons"
+                                color="#3b7830"
+                            />
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => navigate('EditPool', {activePool: new PoolComponent(), onGoBack: () => {this.refreshPools; return this } })}
-                        style={styles.headerIcon}
-                    >
-                        <Icon
-                            name='plus'
-                            type='foundation'
-                            color="#3b7830"
-                        />
-                    </TouchableOpacity>
+                        <Text style={styles.title}>Pools</Text>
+
+                        <TouchableOpacity
+                            onPress={() => navigate('EditPool', { activePool: new PoolComponent(), onGoBack: () => { this.refreshPools; return this } })}
+                            style={styles.headerIcon}
+                        >
+                            <Icon
+                                name='plus'
+                                type='foundation'
+                                color="#3b7830"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {this.renderFlatlist(navigate)}
+                    {this.MessageBarContainer()}
                 </View>
-                {this.renderFlatlist(navigate)}
-                {this.MessageBarContainer()}
-            </View>
+            </SideMenu>
         );
-    };
+    }
 }
 
 const styles = StyleSheet.create({
