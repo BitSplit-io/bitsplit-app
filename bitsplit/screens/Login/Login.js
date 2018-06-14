@@ -136,6 +136,12 @@ export default class Login extends ScreenComponent {
                     >
                         <Text style={styles.newUserButton}>Create account</Text>
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={}
+                    >
+                        <Text style={styles.forgotPasswordButton}>forgot password?</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {this.MessageBarContainer()}
@@ -202,9 +208,17 @@ const styles = StyleSheet.create({
         borderColor: '#f5fff5',
         textAlign: 'center',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 10,
         color: '#f5fff5',
         opacity: 0.5
+    },
+
+    forgotPasswordButton: {
+        fontSize: 11,
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: '#f5fff5',
+        opacity: 0.5,
     }
 
 });

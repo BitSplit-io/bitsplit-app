@@ -94,6 +94,12 @@ export default class ConfirmPasswordScreen extends ScreenComponent {
                     >
                         <Text style={styles.newUserButton}>Use a different account</Text>
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={}
+                    >
+                        <Text style={styles.forgotPasswordButton}>forgot password?</Text>
+                    </TouchableOpacity>
                 </View>
                 {this.MessageBarContainer()}
             </View>
@@ -161,5 +167,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#f5fff5',
         opacity: 0.5
+    },
+    forgotPasswordButton: {
+        fontSize: 11,
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: '#f5fff5',
+        opacity: 0.5,
     }
 });
