@@ -93,29 +93,29 @@ export default class Pool extends ScreenComponent {
 
                 <ScrollView style={{ flex: 1 }}>
 
-                    <View style={{ height: "40%", flex: 1, flexDirection: "column", backgroundColor: "#fff" }}>
+                    <View style={{ flex: 1, flexDirection: "column", backgroundColor: "#fff" }}>
+                    
+                        <View style={styles.qrContainer}>
+                            <Icon
+                                name='qrcode'
+                                type='font-awesome'
+                                style={styles.receiveButton}
+                                onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
+                            />
+                        </View>
+
+
+                        {/* Pie chart is rendered */}
                         <View style={styles.pieContainer}>
 
                             {this.state.activePool.renderPoolPieChart(100)}
 
                         </View>
 
-                        <View style={styles.qrContainer}>
-                            <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
-                                Press
+
+                            <Text style={[{ textAlign: 'center', fontSize: 14, color: "#999", marginBottom: 15 }]}>
+                                Press the QR-icon to receive a transaction
                             </Text>
-                            <Icon
-                                name='qrcode'
-                                type='font-awesome'
-                                raised
-                                reverse
-                                style={styles.receiveButton}
-                            onPress={() => navigate('Receive', this.state.activePool.poolDetails.poolId)}
-                            />
-                            <Text style={[{ textAlignVertical: 'center', fontSize: 16 }]}>
-                                to receive a transaction
-                            </Text>
-                        </View>
                     </View>
 
                     <Button
@@ -226,19 +226,20 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     qrContainer: {
+        flex: 1,
+        marginTop: 30,
         marginLeft: 30,
         marginRight: 30,
-        marginBottom: 40,
-        flexDirection: 'row',
+        flexDirection: "row",
+        justifyContent: 'flex-end',
     },
     receiveButton: {
         flex: 1,
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
     },
     pieContainer: {
         flex: 1,
-        margin: 50,
+        marginTop: 24,
+        marginBottom: 50,
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: -10,
