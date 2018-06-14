@@ -33,7 +33,6 @@ export default class QRScanner extends Component {
     result = result.replace(/\:/g, "");
 
     this.props._reactInternalInstance.type.prototype.AddRecipient(result, this.props);
-
     this.props.setState({
       qrScannerState: {
         visible: false,

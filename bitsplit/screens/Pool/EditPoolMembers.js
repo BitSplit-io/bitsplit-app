@@ -47,7 +47,7 @@ export default class EditPoolMembers extends ScreenComponent {
 
         var promise;
 
-        if(!this.props){
+        if (!this.props) {
             this.state = props.state;
         }
 
@@ -135,7 +135,7 @@ export default class EditPoolMembers extends ScreenComponent {
                 right={swipeoutBtns}
                 autoClose={false}
                 backgroundColor="#fff"
-                close={false}
+                close={!item.isLocked ? false : true}
                 key={item.address}
             >
 
@@ -143,12 +143,16 @@ export default class EditPoolMembers extends ScreenComponent {
 
                     <View style={styles.topListRow}>
 
+                        {/* Recipient name/identification */}
+                        {/* ---------------------------------------------------------------- */}
                         <View>
-                            <Text>
-                                {item.address}
+                            <Text >
+                                {item.address.substring(0, 20) + "..."}
                             </Text>
                         </View>
 
+                        {/* Input field for recipient split */}
+                        {/* ---------------------------------------------------------------- */}
                         <View style={styles.percentageField}>
                             <TextInput ref={component => this.addTextfield(component)}
                                 style={[{
@@ -270,18 +274,18 @@ export default class EditPoolMembers extends ScreenComponent {
     renderQRScannerModalContent() {
         return (
             <View style={styles.modalContent}>
-                <Text style={{ color: "#999", textAlign: "center" }}>
-                    Scan a QR code from Bitcoin address
-                </Text>
-
-                {this.QRScanner.render()}
-
                 <Icon
                     name='x'
                     type='feather'
                     color='#999'
                     onPress={() => this.setState({ qrScannerState: { visible: false } })}
                 />
+
+                {this.QRScanner.render()}
+
+                <Text style={{ color: "#999", textAlign: "center" }}>
+                    Scan a QR code from Bitcoin address
+                </Text>
             </View>
         );
     }
@@ -299,8 +303,6 @@ export default class EditPoolMembers extends ScreenComponent {
 
         return (
             <View style={styles.container}>
-
-
 
                 <Modal
                     isVisible={this.state.modalState.visible}
@@ -326,7 +328,7 @@ export default class EditPoolMembers extends ScreenComponent {
                     <TextInput
                         style={styles.textField}
                         placeholder="Enter Bitcoin-address or BitSplit username"
-                        placeholderTextColor="rgba(128,128,128,0.8)"
+                        placeholderTextColor="rgba(128,128,128,0.6)"
                         underlineColorAndroid='rgba(0,0,0,0)'
                         textColor="#000"
                         keyboardType="email-address"
@@ -342,15 +344,13 @@ export default class EditPoolMembers extends ScreenComponent {
 
                     >
                     </TextInput>
+                    <Icon
+                        name='qrcode'
+                        type='font-awesome'
+                        color='#000'
+                        onPress={() => this.setState({ qrScannerState: { visible: true } })}
+                    />
                 </View>
-
-                <Icon
-                    raised
-                    name='qrcode'
-                    type='font-awesome'
-                    color='#000'
-                    onPress={() => this.setState({ qrScannerState: { visible: true } })}
-                />
 
                 <ScrollView style={{ flex: 1 }}>
                     {this.renderList(this.state.activePool.poolDetails.recipients)}
@@ -378,21 +378,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#7EC480',
     },
+    title: {
+        flexDirection: 'row',
+        justifyContent:"flex-end",
+        backgroundColor: '#eee',
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#A0A0A0',
+        paddingHorizontal: 15,
+        height: 42,
+        elevation: 5,
+    },
     textField: {
         flex: 1,
         // height: 50,
         color: '#000',
         backgroundColor: '#eee',
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 14,
         // padding: 20,
-    },
-    title: {
-        backgroundColor: '#f5fff5',
-        borderBottomWidth: 1,
-        borderBottomColor: '#A0A0A0',
-        height: 42,
-        elevation: 5,
     },
     listComponent: {
         flex: 1,
@@ -402,6 +405,8 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         borderBottomWidth: 1,
         borderBottomColor: '#A0A0A0',
+        borderRightWidth: 4,
+        borderRightColor: "darkred",
     },
     topListRow: {
         height: 40,
@@ -441,7 +446,7 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: '#f5fff5',
         padding: 22,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
