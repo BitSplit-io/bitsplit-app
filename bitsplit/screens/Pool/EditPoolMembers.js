@@ -7,21 +7,26 @@ import Modal from "react-native-modal";
 import { GetUserAddress, GetUserId } from "../../src/components/User/CurrentUser";
 import { validateAddress, validateUserAsRecipient } from "../../src/api/ApiUtils";
 import Toast from 'react-native-simple-toast';
-// import QRCodeScanner from 'react-native-qrcode-scanner';
-import QRScanner from "../../src/components/QRScanner/QRScanner";
+import QRCodeScanner from 'react-native-qrcode-scanner';
+// import QRScanner from "../../src/components/QRScanner/QRScanner";
 import ScreenComponent from '../ScreenComponent';
 
 export default class EditPoolMembers extends ScreenComponent {
 
     constructor(props) {
         super(props);
+
+        // The current pool is defined by taking props from the previous screen.
+        // The content of the pool can be managed through the state "activePool"
         console.log("");
         console.log(props.navigation.state.params.props);
         var pool = props.navigation.state.params.props;
 
         this.state = {
-            activePool: pool,
+            // Firstly a boolean is set depending on wether the pool has been filled with users already.
             isNewPool: !pool.poolDetails.recipients.length,
+            // The passed pool is set to the state "activePool"
+            activePool: pool,
             numberInput: 0,
             textfields: [],
             currentRecipient: "",
@@ -34,8 +39,9 @@ export default class EditPoolMembers extends ScreenComponent {
             }
         };
 
-        this.QRScanner = new QRScanner(this);
-
+        // TODO: Allow user to set default address to user
+        //
+        // Setting a first entry of the users own address on mounting component
         if (this.state.isNewPool && GetUserAddress()) {
             if (GetUserAddress()) {
                 this.state.activePool.addPoolRecipient({ address: GetUserAddress(), proportion: 1 });
@@ -43,13 +49,11 @@ export default class EditPoolMembers extends ScreenComponent {
         }
     };
 
-    AddRecipient(recipient, props) {
+    AddRecipient(recipient) {
 
+        // TODO: Implement 
+        // To validate an input
         var promise;
-
-        if (!this.props) {
-            this.state = props.state;
-        }
 
         if (recipient.length > 5 && recipient.length < 20) {
             promise = validateUserAsRecipient(recipient);
@@ -57,6 +61,7 @@ export default class EditPoolMembers extends ScreenComponent {
         else {
             promise = validateAddress(recipient);
         }
+
         promise.then((response) => {
             if (response.status && response.status == "error") {
                 Toast.show("Could not create valid recipient for the user or address submitted.")
@@ -86,9 +91,9 @@ export default class EditPoolMembers extends ScreenComponent {
     evenSplit() {
         console.log(this.state.activePool);
         this.state.activePool.poolDetails.recipients.forEach((recipient) => {
-            console.log("innan split");
+            console.log("before split");
             recipient.proportion = 1 / this.state.activePool.poolDetails.recipients.length
-            console.log("efter split");
+            console.log("after split");
         })
     };
 
@@ -119,6 +124,8 @@ export default class EditPoolMembers extends ScreenComponent {
         }
     }
 
+    // RENDER of single objects in the list of recipients
+    // 
     renderRow(index) {
         var item = this.state.activePool.poolDetails.recipients[index];
         let swipeoutBtns = [{
@@ -135,7 +142,7 @@ export default class EditPoolMembers extends ScreenComponent {
                 right={swipeoutBtns}
                 autoClose={false}
                 backgroundColor="#fff"
-                close={!item.isLocked ? false : true}
+                disabled={!item.isLocked ? false : true}
                 key={item.address}
             >
 
@@ -271,6 +278,9 @@ export default class EditPoolMembers extends ScreenComponent {
         );
     }
 
+    // A QR-scanner is rendered inside of a modal
+    // This allows for a user to utlize a camera of the smartphone 
+    // to easily add an address to the pool.
     renderQRScannerModalContent() {
         return (
             <View style={styles.modalContent}>
@@ -281,13 +291,35 @@ export default class EditPoolMembers extends ScreenComponent {
                     onPress={() => this.setState({ qrScannerState: { visible: false } })}
                 />
 
-                {this.QRScanner.render()}
+                <QRCodeScanner
+                    // In case of a discovered QR-code in the camera, the scanner runs method onSuccessQRScan() with the result.
+                    onRead={this.onSuccessQRScan.bind(this)}
+                />
 
                 <Text style={{ color: "#999", textAlign: "center" }}>
                     Scan a QR code from Bitcoin address
                 </Text>
             </View>
         );
+    }
+
+    // In case of a successful scan, the QR scanner runs this method.
+    // Here, the output string is refactored to only contain 
+    onSuccessQRScan(e) {
+
+        var result = e.data.substring(0, e.data.indexOf("?"));
+
+        result = result.replace("bitcoin", "");
+        result = result.replace(/\//g, "");
+        result = result.replace(/\:/g, "");
+
+        this.AddRecipient(result);
+        this.setState({
+            qrScannerState: {
+                visible: false,
+            }
+        });
+        if (this.state.isNewPool) this.state.isNewPool = false;
     }
 
     render() {
@@ -380,7 +412,7 @@ const styles = StyleSheet.create({
     },
     title: {
         flexDirection: 'row',
-        justifyContent:"flex-end",
+        justifyContent: "flex-end",
         backgroundColor: '#eee',
         borderBottomWidth: 0.5,
         borderBottomColor: '#A0A0A0',
